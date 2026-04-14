@@ -218,8 +218,15 @@ app.post('/api/auth/login', async (req, res) => {
   if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
 
   try {
-    const emailLower = email.toLowerCase();
-    const user = await db.getUserByEmail(emailLower);
+    const identifier = email.trim(); // Now used as email or username
+    let user;
+
+    if (identifier.includes('@')) {
+      user = await db.getUserByEmail(identifier.toLowerCase());
+    } else {
+      user = await db.getUserByUsername(identifier);
+    }
+
     if (!user) return res.status(401).json({ error: 'Invalid credentials' });
 
     // Legacy OTP users won't have a passwordHash/salt. Gracefully handle it.

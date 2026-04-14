@@ -25,8 +25,8 @@ window.renderAuthScreen = function() {
           
           ${authState.tab === 'login' ? `
             <form onsubmit="handleAuthSubmit(event, 'login')">
-              <label class="text-xs text-muted fw-700 block mb-1">Email Address</label>
-              <input type="email" id="auth-email" class="modern-input mb-3" placeholder="you@example.com" value="${authState.email}" required>
+              <label class="text-xs text-muted fw-700 block mb-1">Email or Username</label>
+              <input type="text" id="auth-email" class="modern-input mb-3" placeholder="you@example.com or Username" value="${authState.email}" required>
               
               <label class="text-xs text-muted fw-700 block mb-1">Password</label>
               <input type="password" id="auth-pass" class="modern-input mb-4" placeholder="••••••••" required>
