@@ -145,7 +145,7 @@ window.handleAuthSubmit = async function(e, type) {
     // Success for Login
     Storage.setAuthToken(data.token, data.user);
     btn.innerHTML = '✅ Success!';
-    Toast.success(\`Welcome back, \${data.user.username}!\`, 2000);
+    Toast.success(`Welcome back, ${data.user.username}!`, 2000);
     await Storage.forceSyncDown();
     
     setTimeout(() => {
@@ -181,7 +181,7 @@ window.handleRegistrationVerify = async function() {
     
     Storage.setAuthToken(data.token, data.user);
     btn.innerHTML = '✅ Account Verified!';
-    Toast.success(\`Welcome, \${data.user.username}! Your account is ready.\`, 3000);
+    Toast.success(`Welcome, ${data.user.username}! Your account is ready.`, 3000);
     
     await Storage.forceSyncDown();
     
