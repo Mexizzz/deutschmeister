@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 const dataDir = path.join(__dirname, 'data');
 if (!fs.existsSync(dataDir)) {
@@ -10,7 +11,7 @@ const dbFile = path.join(dataDir, 'deutschmeister.json');
 
 // Init empty DB if missing
 if (!fs.existsSync(dbFile)) {
-  fs.writeFileSync(dbFile, JSON.stringify({ users: [], otps: [], userData: [] }, null, 2));
+  fs.writeFileSync(dbFile, JSON.stringify({ users: [], userData: [] }, null, 2));
 }
 
 function readDB() {
@@ -29,30 +30,18 @@ module.exports = {
   getUserByEmail: (email) => {
     return readDB().users.find(u => u.email === email);
   },
-  createUser: (id, email, username) => {
+  createUser: (id, email, username, passwordHash, salt) => {
     const db = readDB();
-    db.users.push({ id, email, username, createdAt: new Date().toISOString() });
+    db.users.push({ id, email, username, passwordHash, salt, createdAt: new Date().toISOString() });
     writeDB(db);
   },
   
-  getOtp: (email) => {
-    return readDB().otps.find(o => o.email === email);
+  // -- Auth Encryption Helpers --
+  hashPassword: (password, salt) => {
+    return crypto.scryptSync(password, salt, 64).toString('hex');
   },
-  saveOtp: (email, code, expiresAt) => {
-    const db = readDB();
-    const existing = db.otps.find(o => o.email === email);
-    if (existing) {
-      existing.code = code;
-      existing.expiresAt = expiresAt;
-    } else {
-      db.otps.push({ email, code, expiresAt });
-    }
-    writeDB(db);
-  },
-  deleteOtp: (email) => {
-    const db = readDB();
-    db.otps = db.otps.filter(o => o.email !== email);
-    writeDB(db);
+  generateSalt: () => {
+    return crypto.randomBytes(16).toString('hex');
   },
 
   getUserData: (userId) => {

@@ -132,77 +132,63 @@ function authenticateToken(req, res, next) {
   });
 }
 
-// 1. Send OTP via Resend
-app.post('/api/auth/send-code', async (req, res) => {
-  const { email, username } = req.body;
-  if (!email || !username) return res.status(400).json({ error: 'Email and username required' });
-
-  const code = Math.floor(100000 + Math.random() * 900000).toString();
-  const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
-
-  try {
-    const existingUser = db.getUserByUsername(username);
-    if (existingUser && existingUser.email.toLowerCase() !== email.toLowerCase()) {
-      return res.status(409).json({ error: 'Username is already taken by another account.' });
-    }
-
-    db.saveOtp(email.toLowerCase(), code, expiresAt);
-
-    // Using onboarding@resend.dev which only works for verified emails in free tier, but works out-of-the-box for testing
-    await resend.emails.send({
-      from: 'FluentGermanAI <onboarding@resend.dev>',
-      to: email,
-      subject: 'Your FluentGermanAI Login Code 🇩🇪',
-      html: `
-        <div style="font-family:sans-serif; text-align:center; padding:2rem;">
-          <h2>Welcome to FluentGermanAI!</h2>
-          <p>Here is your magic login code:</p>
-          <h1 style="letter-spacing:4px; color:#6366f1;">${code}</h1>
-          <p style="color:#666">This code expires in 10 minutes.</p>
-        </div>
-      `
-    });
-
-    res.json({ success: true, message: 'Code sent!' });
-  } catch (err) {
-    console.error('OTP Error:', err);
-    // Even if Resend fails due to free tier restrictions on unverified emails, 
-    // we will log the code so the dev can still log in via console
-    console.log(`[DEBUG MOCK] Sent OTP ${code} to ${email}`);
-    res.json({ success: true, message: 'Code routed.', debugCode: code });
-  }
-});
-
-// 2. Verify OTP & Login
-app.post('/api/auth/verify-code', async (req, res) => {
-  const { email, code, username } = req.body;
-  if (!email || !code || !username) return res.status(400).json({ error: 'Missing fields' });
+// 1. Password Registration
+app.post('/api/auth/register', async (req, res) => {
+  const { email, username, password } = req.body;
+  if (!email || !username || !password) return res.status(400).json({ error: 'All fields are required' });
+  if (password.length < 6) return res.status(400).json({ error: 'Password must be at least 6 characters' });
 
   try {
     const emailLower = email.toLowerCase();
-    const otpRec = db.getOtp(emailLower);
     
-    if (!otpRec || otpRec.code !== code || new Date() > new Date(otpRec.expiresAt)) {
-      return res.status(401).json({ error: 'Invalid or expired code' });
+    // Check conflicts
+    if (db.getUserByEmail(emailLower)) return res.status(409).json({ error: 'Email already registered' });
+    if (db.getUserByUsername(username)) return res.status(409).json({ error: 'Username is already taken' });
+
+    // Hash and store
+    const salt = db.generateSalt();
+    const hash = db.hashPassword(password, salt);
+    const userId = crypto.randomUUID();
+    
+    db.createUser(userId, emailLower, username, hash, salt);
+
+    // Initialize Default User Profile Data
+    const defaultProfile = JSON.stringify({ name: username, level: 'A1', xp: 0, hearts: 5, appLevel: 1 });
+    db.createUserData(userId, defaultProfile, '{}', '[]');
+
+    const token = jwt.sign({ id: userId, username }, JWT_SECRET, { expiresIn: '30d' });
+    res.json({ success: true, token, user: { id: userId, username, email: emailLower } });
+  } catch (err) {
+    console.error('Registration Error:', err);
+    res.status(500).json({ error: 'Server error during registration' });
+  }
+});
+
+// 2. Password Login
+app.post('/api/auth/login', async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
+
+  try {
+    const emailLower = email.toLowerCase();
+    const user = db.getUserByEmail(emailLower);
+    if (!user) return res.status(401).json({ error: 'Invalid credentials' });
+
+    // Legacy OTP users won't have a passwordHash/salt. Gracefully handle it.
+    if (!user.passwordHash || !user.salt) {
+       return res.status(401).json({ error: 'This account was created via Email Magic Link. Please re-register to set a password.' });
     }
 
-    let user = db.getUserByEmail(emailLower);
-    if (!user) {
-      const userId = crypto.randomUUID();
-      db.createUser(userId, emailLower, username);
-      user = { id: userId, email: emailLower, username };
-      
-      const defaultProfile = JSON.stringify({ name: username, level: 'A1', xp: 0, hearts: 5, appLevel: 1 });
-      db.createUserData(userId, defaultProfile, '{}', '[]');
+    const hash = db.hashPassword(password, user.salt);
+    if (hash !== user.passwordHash) {
+      return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    db.deleteOtp(emailLower);
     const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '30d' });
-
     res.json({ success: true, token, user: { id: user.id, username: user.username, email: user.email } });
   } catch (err) {
-    console.error('Verify Error:', err);
-    res.status(500).json({ error: 'Server error' });
+    console.error('Login Error:', err);
+    res.status(500).json({ error: 'Server error during login' });
   }
 });
 
