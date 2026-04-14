@@ -256,8 +256,8 @@ const App = (() => {
       <div class="section-label mb-1">🤖 AI Features</div>
       <p class="text-secondary text-sm mb-3">Powered by Groq (llama-3.3-70b) — ultra-fast AI for real learning.</p>
       <div style="display:flex;flex-direction:column;gap:.75rem">
-        ${aiFeatures.map(f => `
-          <div class="glass-card" style="cursor:pointer;display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem"
+        ${aiFeatures.map((f, i) => `
+          <div class="glass-card animate-fade-in stagger-${i+1}" style="cursor:pointer;display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem"
                onclick="App.navigate('${f.route}')">
             <div style="width:52px;height:52px;border-radius:var(--radius-md);background:${f.color};display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0">
               ${f.icon}

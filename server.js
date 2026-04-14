@@ -114,7 +114,22 @@ Return ONLY a valid JSON object with this exact shape:
     {"word": "the problematic word", "tip": "specific pronunciation tip for this word"}
   ],
   "encouragement": "A motivating closing sentence"
-}`
+    }`,
+
+  define: () =>
+    `You are a German dictionary expert. Given a German or English word/phrase, provide its core definition and metadata.
+Return ONLY a valid JSON object with this exact shape:
+{
+  "de": "The German word (without article)",
+  "en": "The English translation",
+  "gender": "m|f|n|null",
+  "plural": "the plural form with 'die' (null if not a noun)",
+  "example_de": "A simple A1/A2 level example sentence in German",
+  "example_en": "The English translation of the example sentence",
+  "category": "basics|travel|food|family|verbs|time|home|clothing|body|animals|colors|numbers",
+  "level": "A1|A2|B1"
+}
+If the input is English, find the most common German equivalent.`
 };
 
 // ── Auth & Database Routes ───────────────────────────────────────────────────
@@ -530,6 +545,33 @@ app.post('/api/pronunciation', async (req, res) => {
     const data = await groqResp.json();
     const content = data.choices?.[0]?.message?.content || '{}';
     res.json(JSON.parse(content));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── Route: AI Define (Unlimited Vocab) ─────────────────────────────────────
+app.post('/api/vocab/define', async (req, res) => {
+  if (!checkRateLimit(req.ip)) return res.status(429).json({ error: 'Rate limited. Wait a moment.' });
+
+  const { word = '' } = req.body;
+  if (!word.trim()) return res.status(400).json({ error: 'word required' });
+
+  try {
+    const groqResp = await callGroq({
+      systemPrompt: PROMPTS.define(),
+      messages: [{ role: 'user', content: `Define the word: "${word}"` }],
+      json: true,
+      fast: true,
+    });
+    const data = await groqResp.json();
+    const content = data.choices?.[0]?.message?.content || '{}';
+    const parsed = JSON.parse(content);
+    
+    // Add a unique ID for the frontend session
+    parsed.id = 'ai_' + Date.now();
+    
+    res.json(parsed);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

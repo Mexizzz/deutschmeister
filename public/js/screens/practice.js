@@ -16,8 +16,8 @@ function renderPractice() {
   const html = `
     <div class="section-label mb-3">🎯 Practice Modes</div>
     <div style="display:grid;gap:.75rem">
-      ${modes.map(m => `
-        <div class="glass-card" style="cursor:pointer;display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem"
+      ${modes.map((m, i) => `
+        <div class="glass-card animate-fade-in stagger-${i+1}" style="cursor:pointer;display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem"
              onclick="App.navigate('${m.route}')">
           <div style="width:48px;height:48px;border-radius:var(--radius-md);background:${m.color};display:flex;align-items:center;justify-content:center;flex-shrink:0">
             <i class="${m.icon}" style="color:#fff;font-size:1.25rem"></i>

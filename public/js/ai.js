@@ -94,11 +94,11 @@ const AI = (() => {
     return res.json();
   }
 
-  // ── Health Check ─────────────────────────────────────────────────────────
-  async function healthCheck() {
-    const res = await fetch('/api/health');
+  // ── Universal AI Define ─────────────────────────────────────────────────
+  async function defineWord(word) {
+    const res = await post('/api/vocab/define', { word });
     return res.json();
   }
 
-  return { chat, correctGrammar, generateStory, generateExercises, askTutor, evaluatePronunciation, healthCheck };
+  return { chat, correctGrammar, generateStory, generateExercises, askTutor, evaluatePronunciation, defineWord, healthCheck };
 })();

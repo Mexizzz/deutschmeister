@@ -48,7 +48,7 @@ function renderDashboard() {
   const isBookmarked = bookmarks.includes(wotd.id);
 
   const wotdHtml = `
-    <div class="glass-card mb-3">
+    <div class="glass-card mb-3 animate-fade-in stagger-1">
       <div class="flex-between mb-1">
         <div class="text-xs fw-700 text-gold" style="text-transform:uppercase;letter-spacing:.1em">📅 Word of the Day</div>
         <button class="btn btn-icon btn-sm ${isBookmarked ? 'btn-primary' : 'btn-secondary'}" 
@@ -72,7 +72,7 @@ function renderDashboard() {
 
   // ── Goal progress banner ──────────────────────────────────────────────────
   const goalHtml = `
-    <div class="glass-card mb-3" style="${certified ? 'border-color:rgba(16,185,129,.4)' : ''}">
+    <div class="glass-card mb-3 animate-fade-in stagger-2" style="${certified ? 'border-color:rgba(16,185,129,.4)' : ''}">
       <div class="flex-between mb-1">
         <div class="fw-700 text-sm">🎯 Goal: ${goalLevel === 'A1' ? '🌱' : goalLevel === 'A2' ? '📗' : '🚀'} ${goalLevel} Level</div>
         ${certified
@@ -91,7 +91,7 @@ function renderDashboard() {
   const homeworkDone = p.homeworkDate === today && p.homeworkCompleted;
 
   const homeworkHtml = `
-    <div class="glass-card mb-3" style="cursor:pointer;transition:all var(--transition)"
+    <div class="glass-card mb-3 animate-fade-in stagger-3" style="cursor:pointer;transition:all var(--transition)"
          onclick="App.navigate('/homework')">
       <div class="flex-between">
         <div>
