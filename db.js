@@ -189,5 +189,24 @@ module.exports = {
       xp: r.xp,
       appLevel: r.app_level
     }));
+  },
+
+  // -- Admin Tools --
+  getAllUsers: async () => {
+    const res = await pool.query(`
+      SELECT 
+        u.id, 
+        u.email, 
+        u.username, 
+        u.created_at, 
+        ud.last_synced,
+        ud.profile->>'appLevel' as app_level,
+        ud.profile->>'streak' as streak,
+        ud.profile->>'xp' as xp
+      FROM users u
+      LEFT JOIN user_data ud ON u.id = ud.user_id
+      ORDER BY u.created_at DESC
+    `);
+    return res.rows;
   }
 };

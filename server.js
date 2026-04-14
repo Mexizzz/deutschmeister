@@ -147,6 +147,32 @@ function authenticateToken(req, res, next) {
   });
 }
 
+// Admin Middleware
+function authenticateAdmin(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) return res.status(401).json({ error: 'Missing token' });
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) return res.status(403).json({ error: 'Invalid token' });
+    if (user.username !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admins only' });
+    }
+    req.user = user;
+    next();
+  });
+}
+
+// Admin Users Route
+app.get('/api/admin/users', authenticateAdmin, async (req, res) => {
+  try {
+    const users = await db.getAllUsers();
+    res.json({ success: true, count: users.length, users });
+  } catch (err) {
+    res.status(500).json({ error: 'Admin fetch failed', details: err.message });
+  }
+});
+
 // 1. Password Registration (Initiation)
 app.post('/api/auth/register', async (req, res) => {
   const { email, username, password } = req.body;

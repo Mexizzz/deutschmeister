@@ -26,6 +26,7 @@ const App = (() => {
     '/level-test/:level':   (p) => renderLevelTest(p.level),
     '/progress':            () => renderProgress(),
     '/settings':            () => renderSettings(),
+    '/admin':               () => renderAdminPanel(),
   };
 
   // ── Tab map for bottom nav highlight ────────────────────────────────────────
