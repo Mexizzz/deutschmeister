@@ -13,6 +13,7 @@ const App = (() => {
     '/review':              () => renderSmartReview(),
     '/vocab':               () => renderVocabBrowser(),
     '/practice':            () => renderPractice(),
+    '/homework':            () => renderHomework(),
     '/practice/flashcards': () => renderFlashcards(),
     '/practice/quiz':       () => renderQuiz(),
     '/practice/challenge':  () => renderDailyChallenge(),

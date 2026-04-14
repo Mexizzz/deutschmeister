@@ -87,6 +87,30 @@ function renderDashboard() {
       ${!certified && !allGoalDone ? `<div class="text-xs text-muted mt-1">${goalPct}% towards ${goalLevel} certification</div>` : ''}
     </div>`;
 
+  // ── AI Daily Homework ─────────────────────────────────────────────────────
+  const today = new Date().toDateString();
+  const homeworkDone = p.homeworkDate === today && p.homeworkCompleted;
+
+  const homeworkHtml = `
+    <div class="glass-card mb-3" style="background:linear-gradient(135deg,rgba(139,92,246,.12),rgba(99,102,241,.08));border-color:${homeworkDone ? 'rgba(16,185,129,.3)' : 'rgba(139,92,246,.4)'};cursor:pointer;transition:all var(--transition)"
+         onclick="App.navigate('/homework')">
+      <div class="flex-between">
+        <div>
+          <div class="fw-700 ${homeworkDone ? 'text-success' : 'text-purple'} mb-1">🤖 AI Daily Homework</div>
+          <div class="text-secondary text-sm">Personalized story & roleplay</div>
+        </div>
+        <div style="font-size:2rem">${homeworkDone ? '✅' : '📝'}</div>
+      </div>
+      ${!homeworkDone ? `
+        <div class="flex-between mt-3">
+          <div class="text-xs fw-700" style="color:var(--accent-gold)">+100 XP</div>
+          <div class="text-xs fw-700" style="color:var(--accent-purple)">START <i class="fa-solid fa-arrow-right"></i></div>
+        </div>
+      ` : `
+        <div class="text-xs text-success mt-2">Completed for today! Awesome job.</div>
+      `}
+    </div>`;
+
   // ── Daily Challenge ───────────────────────────────────────────────────────
   const challengeHtml = `
     <div class="challenge-card ${challengeDone ? 'completed' : ''}" 
@@ -204,6 +228,9 @@ function renderDashboard() {
 
     <!-- Goal Progress -->
     ${goalHtml}
+
+    <!-- AI Daily Homework -->
+    ${homeworkHtml}
 
     <!-- Daily Challenge -->
     ${challengeHtml}

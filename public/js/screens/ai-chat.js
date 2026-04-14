@@ -16,6 +16,10 @@ const SCENARIOS = [
 
 function renderAIChat() {
   chatState = { scenario: null, messages: [], streaming: false };
+  if (window.__ROLEPLAY_OVERRIDE__) {
+    startChat('custom_homework');
+    return;
+  }
   renderScenarioPicker();
 }
 
@@ -36,7 +40,11 @@ function renderScenarioPicker() {
 }
 
 function startChat(scenarioId) {
-  const scenario = SCENARIOS.find(s => s.id === scenarioId);
+  let scenario = SCENARIOS.find(s => s.id === scenarioId);
+  if (!scenario && scenarioId === 'custom_homework' && window.__ROLEPLAY_OVERRIDE__) {
+    scenario = { id: 'custom_homework', name: 'Homework Scenario', icon: '🎭', prompt: window.__ROLEPLAY_OVERRIDE__ };
+    window.__ROLEPLAY_OVERRIDE__ = null; // Consume it
+  }
   if (!scenario) return;
 
   const savedHistory = Storage.getChatHistory(scenarioId);

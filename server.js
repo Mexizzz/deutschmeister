@@ -253,6 +253,45 @@ app.get('/api/leaderboard', authenticateToken, async (req, res) => {
   }
 });
 
+// 5. Daily AI Homework Generator
+app.post('/api/homework/generate', authenticateToken, async (req, res) => {
+  const { words } = req.body;
+  if (!words || !Array.isArray(words)) return res.status(400).json({ error: 'Missing words array' });
+
+  // Fallback if user is totally new
+  let targets = words;
+  if (targets.length < 5) {
+    targets = ['Hallo', 'Danke', 'Bitte', 'Tschüss', 'Wasser', 'Brot', 'Kaffee'];
+  }
+  
+  const selected = targets.sort(() => 0.5 - Math.random()).slice(0, 12).join(', ');
+
+  const systemPrompt = `You are a German language curriculum designer. 
+The user has learned these words: [${selected}]. 
+Generate a Daily Homework JSON object containing:
+{
+  "story_de": "A 4-5 sentence short story in simple German (A1/A2) using as many of these specific words as naturally possible.",
+  "story_en": "The exact English translation of the story.",
+  "questions": [ // Array of exactly 3 comprehension questions
+    { "q": "Question string in English", "options": ["Choice A", "Choice B", "Choice C"], "answer": "Exact string of the correct choice" }
+  ],
+  "roleplay_setup": "A 1-sentence description of a roleplay scenario related to the story context.",
+  "roleplay_system": "The system prompt the AI should adopt for this roleplay (e.g. 'You are a baker. Be polite but strict.')"
+}
+Output ONLY valid JSON matching this schema exactly.`;
+
+  try {
+    const resp = await callGroq({ systemPrompt, messages: [], json: true });
+    const json = await resp.json();
+    const resultString = json.choices[0].message.content;
+    const parsed = JSON.parse(resultString);
+    res.json({ success: true, homework: parsed });
+  } catch (err) {
+    console.error('Homework Gen Error:', err);
+    res.status(500).json({ error: 'Generation failed' });
+  }
+});
+
 // ── Groq API Helper ────────────────────────────────────────────────────────
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const PRIMARY_MODEL = 'llama-3.3-70b-versatile';
