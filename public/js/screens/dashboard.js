@@ -28,90 +28,92 @@ function renderDashboard() {
   }).join('');
 
   const html = `
-    <!-- Top Hub Banner -->
-    <div class="dashboard-banner mb-4 animate-fade-in stagger-1">
-      <div class="banner-content">
-        <div class="banner-meta text-xs fw-800 mb-1" style="opacity:0.7">${dateStr.toUpperCase()}</div>
-        <h1>Welcome back, ${p.name || 'Mexiz'} 👋</h1>
-        <div class="banner-stats">
-          <div class="banner-stat-item">
-            <span class="banner-stat-value">${p.streak}</span>
-            <span class="banner-stat-label">day streak</span>
-          </div>
-          <div style="width:1px; background:rgba(255,255,255,0.2)"></div>
-          <div class="banner-stat-item">
-            <span class="banner-stat-value">${p.xp.toLocaleString()}</span>
-            <span class="banner-stat-label">total XP</span>
-          </div>
-        </div>
-      </div>
-      <div class="banner-mascot" style="font-size: 5.5rem;">🚀</div>
-    </div>
-
-<div class="dashboard-stack" style="display: flex; flex-direction: column; gap: 1.25rem;">
-      <!-- Review Ribbon -->
-      <div class="glass-card-smooth animate-fade-in stagger-2" style="background:rgba(245,158,11,0.05); border-color:rgba(245,158,11,0.2); cursor:pointer" onclick="App.navigate('/review')">
-        <div class="flex-between">
-          <div class="flex-center gap-2">
-            <span style="font-size:1.2rem">📚</span>
-            <div>
-              <div class="fw-800" style="color:var(--accent-gold)">${dueCount} flashcards due for review</div>
-              <div class="text-xs text-muted">Keep your spaced repetition streak going</div>
+    <div style="max-width: 900px; margin: 0 auto; width: 100%;">
+      <!-- Top Hub Banner -->
+      <div class="dashboard-banner mb-4 animate-fade-in stagger-1">
+        <div class="banner-content">
+          <div class="banner-meta text-xs fw-800 mb-1" style="opacity:0.7">${dateStr.toUpperCase()}</div>
+          <h1>Welcome back, ${p.name || 'Mexiz'} 👋</h1>
+          <div class="banner-stats">
+            <div class="banner-stat-item">
+              <span class="banner-stat-value">${p.streak}</span>
+              <span class="banner-stat-label">day streak</span>
+            </div>
+            <div style="width:1px; background:rgba(255,255,255,0.2)"></div>
+            <div class="banner-stat-item">
+              <span class="banner-stat-value">${p.xp.toLocaleString()}</span>
+              <span class="banner-stat-label">total XP</span>
             </div>
           </div>
-          <i class="fa-solid fa-chevron-right text-muted"></i>
         </div>
+        <div class="banner-mascot" style="font-size: 5.5rem;">🚀</div>
       </div>
 
-      <!-- Streak Card -->
-      <div class="glass-card-smooth animate-fade-in stagger-3">
-        <div class="dashboard-section-title mb-2">Study Streak</div>
-        <div class="flex-center gap-2 mb-1">
-          <span style="font-size:1.5rem">🔥</span>
-          <span style="font-size:1.8rem; font-weight:900; color:var(--accent-gold)">${p.streak}</span>
-          <span class="text-xs text-muted fw-700">days</span>
-        </div>
-        <div class="activity-dots">
-          ${activityHtml}
-        </div>
-        <div class="text-xs text-center text-muted mt-3">Study today to keep your streak!</div>
-      </div>
-
-      <!-- Word of the Day -->
-      <div class="glass-card-smooth animate-fade-in stagger-4">
-        <div class="dashboard-section-title mb-2">Word of the Day</div>
-        <div class="text-center py-1">
-          <div class="gender-tag ${wotd.gender || 'n'}">${wotd.gender || 'das'}</div>
-          <div class="fw-900 mt-1" style="font-size:1.5rem">${wotd.de}</div>
-          <div class="text-muted text-sm">${wotd.en}</div>
-          <button class="btn btn-secondary btn-sm mt-3" data-speak="${wotd.de}">
-            <i class="fa-solid fa-volume-high"></i> Listen
-          </button>
-        </div>
-      </div>
-
-      <!-- AI Homework -->
-      <div class="glass-card-smooth animate-fade-in stagger-5" style="border-left: 4px solid var(--accent-purple)">
-        <div class="flex-between mb-3">
-          <div class="dashboard-section-title">AI Homework</div>
-          <span class="text-xs text-purple fw-800">+100 XP</span>
-        </div>
-        <div class="flex gap-3">
-          <div style="font-size:1.5rem">🧠</div>
-          <div>
-            <div class="fw-700 text-sm">Personalized Session</div>
-            <div class="text-xs text-muted">A1 Story + Grammar Practice</div>
+      <div class="dashboard-stack" style="display: flex; flex-direction: column; gap: 1.25rem;">
+        <!-- Review Ribbon -->
+        <div class="glass-card-smooth animate-fade-in stagger-2" style="background:rgba(245,158,11,0.05); border-color:rgba(245,158,11,0.2); cursor:pointer" onclick="App.navigate('/review')">
+          <div class="flex-between">
+            <div class="flex-center gap-2">
+              <span style="font-size:1.2rem">📚</span>
+              <div>
+                <div class="fw-800" style="color:var(--accent-gold)">${dueCount} flashcards due for review</div>
+                <div class="text-xs text-muted">Keep your spaced repetition streak going</div>
+              </div>
+            </div>
+            <i class="fa-solid fa-chevron-right text-muted"></i>
           </div>
         </div>
-        <button class="btn btn-secondary btn-block btn-sm mt-4" onclick="App.navigate('/homework')">Start Lesson</button>
-      </div>
 
-      <!-- Planning Card -->
-      <div class="glass-card-smooth mb-4 animate-fade-in stagger-6 text-center py-4">
-        <div style="font-size:2.5rem; margin-bottom:1rem; opacity:0.3">📅</div>
-        <div class="fw-800 mb-1">No plan for today</div>
-        <div class="text-sm text-muted mb-4">Set up your study plan for the day</div>
-        <button class="btn btn-primary btn-block" onclick="App.navigate('/settings')">Create Study Plan</button>
+        <!-- Streak Card -->
+        <div class="glass-card-smooth animate-fade-in stagger-3">
+          <div class="dashboard-section-title mb-2">Study Streak</div>
+          <div class="flex-center gap-2 mb-1">
+            <span style="font-size:1.5rem">🔥</span>
+            <span style="font-size:1.8rem; font-weight:900; color:var(--accent-gold)">${p.streak}</span>
+            <span class="text-xs text-muted fw-700">days</span>
+          </div>
+          <div class="activity-dots">
+            ${activityHtml}
+          </div>
+          <div class="text-xs text-center text-muted mt-3">Study today to keep your streak!</div>
+        </div>
+
+        <!-- Word of the Day -->
+        <div class="glass-card-smooth animate-fade-in stagger-4">
+          <div class="dashboard-section-title mb-2">Word of the Day</div>
+          <div class="text-center py-1">
+            <div class="gender-tag ${wotd.gender || 'n'}">${wotd.gender || 'das'}</div>
+            <div class="fw-900 mt-1" style="font-size:1.5rem">${wotd.de}</div>
+            <div class="text-muted text-sm">${wotd.en}</div>
+            <button class="btn btn-secondary btn-sm mt-3" data-speak="${wotd.de}">
+              <i class="fa-solid fa-volume-high"></i> Listen
+            </button>
+          </div>
+        </div>
+
+        <!-- AI Homework -->
+        <div class="glass-card-smooth animate-fade-in stagger-5" style="border-left: 4px solid var(--accent-purple)">
+          <div class="flex-between mb-3">
+            <div class="dashboard-section-title">AI Homework</div>
+            <span class="text-xs text-purple fw-800">+100 XP</span>
+          </div>
+          <div class="flex gap-3">
+            <div style="font-size:1.5rem">🧠</div>
+            <div>
+              <div class="fw-700 text-sm">Personalized Session</div>
+              <div class="text-xs text-muted">A1 Story + Grammar Practice</div>
+            </div>
+          </div>
+          <button class="btn btn-secondary btn-block btn-sm mt-4" onclick="App.navigate('/homework')">Start Lesson</button>
+        </div>
+
+        <!-- Planning Card -->
+        <div class="glass-card-smooth mb-4 animate-fade-in stagger-6 text-center py-4">
+          <div style="font-size:2.5rem; margin-bottom:1rem; opacity:0.3">📅</div>
+          <div class="fw-800 mb-1">No plan for today</div>
+          <div class="text-sm text-muted mb-4">Set up your study plan for the day</div>
+          <button class="btn btn-primary btn-block" onclick="App.navigate('/settings')">Create Study Plan</button>
+        </div>
       </div>
     </div>
   `;
