@@ -197,29 +197,33 @@ function renderDashboard() {
     </div>`).join('');
 
   // ── Main HTML ─────────────────────────────────────────────────────────────
+  const dateStr = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
   const html = `
-    <!-- Stats Card -->
-    <div class="glass-card mb-3">
-      <div class="flex-between mb-2">
+    <!-- Hero Banner -->
+    <div class="hero-banner">
+      <div class="hero-greeting">Welcome back, ${p.name || 'Learner'} 👋</div>
+      <div class="hero-date">${dateStr}</div>
+      <div class="hero-stats">
         <div>
-          <div class="text-sm text-muted">Level ${p.appLevel} · ${levelName(p.appLevel)}</div>
-          <div class="fw-800" style="font-size:1.5rem">
-            <span class="gradient-text-gold">${p.xp}</span>
-            <span class="text-muted text-sm fw-700"> / ${xpNeeded} XP</span>
-          </div>
+          <div class="hero-stat-value">🔥 ${p.streak}</div>
+          <div class="hero-stat-label">day streak</div>
         </div>
-        <div class="text-center">
-          <div class="streak-badge"><span class="streak-fire">🔥</span> ${p.streak} day${p.streak !== 1 ? 's' : ''}</div>
-          <div class="hearts-row mt-1" style="justify-content:center">${heartsHtml}</div>
+        <div style="width:1px;background:rgba(255,255,255,.2);margin:0 .5rem"></div>
+        <div>
+          <div class="hero-stat-value">${p.xp}</div>
+          <div class="hero-stat-label">total XP</div>
+        </div>
+        <div style="width:1px;background:rgba(255,255,255,.2);margin:0 .5rem"></div>
+        <div>
+          <div class="hero-stat-value">${heartsHtml}</div>
+          <div class="hero-stat-label">hearts</div>
         </div>
       </div>
-      <div class="xp-bar-wrap">
-        <div class="xp-bar-fill" style="width:${xpPct}%"></div>
-      </div>
-      <div class="flex-between mt-2">
-        <span class="text-xs text-muted">Daily goal: ${p.dailyXp}/${p.dailyGoal} XP</span>
-        <span class="text-xs text-muted">${SRS.getMasteredCount()} words mastered</span>
-      </div>
+    </div>
+
+    <div class="xp-bar-wrap mb-3">
+      <div class="xp-bar-fill" style="width:${xpPct}%"></div>
     </div>
 
     <!-- Word of the Day -->
