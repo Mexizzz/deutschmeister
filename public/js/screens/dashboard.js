@@ -48,7 +48,7 @@ function renderDashboard() {
   const isBookmarked = bookmarks.includes(wotd.id);
 
   const wotdHtml = `
-    <div class="glass-card mb-3" style="background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(249,115,22,.05));border-color:rgba(245,158,11,.3)">
+    <div class="glass-card mb-3">
       <div class="flex-between mb-1">
         <div class="text-xs fw-700 text-gold" style="text-transform:uppercase;letter-spacing:.1em">📅 Word of the Day</div>
         <button class="btn btn-icon btn-sm ${isBookmarked ? 'btn-primary' : 'btn-secondary'}" 
@@ -91,7 +91,7 @@ function renderDashboard() {
   const homeworkDone = p.homeworkDate === today && p.homeworkCompleted;
 
   const homeworkHtml = `
-    <div class="glass-card mb-3" style="background:linear-gradient(135deg,rgba(139,92,246,.12),rgba(99,102,241,.08));border-color:${homeworkDone ? 'rgba(16,185,129,.3)' : 'rgba(139,92,246,.4)'};cursor:pointer;transition:all var(--transition)"
+    <div class="glass-card mb-3" style="cursor:pointer;transition:all var(--transition)"
          onclick="App.navigate('/homework')">
       <div class="flex-between">
         <div>
@@ -135,7 +135,7 @@ function renderDashboard() {
   const quickHtml = `
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:.65rem" class="mb-3">
       ${quickActions.map(a => `
-        <div class="glass-card" style="cursor:pointer;padding:.85rem;${a.highlight ? 'border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.05)' : ''}"
+        <div class="glass-card" style="cursor:pointer;padding:.85rem"
              onclick="App.navigate('${a.route}')">
           <div style="font-size:1.6rem">${a.icon}</div>
           <div class="fw-700 mt-1" style="font-size:.9rem">${a.label}</div>
