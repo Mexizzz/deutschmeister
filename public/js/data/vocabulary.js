@@ -320,16 +320,6 @@ const VOCABULARY = [
   { id:'v299', de:'die Nummer', en:'the number', gender:'f', plural:'die Nummern', example_de:'Wie ist Ihre Telefonnummer?', example_en:'What is your phone number?', category:'basics', level:'A1' },
   { id:'v300', de:'das Alter', en:'the age', gender:'n', plural:null, example_de:'Wie ist Ihr Alter?', example_en:'What is your age?', category:'basics', level:'A1' },
 ];
-ufe Lebensmittel.', example_en:'I am buying groceries.', category:'verbs', level:'A1' },
-  { id:'v148', de:'hören', en:'to hear / listen', gender:null, plural:null, example_de:'Ich höre Musik.', example_en:'I listen to music.', category:'verbs', level:'A1' },
-  { id:'v149', de:'sehen', en:'to see', gender:null, plural:null, example_de:'Ich sehe den Film nicht.', example_en:'I can\'t see the film.', category:'verbs', level:'A1' },
-  { id:'v150', de:'wissen', en:'to know (a fact)', gender:null, plural:null, example_de:'Ich weiß das nicht.', example_en:'I don\'t know that.', category:'verbs', level:'A1' },
-  { id:'v151', de:'brauchen', en:'to need', gender:null, plural:null, example_de:'Ich brauche Hilfe.', example_en:'I need help.', category:'verbs', level:'A1' },
-  { id:'v152', de:'helfen', en:'to help', gender:null, plural:null, example_de:'Können Sie mir helfen?', example_en:'Can you help me?', category:'verbs', level:'A1' },
-  { id:'v153', de:'schlafen', en:'to sleep', gender:null, plural:null, example_de:'Das Kind schläft schon.', example_en:'The child is already asleep.', category:'verbs', level:'A1' },
-  { id:'v154', de:'aufstehen', en:'to get up', gender:null, plural:null, example_de:'Ich stehe um sieben Uhr auf.', example_en:'I get up at seven o\'clock.', category:'verbs', level:'A1' },
-  { id:'v155', de:'fahren', en:'to drive / travel', gender:null, plural:null, example_de:'Wir fahren mit dem Zug.', example_en:'We travel by train.', category:'verbs', level:'A1' },
-];
 
 // Category metadata
 const VOCAB_CATEGORIES = [
