@@ -11,7 +11,7 @@ const dbFile = path.join(dataDir, 'deutschmeister.json');
 
 // Init empty DB if missing
 if (!fs.existsSync(dbFile)) {
-  fs.writeFileSync(dbFile, JSON.stringify({ users: [], userData: [] }, null, 2));
+  fs.writeFileSync(dbFile, JSON.stringify({ users: [], pendingUsers: [], userData: [] }, null, 2));
 }
 
 function readDB() {
@@ -36,7 +36,30 @@ module.exports = {
     writeDB(db);
   },
   
-  // -- Auth Encryption Helpers --
+  // -- Pending Registrations (Pre-Verification) --
+  savePendingUser: (id, email, username, passwordHash, salt, code) => {
+    const db = readDB();
+    const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString(); // 15 min expiry
+    db.pendingUsers = db.pendingUsers.filter(u => u.email !== email); // Clear previous attempt
+    db.pendingUsers.push({ id, email, username, passwordHash, salt, code, expiresAt });
+    writeDB(db);
+  },
+  getPendingUser: (email) => {
+    const db = readDB();
+    const pending = db.pendingUsers.find(u => u.email === email);
+    if (pending && new Date() > new Date(pending.expiresAt)) {
+      db.pendingUsers = db.pendingUsers.filter(u => u.email !== email);
+      writeDB(db);
+      return null;
+    }
+    return pending;
+  },
+  deletePendingUser: (email) => {
+    const db = readDB();
+    db.pendingUsers = db.pendingUsers.filter(u => u.email !== email);
+    writeDB(db);
+  },
+
   hashPassword: (password, salt) => {
     return crypto.scryptSync(password, salt, 64).toString('hex');
   },

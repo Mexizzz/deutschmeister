@@ -132,7 +132,7 @@ function authenticateToken(req, res, next) {
   });
 }
 
-// 1. Password Registration
+// 1. Password Registration (Initiation)
 app.post('/api/auth/register', async (req, res) => {
   const { email, username, password } = req.body;
   if (!email || !username || !password) return res.status(400).json({ error: 'All fields are required' });
@@ -145,22 +145,70 @@ app.post('/api/auth/register', async (req, res) => {
     if (db.getUserByEmail(emailLower)) return res.status(409).json({ error: 'Email already registered' });
     if (db.getUserByUsername(username)) return res.status(409).json({ error: 'Username is already taken' });
 
-    // Hash and store
+    // Generate Verification Code
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
     const salt = db.generateSalt();
     const hash = db.hashPassword(password, salt);
     const userId = crypto.randomUUID();
     
-    db.createUser(userId, emailLower, username, hash, salt);
+    // Save to PENDING instead of permanent
+    db.savePendingUser(userId, emailLower, username, hash, salt, code);
+
+    // Send Code via Resend
+    try {
+      await resend.emails.send({
+        from: 'FluentGermanAI <onboarding@resend.dev>',
+        to: emailLower,
+        subject: `${code} is your FluentGermanAI verification code 🇩🇪`,
+        html: `
+          <div style="font-family:sans-serif; text-align:center; padding:2rem; border:1px solid #eee; border-radius:12px;">
+            <h2 style="color:#6366f1;">Welcome to FluentGermanAI!</h2>
+            <p>To finalize your account, please enter this code in the app:</p>
+            <h1 style="letter-spacing:6px; font-size:3rem; color:#111;">${code}</h1>
+            <p style="color:#666; font-size:0.9rem;">This code expires in 15 minutes.</p>
+          </div>
+        `
+      });
+      res.json({ success: true, verificationRequired: true, message: 'Code sent!' });
+    } catch (err) {
+      console.error('Email Dispatch Error:', err);
+      // Fallback debug code for dev
+      res.json({ success: true, verificationRequired: true, debugCode: code });
+    }
+  } catch (err) {
+    console.error('Registration Init Error:', err);
+    res.status(500).json({ error: 'Server error during registration' });
+  }
+});
+
+// 1.5 Verify Registration Code
+app.post('/api/auth/verify-registration', async (req, res) => {
+  const { email, code } = req.body;
+  if (!email || !code) return res.status(400).json({ error: 'Email and code required' });
+
+  try {
+    const emailLower = email.toLowerCase();
+    const pending = db.getPendingUser(emailLower);
+
+    if (!pending || pending.code !== code) {
+      return res.status(401).json({ error: 'Invalid or expired verification code' });
+    }
+
+    // Officialize Account
+    db.createUser(pending.id, emailLower, pending.username, pending.passwordHash, pending.salt);
 
     // Initialize Default User Profile Data
-    const defaultProfile = JSON.stringify({ name: username, level: 'A1', xp: 0, hearts: 5, appLevel: 1 });
-    db.createUserData(userId, defaultProfile, '{}', '[]');
+    const defaultProfile = JSON.stringify({ name: pending.username, level: 'A1', xp: 0, hearts: 5, appLevel: 1 });
+    db.createUserData(pending.id, defaultProfile, '{}', '[]');
 
-    const token = jwt.sign({ id: userId, username }, JWT_SECRET, { expiresIn: '30d' });
-    res.json({ success: true, token, user: { id: userId, username, email: emailLower } });
+    // Cleanup
+    db.deletePendingUser(emailLower);
+
+    const token = jwt.sign({ id: pending.id, username: pending.username }, JWT_SECRET, { expiresIn: '30d' });
+    res.json({ success: true, token, user: { id: pending.id, username: pending.username, email: emailLower } });
   } catch (err) {
-    console.error('Registration Error:', err);
-    res.status(500).json({ error: 'Server error during registration' });
+    console.error('Verification Error:', err);
+    res.status(500).json({ error: 'Server error during verification' });
   }
 });
 
