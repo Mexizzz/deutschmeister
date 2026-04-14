@@ -56,14 +56,16 @@ function renderAuthScreen() {
 // Ensure styles for the sliding steps are injected
 const authStyles = document.createElement('style');
 authStyles.innerHTML = `
-  .auth-step { position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: 1.25rem; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); background: var(--bg-card); opacity: 0; pointer-events: none; }
-  .auth-step.active { position: relative; opacity: 1; pointer-events: auto; transform: translateX(0); }
+  .auth-step { position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: 1.25rem; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); background: transparent; opacity: 0; pointer-events: none; }
+  .auth-step.active { position: relative; opacity: 1; pointer-events: auto; transform: translateX(0) !important; }
   #step-email { transform: translateX(-100%); }
   #step-code { transform: translateX(100%); }
-  #step-email.active ~ #step-code { transform: translateX(100%); }
-  .active ~ .auth-step { transform: translateX(100%); }
 `;
-document.head.appendChild(authStyles);
+// Only append if it doesn't exist to avoid duplicates on re-renders
+if (!document.getElementById('auth-styles-tag')) {
+  authStyles.id = 'auth-styles-tag';
+  document.head.appendChild(authStyles);
+}
 
 window.sendAuthCode = async function() {
   const emailInput = document.getElementById('auth-email');
