@@ -1,62 +1,80 @@
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
 const fs = require('fs');
+const path = require('path');
 
-// Ensure data directory exists
 const dataDir = path.join(__dirname, 'data');
 if (!fs.existsSync(dataDir)) {
   fs.mkdirSync(dataDir);
 }
 
-const dbPath = path.join(dataDir, 'deutschmeister.sqlite');
-const db = new sqlite3.Database(dbPath);
+const dbFile = path.join(dataDir, 'deutschmeister.json');
 
-// Initialize schema
-db.serialize(() => {
-  db.run(`
-    CREATE TABLE IF NOT EXISTS users (
-      id TEXT PRIMARY KEY,
-      email TEXT UNIQUE NOT NULL,
-      username TEXT UNIQUE NOT NULL,
-      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-  `);
+// Init empty DB if missing
+if (!fs.existsSync(dbFile)) {
+  fs.writeFileSync(dbFile, JSON.stringify({ users: [], otps: [], userData: [] }, null, 2));
+}
 
-  db.run(`
-    CREATE TABLE IF NOT EXISTS otps (
-      email TEXT PRIMARY KEY,
-      code TEXT NOT NULL,
-      expiresAt DATETIME NOT NULL
-    )
-  `);
+function readDB() {
+  return JSON.parse(fs.readFileSync(dbFile, 'utf8'));
+}
 
-  db.run(`
-    CREATE TABLE IF NOT EXISTS user_data (
-      userId TEXT PRIMARY KEY,
-      profile TEXT,
-      srsCards TEXT,
-      chatHistory TEXT,
-      bookmarks TEXT,
-      lastSynced DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
-    )
-  `);
-});
+function writeDB(data) {
+  fs.writeFileSync(dbFile, JSON.stringify(data, null, 2), 'utf8');
+}
 
-// Promisified helpers for cleaner async/await usage
-const dbAsync = {
-  get: (sql, params = []) => new Promise((resolve, reject) => {
-    db.get(sql, params, (err, row) => err ? reject(err) : resolve(row));
-  }),
-  all: (sql, params = []) => new Promise((resolve, reject) => {
-    db.all(sql, params, (err, rows) => err ? reject(err) : resolve(rows));
-  }),
-  run: (sql, params = []) => new Promise((resolve, reject) => {
-    db.run(sql, params, function (err) {
-      if (err) reject(err);
-      else resolve({ lastID: this.lastID, changes: this.changes });
-    });
-  })
+// Minimal ORM for our exact usecases
+module.exports = {
+  getUserByUsername: (username) => {
+    return readDB().users.find(u => u.username.toLowerCase() === username.toLowerCase());
+  },
+  getUserByEmail: (email) => {
+    return readDB().users.find(u => u.email === email);
+  },
+  createUser: (id, email, username) => {
+    const db = readDB();
+    db.users.push({ id, email, username, createdAt: new Date().toISOString() });
+    writeDB(db);
+  },
+  
+  getOtp: (email) => {
+    return readDB().otps.find(o => o.email === email);
+  },
+  saveOtp: (email, code, expiresAt) => {
+    const db = readDB();
+    const existing = db.otps.find(o => o.email === email);
+    if (existing) {
+      existing.code = code;
+      existing.expiresAt = expiresAt;
+    } else {
+      db.otps.push({ email, code, expiresAt });
+    }
+    writeDB(db);
+  },
+  deleteOtp: (email) => {
+    const db = readDB();
+    db.otps = db.otps.filter(o => o.email !== email);
+    writeDB(db);
+  },
+
+  getUserData: (userId) => {
+    return readDB().userData.find(u => u.userId === userId);
+  },
+  createUserData: (userId, profile, srsCards, bookmarks) => {
+    const db = readDB();
+    db.userData.push({ userId, profile, srsCards, bookmarks, chatHistory: '{}', lastSynced: new Date().toISOString() });
+    writeDB(db);
+  },
+  updateUserData: (userId, profile, srsCards, chatHistory, bookmarks) => {
+    const db = readDB();
+    let ud = db.userData.find(u => u.userId === userId);
+    if (!ud) {
+      ud = { userId };
+      db.userData.push(ud);
+    }
+    if (profile) ud.profile = profile;
+    if (srsCards) ud.srsCards = srsCards;
+    if (chatHistory) ud.chatHistory = chatHistory;
+    if (bookmarks) ud.bookmarks = bookmarks;
+    ud.lastSynced = new Date().toISOString();
+    writeDB(db);
+  }
 };
-
-module.exports = dbAsync;

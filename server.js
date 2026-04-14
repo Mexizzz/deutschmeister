@@ -141,15 +141,12 @@ app.post('/api/auth/send-code', async (req, res) => {
   const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
 
   try {
-    const existingUser = await db.get('SELECT * FROM users WHERE username = ? COLLATE NOCASE', [username]);
+    const existingUser = db.getUserByUsername(username);
     if (existingUser && existingUser.email.toLowerCase() !== email.toLowerCase()) {
       return res.status(409).json({ error: 'Username is already taken by another account.' });
     }
 
-    await db.run(
-      'INSERT INTO otps (email, code, expiresAt) VALUES (?, ?, ?) ON CONFLICT(email) DO UPDATE SET code = excluded.code, expiresAt = excluded.expiresAt',
-      [email.toLowerCase(), code, expiresAt]
-    );
+    db.saveOtp(email.toLowerCase(), code, expiresAt);
 
     // Using onboarding@resend.dev which only works for verified emails in free tier, but works out-of-the-box for testing
     await resend.emails.send({
@@ -183,23 +180,23 @@ app.post('/api/auth/verify-code', async (req, res) => {
 
   try {
     const emailLower = email.toLowerCase();
-    const otpRec = await db.get('SELECT * FROM otps WHERE email = ?', [emailLower]);
+    const otpRec = db.getOtp(emailLower);
     
     if (!otpRec || otpRec.code !== code || new Date() > new Date(otpRec.expiresAt)) {
       return res.status(401).json({ error: 'Invalid or expired code' });
     }
 
-    let user = await db.get('SELECT * FROM users WHERE email = ?', [emailLower]);
+    let user = db.getUserByEmail(emailLower);
     if (!user) {
       const userId = crypto.randomUUID();
-      await db.run('INSERT INTO users (id, email, username) VALUES (?, ?, ?)', [userId, emailLower, username]);
+      db.createUser(userId, emailLower, username);
       user = { id: userId, email: emailLower, username };
       
       const defaultProfile = JSON.stringify({ name: username, level: 'A1', xp: 0, hearts: 5, appLevel: 1 });
-      await db.run('INSERT INTO user_data (userId, profile, srsCards, bookmarks) VALUES (?, ?, ?, ?)', [userId, defaultProfile, '{}', '[]']);
+      db.createUserData(userId, defaultProfile, '{}', '[]');
     }
 
-    await db.run('DELETE FROM otps WHERE email = ?', [emailLower]);
+    db.deleteOtp(emailLower);
     const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '30d' });
 
     res.json({ success: true, token, user: { id: user.id, username: user.username, email: user.email } });
@@ -212,7 +209,9 @@ app.post('/api/auth/verify-code', async (req, res) => {
 // 3. User Data Sync
 app.get('/api/user/sync', authenticateToken, async (req, res) => {
   try {
-    const data = await db.get('SELECT profile, srsCards, chatHistory, bookmarks FROM user_data WHERE userId = ?', [req.user.id]);
+    const data = db.getUserData(req.user.id);
+    if (!data) return res.json({ success: true, data: { profile: {}, srsCards: {}, chatHistory: {}, bookmarks: [] } });
+
     res.json({
       success: true,
       data: {
@@ -230,15 +229,12 @@ app.get('/api/user/sync', authenticateToken, async (req, res) => {
 app.post('/api/user/sync', authenticateToken, async (req, res) => {
   const { profile, srsCards, chatHistory, bookmarks } = req.body;
   try {
-    await db.run(
-      'UPDATE user_data SET profile = ?, srsCards = ?, chatHistory = ?, bookmarks = ?, lastSynced = CURRENT_TIMESTAMP WHERE userId = ?',
-      [
-        profile ? JSON.stringify(profile) : null,
-        srsCards ? JSON.stringify(srsCards) : null,
-        chatHistory ? JSON.stringify(chatHistory) : null,
-        bookmarks ? JSON.stringify(bookmarks) : null,
-        req.user.id
-      ]
+    db.updateUserData(
+      req.user.id,
+      profile ? JSON.stringify(profile) : null,
+      srsCards ? JSON.stringify(srsCards) : null,
+      chatHistory ? JSON.stringify(chatHistory) : null,
+      bookmarks ? JSON.stringify(bookmarks) : null
     );
     res.json({ success: true });
   } catch (err) {
