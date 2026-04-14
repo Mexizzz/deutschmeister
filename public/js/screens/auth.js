@@ -3,7 +3,7 @@
 
 let authState = { tab: 'login', email: '', username: '', password: '' };
 
-function renderAuthScreen() {
+window.renderAuthScreen = function() {
   const html = `
     <div style="min-height:90vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1rem">
       <!-- Logo -->
@@ -108,7 +108,7 @@ window.handleAuthSubmit = async function(e, type) {
     Storage.setAuthToken(data.token, data.user);
     
     btn.innerHTML = '✅ Success!';
-    Toast.success(type === 'register' ? \`Account created! Welcome, \${data.user.username}!\` : \`Welcome back, \${data.user.username}!\`, 2000);
+    Toast.success(type === 'register' ? `Account created! Welcome, ${data.user.username}!` : `Welcome back, ${data.user.username}!`, 2000);
     
     // Sync down right after login
     await Storage.forceSyncDown();
