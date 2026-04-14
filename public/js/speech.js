@@ -77,6 +77,23 @@ const Speech = (() => {
       speechSynthesis.cancel();
 
       const utter = new SpeechSynthesisUtterance(clean);
+      
+      // Fix Chrome Garbage Collection Bug: keep global reference
+      window._globalActiveUtterance = utter;
+
+      // Fallback timeout in case onend stops firing
+      const maxWaitTimeout = Math.max(3000, clean.length * 200);
+      let isSettled = false;
+      const safeResolve = () => {
+        if (!isSettled) {
+          isSettled = true;
+          window._globalActiveUtterance = null;
+          resolve();
+        }
+      };
+      
+      setTimeout(safeResolve, maxWaitTimeout);
+
       utter.lang  = 'de-DE';
 
       // Use profile speed OR a sensible default of 0.72 (slow & clear)
@@ -89,8 +106,8 @@ const Speech = (() => {
       if (!voices.length) loadVoices();
       if (germanVoice) utter.voice = germanVoice;
 
-      utter.onend   = resolve;
-      utter.onerror = resolve; // resolve even on error so callers don't hang
+      utter.onend   = safeResolve;
+      utter.onerror = safeResolve;
 
       speechSynthesis.speak(utter);
     });
@@ -126,7 +143,8 @@ const Speech = (() => {
       btn.addEventListener('click', e => {
         e.stopPropagation();
         const rawText = btn.getAttribute('data-speak') || '';
-        const text = decodeURIComponent(rawText);
+        let text = rawText;
+        try { text = decodeURIComponent(rawText); } catch(err) {} 
         const icon = btn.querySelector('i');
 
         if (clickTimer) {
