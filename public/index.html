@@ -42,6 +42,40 @@
   }
   </script>
 
+  <!-- FAQ Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How can I learn German fast with AI?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "FluentGermanAI uses advanced conversational AI to simulate real-life German conversations, allowing you to practice speaking and listening 10x faster than traditional methods."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is FluentGermanAI free to use?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, FluentGermanAI offers a generous free tier that includes access to core AI conversation features and vocabulary tracking."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does the AI correct my German grammar?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Absolutely. Our AI Tutor provides real-time feedback and grammar corrections during your conversations, helping you learn from your mistakes instantly."
+        }
+      }
+    ]
+  }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet" />
@@ -155,6 +189,12 @@
     /* Features Grid */
     section { padding: 8rem 5%; position: relative; z-index: 2;}
     .section-title { text-align: center; font-size: 2.5rem; font-weight: 900; margin-bottom: 4rem; }
+
+    /* FAQ Section Styles */
+    .faq-container { max-width: 800px; margin: 0 auto; }
+    .faq-item { margin-bottom: 1.5rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 1.5rem; }
+    .faq-question { font-weight: 800; font-size: 1.1rem; color: white; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 10px; }
+    .faq-answer { color: var(--text-muted); line-height: 1.6; }
     
     .features-grid {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;
@@ -255,7 +295,7 @@
 
   <!-- Features Block -->
   <section id="features">
-    <h2 class="section-title scroll-reveal">A complete fluency ecosystem.</h2>
+    <h2 class="section-title scroll-reveal">Master German with our AI ecosystem.</h2>
     <div class="features-grid">
       
       <div class="feature-card tilt-card scroll-reveal">
@@ -299,6 +339,29 @@
       <div class="stat-box scroll-reveal" style="transition-delay: 0.2s;">
         <h4>100%</h4>
         <p>Cross-Device Sync</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section id="faq" class="scroll-reveal">
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    <div class="faq-container">
+      <div class="faq-item">
+        <div class="faq-question"><span>🤔</span> How can I learn German fast with AI?</div>
+        <div class="faq-answer">FluentGermanAI uses advanced conversational AI to simulate real-life German conversations, allowing you to practice speaking and listening 10x faster than traditional methods.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question"><span>💸</span> Is FluentGermanAI free to use?</div>
+        <div class="faq-answer">Yes, FluentGermanAI offers a generous free tier that includes access to core AI conversation features and vocabulary tracking.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question"><span>💡</span> Does the AI correct my German grammar?</div>
+        <div class="faq-answer">Absolutely. Our AI Tutor provides real-time feedback and grammar corrections during your conversations, helping you learn from your mistakes instantly.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question"><span>📈</span> What German levels are supported?</div>
+        <div class="faq-answer">We currently support A1 (Beginner), A2 (Elementary), and B1 (Intermediate) levels, with content specifically optimized for official German language certifications.</div>
       </div>
     </div>
   </section>
