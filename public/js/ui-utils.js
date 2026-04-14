@@ -174,17 +174,17 @@ function createWaveform() {
 // ── Screen Transition ────────────────────────────────────────────────────────
 function renderScreen(html) {
   const root = document.getElementById('app-root');
-  root.style.opacity = '0';
-  root.style.transform = 'translateY(10px)';
-  root.style.transition = 'none';
+  // Trigger fade out
+  root.classList.add('fade-out');
+  
   setTimeout(() => {
+    window.scrollTo(0, 0); // Auto-scroll to top on new screen
     root.innerHTML = html;
-    root.style.transition = 'opacity .28s ease, transform .28s ease';
+    // Release fade out to trigger CSS transition fade in
     requestAnimationFrame(() => {
-      root.style.opacity = '1';
-      root.style.transform = 'translateY(0)';
+      root.classList.remove('fade-out');
     });
-  }, 80);
+  }, 180);
 }
 
 // ── Format helpers ───────────────────────────────────────────────────────────

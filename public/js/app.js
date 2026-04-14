@@ -331,12 +331,26 @@ const App = (() => {
     setTimeout(() => Speech.attachSpeakerButtons(), 200);
   };
 
+  // ── Offline Resilience ───────────────────────────────────────────────────
+  function setupOfflineMonitoring() {
+    window.addEventListener('offline', () => {
+      Toast.warning('📡 You are offline. Progress will be saved locally.', 5000);
+    });
+    window.addEventListener('online', () => {
+      Toast.success('📶 Back online! Syncing progress...', 3000);
+      if (Storage.getAuthToken()) {
+        Storage.syncWithServer().catch(console.error);
+      }
+    });
+  }
+
   // ── Init ─────────────────────────────────────────────────────────────────
   function init() {
     const p = Storage.getProfile();
     if (!p.name) Storage.setProfile(Storage.DEFAULTS.profile);
     Gamification.regenHearts();
     Gamification.updateHeaderStats();
+    setupOfflineMonitoring();
     window.addEventListener('hashchange', handleRoute);
     handleRoute();
   }

@@ -19,6 +19,7 @@ const Gamification = (() => {
       p.xp -= neededXp;
       p.appLevel++;
       setTimeout(() => {
+        if (window.AudioFX) AudioFX.levelUp();
         confettiBurst();
         Toast.success(`🎉 Level Up! You're now level ${p.appLevel} — ${levelName(p.appLevel)}!`, 4000);
       }, 300);

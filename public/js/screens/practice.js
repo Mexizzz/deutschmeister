@@ -106,6 +106,11 @@ window.checkQuizAnswer = function(selected, correct, btn) {
   const isCorrect = selected === correct;
   btn.classList.add(isCorrect ? 'correct' : 'wrong');
 
+  if (window.AudioFX) {
+    if (isCorrect) AudioFX.success();
+    else AudioFX.error();
+  }
+
   if (!isCorrect) {
     document.querySelectorAll('.mcq-option').forEach(b => {
       if (b.textContent.trim() === correct) b.classList.add('correct');

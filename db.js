@@ -76,5 +76,19 @@ module.exports = {
     if (bookmarks) ud.bookmarks = bookmarks;
     ud.lastSynced = new Date().toISOString();
     writeDB(db);
+  },
+  
+  getLeaderboard: (limit = 5) => {
+    const db = readDB();
+    const board = db.userData.map(ud => {
+      try {
+        const p = typeof ud.profile === 'string' ? JSON.parse(ud.profile) : ud.profile;
+        if (!p) return null;
+        // Use user ID if no name
+        const n = p.name || 'Learner';
+        return { name: n, xp: p.xp || p.totalXp || 0, appLevel: p.appLevel || 1 };
+      } catch { return null; }
+    }).filter(Boolean);
+    return board.sort((a, b) => b.xp - a.xp).slice(0, limit);
   }
 };

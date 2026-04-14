@@ -226,11 +226,40 @@ function renderDashboard() {
       </div>
       <div class="lesson-path">${pathHtml}</div>
     </div>
+
+    <!-- Global Leaderboard (Future Friends System) -->
+    <div class="mt-1 mb-3">
+      <div class="section-label">🏆 Global Leaderboard</div>
+      <div class="glass-card" id="dash-leaderboard" style="padding:.75rem">
+        <div class="text-center text-muted text-sm py-2"><i class="fa-solid fa-circle-notch fa-spin"></i> Fetching rankings...</div>
+      </div>
+    </div>
   `;
 
   renderScreen(html);
   Gamification.updateHeaderStats();
   setTimeout(() => Speech.attachSpeakerButtons(), 100);
+
+  // Fetch and render Leaderboard
+  fetch('/api/leaderboard?limit=5', {
+    headers: { 'Authorization': 'Bearer ' + Storage.getAuthToken() }
+  })
+  .then(r => r.json())
+  .then(j => {
+    if (j.success && j.data && j.data.length > 0) {
+      document.getElementById('dash-leaderboard').innerHTML = j.data.map((u, i) => `
+        <div style="display:flex;align-items:center;padding:.5rem 0;border-bottom:${i < j.data.length-1 ? '1px solid var(--panel-border)' : 'none'}">
+          <div style="width:24px;font-weight:800;color:${i===0?'var(--accent-gold)':i===1?'#cbd5e1':i===2?'#b45309':'var(--text-muted)'}">${i+1}</div>
+          <div style="flex:1;font-size:.9rem;font-weight:600">${u.name} <span class="text-xs text-muted fw-400 ml-1">Lvl ${u.appLevel}</span></div>
+          <div style="font-weight:800;color:var(--accent-gold);font-size:.85rem">${u.xp} XP</div>
+        </div>
+      `).join('');
+    } else {
+      document.getElementById('dash-leaderboard').innerHTML = '<div class="text-muted text-xs text-center">No players ranked yet. Be the first!</div>';
+    }
+  }).catch(() => {
+    document.getElementById('dash-leaderboard').innerHTML = '<div class="text-muted text-xs text-center">Leaderboard offline</div>';
+  });
 }
 
 // Dashboard bookmark toggle (without re-render)

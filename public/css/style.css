@@ -171,6 +171,14 @@ img { max-width: 100%; display: block; }
   margin: 0 auto;
   padding: calc(var(--header-height) + 1.25rem) 1.25rem 1.5rem;
   min-height: 100dvh;
+  transition: opacity 0.25s cubic-bezier(.4,0,.2,1), transform 0.25s cubic-bezier(.4,0,.2,1);
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.app-main.fade-out {
+  opacity: 0;
+  transform: translateY(8px) scale(0.98);
 }
 
 /* ── Loading Screen ────────────────────────────────────────── */

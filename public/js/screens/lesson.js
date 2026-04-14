@@ -420,6 +420,7 @@ window.checkArrange = function() {
 };
 
 function handleCorrect() {
+  if (window.AudioFX) AudioFX.success();
   lessonState.correct++;
   const xp = 10;
   lessonState.xpEarned += xp;
@@ -427,6 +428,7 @@ function handleCorrect() {
 }
 
 function handleWrong() {
+  if (window.AudioFX) AudioFX.error();
   lessonState.wrong++;
   const p = Gamification.loseHeart();
   lessonState.hearts = p.hearts;

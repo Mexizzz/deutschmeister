@@ -242,6 +242,17 @@ app.post('/api/user/sync', authenticateToken, async (req, res) => {
   }
 });
 
+// 4. Leaderboard API
+app.get('/api/leaderboard', authenticateToken, async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit, 10) || 10;
+    const board = db.getLeaderboard(limit);
+    res.json({ success: true, data: board });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch leaderboard' });
+  }
+});
+
 // ── Groq API Helper ────────────────────────────────────────────────────────
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const PRIMARY_MODEL = 'llama-3.3-70b-versatile';
