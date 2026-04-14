@@ -142,8 +142,8 @@ app.post('/api/auth/register', async (req, res) => {
     const emailLower = email.toLowerCase();
     
     // Check conflicts
-    if (db.getUserByEmail(emailLower)) return res.status(409).json({ error: 'Email already registered' });
-    if (db.getUserByUsername(username)) return res.status(409).json({ error: 'Username is already taken' });
+    if (await db.getUserByEmail(emailLower)) return res.status(409).json({ error: 'Email already registered' });
+    if (await db.getUserByUsername(username)) return res.status(409).json({ error: 'Username is already taken' });
 
     // Generate Verification Code
     const code = Math.floor(100000 + Math.random() * 900000).toString();
@@ -152,7 +152,7 @@ app.post('/api/auth/register', async (req, res) => {
     const userId = crypto.randomUUID();
     
     // Save to PENDING instead of permanent
-    db.savePendingUser(userId, emailLower, username, hash, salt, code);
+    await db.savePendingUser(userId, emailLower, username, hash, salt, code);
 
     // Send Code via Resend
     try {
@@ -188,21 +188,21 @@ app.post('/api/auth/verify-registration', async (req, res) => {
 
   try {
     const emailLower = email.toLowerCase();
-    const pending = db.getPendingUser(emailLower);
+    const pending = await db.getPendingUser(emailLower);
 
     if (!pending || pending.code !== code) {
       return res.status(401).json({ error: 'Invalid or expired verification code' });
     }
 
     // Officialize Account
-    db.createUser(pending.id, emailLower, pending.username, pending.passwordHash, pending.salt);
+    await db.createUser(pending.id, emailLower, pending.username, pending.password_hash, pending.salt);
 
     // Initialize Default User Profile Data
-    const defaultProfile = JSON.stringify({ name: pending.username, level: 'A1', xp: 0, hearts: 5, appLevel: 1 });
-    db.createUserData(pending.id, defaultProfile, '{}', '[]');
+    const defaultProfile = { name: pending.username, level: 'A1', xp: 0, hearts: 5, appLevel: 1 };
+    await db.createUserData(pending.id, defaultProfile, {}, []);
 
     // Cleanup
-    db.deletePendingUser(emailLower);
+    await db.deletePendingUser(emailLower);
 
     const token = jwt.sign({ id: pending.id, username: pending.username }, JWT_SECRET, { expiresIn: '30d' });
     res.json({ success: true, token, user: { id: pending.id, username: pending.username, email: emailLower } });
@@ -219,7 +219,7 @@ app.post('/api/auth/login', async (req, res) => {
 
   try {
     const emailLower = email.toLowerCase();
-    const user = db.getUserByEmail(emailLower);
+    const user = await db.getUserByEmail(emailLower);
     if (!user) return res.status(401).json({ error: 'Invalid credentials' });
 
     // Legacy OTP users won't have a passwordHash/salt. Gracefully handle it.
@@ -228,7 +228,7 @@ app.post('/api/auth/login', async (req, res) => {
     }
 
     const hash = db.hashPassword(password, user.salt);
-    if (hash !== user.passwordHash) {
+    if (hash !== user.password_hash) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
@@ -243,16 +243,16 @@ app.post('/api/auth/login', async (req, res) => {
 // 3. User Data Sync
 app.get('/api/user/sync', authenticateToken, async (req, res) => {
   try {
-    const data = db.getUserData(req.user.id);
+    const data = await db.getUserData(req.user.id);
     if (!data) return res.json({ success: true, data: { profile: {}, srsCards: {}, chatHistory: {}, bookmarks: [] } });
 
     res.json({
       success: true,
       data: {
-        profile: JSON.parse(data.profile || '{}'),
-        srsCards: JSON.parse(data.srsCards || '{}'),
-        chatHistory: JSON.parse(data.chatHistory || '{}'),
-        bookmarks: JSON.parse(data.bookmarks || '[]')
+        profile: data.profile || {},
+        srsCards: data.srsCards || {},
+        chatHistory: data.chatHistory || {},
+        bookmarks: data.bookmarks || []
       }
     });
   } catch (err) {
@@ -263,12 +263,12 @@ app.get('/api/user/sync', authenticateToken, async (req, res) => {
 app.post('/api/user/sync', authenticateToken, async (req, res) => {
   const { profile, srsCards, chatHistory, bookmarks } = req.body;
   try {
-    db.updateUserData(
+    await db.updateUserData(
       req.user.id,
-      profile ? JSON.stringify(profile) : null,
-      srsCards ? JSON.stringify(srsCards) : null,
-      chatHistory ? JSON.stringify(chatHistory) : null,
-      bookmarks ? JSON.stringify(bookmarks) : null
+      profile || null,
+      srsCards || null,
+      chatHistory || null,
+      bookmarks || null
     );
     res.json({ success: true });
   } catch (err) {
@@ -280,7 +280,7 @@ app.post('/api/user/sync', authenticateToken, async (req, res) => {
 app.get('/api/leaderboard', authenticateToken, async (req, res) => {
   try {
     const limit = parseInt(req.query.limit, 10) || 10;
-    const board = db.getLeaderboard(limit);
+    const board = await db.getLeaderboard(limit);
     res.json({ success: true, data: board });
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch leaderboard' });

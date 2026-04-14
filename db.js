@@ -1,70 +1,114 @@
-const fs = require('fs');
-const path = require('path');
+const { Pool } = require('pg');
 const crypto = require('crypto');
 
-const dataDir = path.join(__dirname, 'data');
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir);
-}
+// Determine connection string: Local fallback vs Railway Env
+const connectionString = process.env.DATABASE_URL;
 
-const dbFile = path.join(dataDir, 'deutschmeister.json');
+const pool = new Pool({
+  connectionString: connectionString,
+  ssl: connectionString ? { rejectUnauthorized: false } : false
+});
 
-// Init empty DB if missing
-if (!fs.existsSync(dbFile)) {
-  fs.writeFileSync(dbFile, JSON.stringify({ users: [], pendingUsers: [], userData: [] }, null, 2));
-}
+// -- Database Initialization Logic --
+const initDB = async () => {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    
+    // 1. Users table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id UUID PRIMARY KEY,
+        email TEXT UNIQUE NOT NULL,
+        username TEXT UNIQUE NOT NULL,
+        password_hash TEXT NOT NULL,
+        salt TEXT NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
 
-function readDB() {
-  const data = JSON.parse(fs.readFileSync(dbFile, 'utf8'));
-  // Ensure all tables exist for backward compatibility
-  if (!data.users) data.users = [];
-  if (!data.pendingUsers) data.pendingUsers = [];
-  if (!data.userData) data.userData = [];
-  return data;
-}
+    // 2. Pending Users (Pre-verification)
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS pending_users (
+        id UUID PRIMARY KEY,
+        email TEXT UNIQUE NOT NULL,
+        username TEXT NOT NULL,
+        password_hash TEXT NOT NULL,
+        salt TEXT NOT NULL,
+        code TEXT NOT NULL,
+        expires_at TIMESTAMP WITH TIME ZONE NOT NULL
+      )
+    `);
 
-function writeDB(data) {
-  fs.writeFileSync(dbFile, JSON.stringify(data, null, 2), 'utf8');
-}
+    // 3. User Data (JSONB blobs)
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS user_data (
+        user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+        profile JSONB NOT NULL DEFAULT '{}',
+        srs_cards JSONB NOT NULL DEFAULT '{}',
+        bookmarks JSONB NOT NULL DEFAULT '[]',
+        chat_history JSONB NOT NULL DEFAULT '{}',
+        last_synced TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
 
-// Minimal ORM for our exact usecases
+    await client.query('COMMIT');
+    console.log('✅ PostgreSQL Tables Initialized / Verified.');
+  } catch (err) {
+    await client.query('ROLLBACK');
+    console.error('❌ DB Init Error:', err);
+    throw err;
+  } finally {
+    client.release();
+  }
+};
+
+// Start Init
+initDB().catch(err => console.error('CRITICAL: DB Initialization Failed', err));
+
+// -- Async ORM Exports --
 module.exports = {
-  getUserByUsername: (username) => {
-    return readDB().users.find(u => u.username.toLowerCase() === username.toLowerCase());
-  },
-  getUserByEmail: (email) => {
-    return readDB().users.find(u => u.email === email);
-  },
-  createUser: (id, email, username, passwordHash, salt) => {
-    const db = readDB();
-    db.users.push({ id, email, username, passwordHash, salt, createdAt: new Date().toISOString() });
-    writeDB(db);
-  },
-  
-  // -- Pending Registrations (Pre-Verification) --
-  savePendingUser: (id, email, username, passwordHash, salt, code) => {
-    const db = readDB();
-    const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString(); // 15 min expiry
-    db.pendingUsers = db.pendingUsers.filter(u => u.email !== email); // Clear previous attempt
-    db.pendingUsers.push({ id, email, username, passwordHash, salt, code, expiresAt });
-    writeDB(db);
-  },
-  getPendingUser: (email) => {
-    const db = readDB();
-    const pending = db.pendingUsers.find(u => u.email === email);
-    if (pending && new Date() > new Date(pending.expiresAt)) {
-      db.pendingUsers = db.pendingUsers.filter(u => u.email !== email);
-      writeDB(db);
-      return null;
-    }
-    return pending;
-  },
-  deletePendingUser: (email) => {
-    const db = readDB();
-    db.pendingUsers = db.pendingUsers.filter(u => u.email !== email);
-    writeDB(db);
+  // Connection Pool for custom queries if needed
+  pool,
+
+  getUserByUsername: async (username) => {
+    const res = await pool.query('SELECT * FROM users WHERE LOWER(username) = LOWER($1)', [username]);
+    return res.rows[0];
   },
 
+  getUserByEmail: async (email) => {
+    const res = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+    return res.rows[0];
+  },
+
+  createUser: async (id, email, username, passwordHash, salt) => {
+    await pool.query(
+      'INSERT INTO users (id, email, username, password_hash, salt) VALUES ($1, $2, $3, $4, $5)',
+      [id, email, username, passwordHash, salt]
+    );
+  },
+
+  // -- Pending Registrations --
+  savePendingUser: async (id, email, username, passwordHash, salt, code) => {
+    const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 min expiry
+    // Upsert equivalent: Delete old attempts first
+    await pool.query('DELETE FROM pending_users WHERE email = $1', [email]);
+    await pool.query(
+      'INSERT INTO pending_users (id, email, username, password_hash, salt, code, expires_at) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+      [id, email, username, passwordHash, salt, code, expiresAt]
+    );
+  },
+
+  getPendingUser: async (email) => {
+    const res = await pool.query('SELECT * FROM pending_users WHERE email = $1 AND expires_at > NOW()', [email]);
+    return res.rows[0];
+  },
+
+  deletePendingUser: async (email) => {
+    await pool.query('DELETE FROM pending_users WHERE email = $1', [email]);
+  },
+
+  // -- Auth Helpers --
   hashPassword: (password, salt) => {
     return crypto.scryptSync(password, salt, 64).toString('hex');
   },
@@ -72,40 +116,68 @@ module.exports = {
     return crypto.randomBytes(16).toString('hex');
   },
 
-  getUserData: (userId) => {
-    return readDB().userData.find(u => u.userId === userId);
+  // -- Profile & Sync Data --
+  getUserData: async (userId) => {
+    const res = await pool.query('SELECT * FROM user_data WHERE user_id = $1', [userId]);
+    return res.rows[0];
   },
-  createUserData: (userId, profile, srsCards, bookmarks) => {
-    const db = readDB();
-    db.userData.push({ userId, profile, srsCards, bookmarks, chatHistory: '{}', lastSynced: new Date().toISOString() });
-    writeDB(db);
+
+  createUserData: async (userId, profile, srsCards, bookmarks) => {
+    // profile, srsCards, bookmarks are passed as JSON strings from old legacy code, 
+    // we should parse them to store as proper JSONB
+    const profileObj = typeof profile === 'string' ? JSON.parse(profile) : profile;
+    const srsObj = typeof srsCards === 'string' ? JSON.parse(srsCards) : srsCards;
+    const bkmkObj = typeof bookmarks === 'string' ? JSON.parse(bookmarks) : bookmarks;
+
+    await pool.query(
+      'INSERT INTO user_data (user_id, profile, srs_cards, bookmarks) VALUES ($1, $2, $3, $4)',
+      [userId, profileObj, srsObj, bkmkObj]
+    );
   },
-  updateUserData: (userId, profile, srsCards, chatHistory, bookmarks) => {
-    const db = readDB();
-    let ud = db.userData.find(u => u.userId === userId);
-    if (!ud) {
-      ud = { userId };
-      db.userData.push(ud);
+
+  updateUserData: async (userId, profile, srsCards, chatHistory, bookmarks) => {
+    const res = await pool.query('SELECT user_id FROM user_data WHERE user_id = $1', [userId]);
+    if (res.rowCount === 0) {
+      // Logic for new user data if not exists (should have been created on signup, but safety first)
+      await pool.query('INSERT INTO user_data (user_id) VALUES ($1)', [userId]);
     }
-    if (profile) ud.profile = profile;
-    if (srsCards) ud.srsCards = srsCards;
-    if (chatHistory) ud.chatHistory = chatHistory;
-    if (bookmarks) ud.bookmarks = bookmarks;
-    ud.lastSynced = new Date().toISOString();
-    writeDB(db);
+
+    const updates = [];
+    const values = [];
+    let idx = 1;
+
+    if (profile) { updates.push(`profile = $${idx++}`); values.push(profile); }
+    if (srsCards) { updates.push(`srs_cards = $${idx++}`); values.push(srsCards); }
+    if (chatHistory) { updates.push(`chat_history = $${idx++}`); values.push(chatHistory); }
+    if (bookmarks) { updates.push(`bookmarks = $${idx++}`); values.push(bookmarks); }
+    
+    values.push(userId);
+    const userIdIdx = idx;
+
+    if (updates.length > 0) {
+      await pool.query(
+        `UPDATE user_data SET ${updates.join(', ')}, last_synced = NOW() WHERE user_id = $${userIdIdx}`,
+        values
+      );
+    }
   },
-  
-  getLeaderboard: (limit = 5) => {
-    const db = readDB();
-    const board = db.userData.map(ud => {
-      try {
-        const p = typeof ud.profile === 'string' ? JSON.parse(ud.profile) : ud.profile;
-        if (!p) return null;
-        // Use user ID if no name
-        const n = p.name || 'Learner';
-        return { name: n, xp: p.xp || p.totalXp || 0, appLevel: p.appLevel || 1 };
-      } catch { return null; }
-    }).filter(Boolean);
-    return board.sort((a, b) => b.xp - a.xp).slice(0, limit);
+
+  getLeaderboard: async (limit = 5) => {
+    // In PG, we can query nested JSONB fields!
+    const res = await pool.query(`
+      SELECT 
+        profile->>'name' as name, 
+        CAST(COALESCE(profile->>'xp', '0') AS INTEGER) as xp,
+        CAST(COALESCE(profile->>'appLevel', '1') AS INTEGER) as app_level
+      FROM user_data
+      ORDER BY xp DESC
+      LIMIT $1
+    `, [limit]);
+    
+    return res.rows.map(r => ({
+      name: r.name || 'Learner',
+      xp: r.xp,
+      appLevel: r.app_level
+    }));
   }
 };
