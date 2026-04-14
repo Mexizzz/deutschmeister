@@ -15,35 +15,103 @@
 </head>
 <body>
 
-  <!-- Background blobs -->
-  <div class="blob blob-1"></div>
-  <div class="blob blob-2"></div>
-  <div class="blob blob-3"></div>
+  <!-- Background ambient -->
+  <div class="bg-ambient">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="particle particle-1"></div>
+    <div class="particle particle-2"></div>
+    <div class="particle particle-3"></div>
+    <div class="particle particle-4"></div>
+    <div class="particle particle-5"></div>
+  </div>
 
-  <!-- Top Header -->
-  <header class="app-header" id="app-header">
-    <div class="header-inner">
-      <a class="logo" href="#/">
-        <span class="logo-flag">🇩🇪</span>
-        <span class="logo-text">Fluent<span class="logo-accent">GermanAI</span></span>
-      </a>
-      <div class="header-stats" id="header-stats">
-        <!-- Populated by JS -->
+  <!-- ═══════════════════ APP LAYOUT ═══════════════════ -->
+  <div class="app-layout">
+
+    <!-- ── Desktop Sidebar ─────────────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <!-- Brand -->
+        <a class="sidebar-brand" href="#/">
+          <span class="sidebar-brand-flag">🇩🇪</span>
+          <div class="sidebar-brand-text">
+            <span class="sidebar-brand-name">Fluent<span class="logo-accent">GermanAI</span></span>
+            <span class="sidebar-brand-sub">AI Language Tutor</span>
+          </div>
+        </a>
+
+        <!-- Nav -->
+        <nav class="sidebar-nav">
+          <a class="sidebar-link active" href="#/" data-tab="home" id="side-home">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+          </a>
+          <a class="sidebar-link" href="#/learn" data-tab="learn" id="side-learn">
+            <i class="fa-solid fa-book-open"></i>
+            <span>Learn</span>
+          </a>
+          <a class="sidebar-link sidebar-link-ai" href="#/ai" data-tab="ai" id="side-ai">
+            <i class="fa-solid fa-robot"></i>
+            <span>AI Tutor</span>
+            <span class="sidebar-badge">✨</span>
+          </a>
+          <a class="sidebar-link" href="#/practice" data-tab="practice" id="side-practice">
+            <i class="fa-solid fa-bullseye"></i>
+            <span>Practice</span>
+          </a>
+          <a class="sidebar-link" href="#/progress" data-tab="progress" id="side-progress">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>Progress</span>
+          </a>
+          <a class="sidebar-link" href="#/settings" data-tab="settings" id="side-settings">
+            <i class="fa-solid fa-gear"></i>
+            <span>Settings</span>
+          </a>
+        </nav>
+
+        <!-- Sidebar Footer — User Card -->
+        <div class="sidebar-user" id="sidebar-user">
+          <div class="sidebar-user-avatar" id="sidebar-avatar">👤</div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name" id="sidebar-username">Learner</div>
+            <div class="sidebar-user-level" id="sidebar-level">Level 1</div>
+          </div>
+        </div>
       </div>
-    </div>
-  </header>
+    </aside>
 
-  <!-- Main Content -->
-  <main class="app-main" id="app-root">
-    <!-- Screens rendered here by JS -->
-    <div class="loading-screen">
-      <div class="loading-logo">🇩🇪</div>
-      <div class="loading-text">FluentGermanAI</div>
-      <div class="loading-spinner"></div>
-    </div>
-  </main>
+    <!-- ── Main Column ─────────────────────────────────── -->
+    <div class="main-column">
+      <!-- Top Header (Mobile + Desktop) -->
+      <header class="app-header" id="app-header">
+        <div class="header-inner">
+          <a class="logo" href="#/">
+            <span class="logo-flag">🇩🇪</span>
+            <span class="logo-text">Fluent<span class="logo-accent">GermanAI</span></span>
+          </a>
+          <div class="header-stats" id="header-stats">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </header>
 
-  <!-- Bottom Navigation -->
+      <!-- Main Content -->
+      <main class="app-main" id="app-root">
+        <!-- Screens rendered here by JS -->
+        <div class="loading-screen">
+          <div class="loading-logo">🇩🇪</div>
+          <div class="loading-text">FluentGermanAI</div>
+          <div class="loading-spinner"></div>
+        </div>
+      </main>
+    </div>
+
+  </div>
+  <!-- ═══════════════════ END LAYOUT ═══════════════════ -->
+
+  <!-- Bottom Navigation (Mobile only) -->
   <nav class="bottom-nav" id="bottom-nav">
     <a class="nav-item active" href="#/" data-tab="home" id="nav-home">
       <i class="fa-solid fa-house"></i>

@@ -36,6 +36,7 @@ const App = (() => {
     '/practice':'practice',
     '/ai':      'ai',
     '/progress':'progress',
+    '/settings':'settings',
   };
 
   function getActiveTab(path) {
@@ -86,11 +87,17 @@ const App = (() => {
       return;
     }
 
-    // Highlight nav
+    // Highlight nav (bottom + sidebar)
     const activeTab = getActiveTab(path);
     document.querySelectorAll('.nav-item').forEach(el => {
       el.classList.toggle('active', el.dataset.tab === activeTab);
     });
+    document.querySelectorAll('.sidebar-link').forEach(el => {
+      el.classList.toggle('active', el.dataset.tab === activeTab);
+    });
+
+    // Update sidebar user card
+    updateSidebarUser();
 
     const match = matchRoute(path);
     if (match) {
@@ -344,6 +351,20 @@ const App = (() => {
         Storage.syncWithServer().catch(console.error);
       }
     });
+  }
+
+  // ── Sidebar User Card ─────────────────────────────────────────────────────
+  function updateSidebarUser() {
+    const p = Storage.getProfile();
+    const nameEl  = document.getElementById('sidebar-username');
+    const levelEl = document.getElementById('sidebar-level');
+    const avatarEl = document.getElementById('sidebar-avatar');
+    if (nameEl)  nameEl.textContent = p.name || 'Learner';
+    if (levelEl) levelEl.textContent = `Level ${p.appLevel || 1} · ${levelName(p.appLevel || 1)}`;
+    if (avatarEl) {
+      const initials = (p.name || 'L').charAt(0).toUpperCase();
+      avatarEl.textContent = initials;
+    }
   }
 
   // ── Init ─────────────────────────────────────────────────────────────────

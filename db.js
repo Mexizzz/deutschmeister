@@ -6,60 +6,70 @@ const connectionString = process.env.DATABASE_URL;
 
 const pool = new Pool({
   connectionString: connectionString,
-  ssl: connectionString ? { rejectUnauthorized: false } : false
+  ssl: (connectionString && !connectionString.includes('localhost')) ? { rejectUnauthorized: false } : false
 });
 
-// -- Database Initialization Logic --
-const initDB = async () => {
-  const client = await pool.connect();
-  try {
-    await client.query('BEGIN');
-    
-    // 1. Users table
-    await client.query(`
-      CREATE TABLE IF NOT EXISTS users (
-        id UUID PRIMARY KEY,
-        email TEXT UNIQUE NOT NULL,
-        username TEXT UNIQUE NOT NULL,
-        password_hash TEXT NOT NULL,
-        salt TEXT NOT NULL,
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
+if (!connectionString) {
+  console.warn('⚠️  DATABASE_URL is not set. Defaulting to localhost:5432 (Development only)');
+}
 
-    // 2. Pending Users (Pre-verification)
-    await client.query(`
-      CREATE TABLE IF NOT EXISTS pending_users (
-        id UUID PRIMARY KEY,
-        email TEXT UNIQUE NOT NULL,
-        username TEXT NOT NULL,
-        password_hash TEXT NOT NULL,
-        salt TEXT NOT NULL,
-        code TEXT NOT NULL,
-        expires_at TIMESTAMP WITH TIME ZONE NOT NULL
-      )
-    `);
+// -- Database Initialization Logic with Retries --
+const initDB = async (retries = 5) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const client = await pool.connect();
+      try {
+        await client.query('BEGIN');
+        
+        await client.query(`
+          CREATE TABLE IF NOT EXISTS users (
+            id UUID PRIMARY KEY,
+            email TEXT UNIQUE NOT NULL,
+            username TEXT UNIQUE NOT NULL,
+            password_hash TEXT NOT NULL,
+            salt TEXT NOT NULL,
+            created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+          )
+        `);
 
-    // 3. User Data (JSONB blobs)
-    await client.query(`
-      CREATE TABLE IF NOT EXISTS user_data (
-        user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
-        profile JSONB NOT NULL DEFAULT '{}',
-        srs_cards JSONB NOT NULL DEFAULT '{}',
-        bookmarks JSONB NOT NULL DEFAULT '[]',
-        chat_history JSONB NOT NULL DEFAULT '{}',
-        last_synced TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
+        await client.query(`
+          CREATE TABLE IF NOT EXISTS pending_users (
+            id UUID PRIMARY KEY,
+            email TEXT UNIQUE NOT NULL,
+            username TEXT NOT NULL,
+            password_hash TEXT NOT NULL,
+            salt TEXT NOT NULL,
+            code TEXT NOT NULL,
+            expires_at TIMESTAMP WITH TIME ZONE NOT NULL
+          )
+        `);
 
-    await client.query('COMMIT');
-    console.log('✅ PostgreSQL Tables Initialized / Verified.');
-  } catch (err) {
-    await client.query('ROLLBACK');
-    console.error('❌ DB Init Error:', err);
-    throw err;
-  } finally {
-    client.release();
+        await client.query(`
+          CREATE TABLE IF NOT EXISTS user_data (
+            user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+            profile JSONB NOT NULL DEFAULT '{}',
+            srs_cards JSONB NOT NULL DEFAULT '{}',
+            bookmarks JSONB NOT NULL DEFAULT '[]',
+            chat_history JSONB NOT NULL DEFAULT '{}',
+            last_synced TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+          )
+        `);
+
+        await client.query('COMMIT');
+        console.log('✅ PostgreSQL Tables Initialized / Verified.');
+        return; // Success
+      } catch (err) {
+        if (client) await client.query('ROLLBACK');
+        throw err;
+      } finally {
+        if (client) client.release();
+      }
+    } catch (err) {
+      console.error(`❌ DB Connection Attempt ${i+1}/${retries} failed:`, err.message);
+      if (i === retries - 1) throw err;
+      // Wait 3 seconds before next retry
+      await new Promise(res => setTimeout(res, 3000));
+    }
   }
 };
 

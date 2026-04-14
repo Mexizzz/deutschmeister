@@ -28,59 +28,67 @@
 
   --nav-height:    64px;
   --header-height: 60px;
+  --sidebar-width: 260px;
   --transition:    .22s cubic-bezier(.4,0,.2,1);
+  --transition-spring: .35s cubic-bezier(.34,1.56,.64,1);
+  --bg-sidebar:    rgba(10, 14, 26, .92);
 }
 
 /* ── Theme Definitions ──────────────────────────────────────── */
 
 /* 1. Midnight (Standard Indigo/Gold) */
 .theme-midnight, :root:not([class*="theme-"]) {
-  --accent-1: #8b5cf6; /* Purple */
-  --accent-2: #f59e0b; /* Gold */
-  --accent-3: #3b82f6; /* Blue */
+  --accent-1: #8b5cf6;
+  --accent-2: #f59e0b;
+  --accent-3: #3b82f6;
   --grad-main: linear-gradient(135deg, #8b5cf6, #6366f1);
   --grad-accent: linear-gradient(135deg, #f59e0b, #f97316);
   --shadow-glow: 0 0 24px rgba(139,92,246,.35);
+  --sidebar-glow: linear-gradient(180deg, rgba(139,92,246,.08), rgba(99,102,241,.03));
 }
 
 /* 2. Sunset (Orange/Amber/Red) */
 .theme-sunset {
-  --accent-1: #f97316; /* Orange */
-  --accent-2: #fbbf24; /* Amber */
-  --accent-3: #ef4444; /* Red */
+  --accent-1: #f97316;
+  --accent-2: #fbbf24;
+  --accent-3: #ef4444;
   --grad-main: linear-gradient(135deg, #f97316, #ef4444);
   --grad-accent: linear-gradient(135deg, #fbbf24, #f59e0b);
   --shadow-glow: 0 0 24px rgba(249,115,22,.35);
+  --sidebar-glow: linear-gradient(180deg, rgba(249,115,22,.08), rgba(239,68,68,.03));
 }
 
 /* 3. Ocean (Blue/Cyan/Emerald) */
 .theme-ocean {
-  --accent-1: #0ea5e9; /* Blue */
-  --accent-2: #06b6d4; /* Cyan */
-  --accent-3: #10b981; /* Emerald */
+  --accent-1: #0ea5e9;
+  --accent-2: #06b6d4;
+  --accent-3: #10b981;
   --grad-main: linear-gradient(135deg, #0ea5e9, #06b6d4);
   --grad-accent: linear-gradient(135deg, #10b981, #34d399);
   --shadow-glow: 0 0 24px rgba(14,165,233,.35);
+  --sidebar-glow: linear-gradient(180deg, rgba(14,165,233,.08), rgba(6,182,212,.03));
 }
 
 /* 4. Forest (Emerald/Green/Lime) */
 .theme-forest {
-  --accent-1: #10b981; /* Emerald */
-  --accent-2: #84cc16; /* Lime */
-  --accent-3: #0ea5e9; /* Blue */
+  --accent-1: #10b981;
+  --accent-2: #84cc16;
+  --accent-3: #0ea5e9;
   --grad-main: linear-gradient(135deg, #10b981, #059669);
   --grad-accent: linear-gradient(135deg, #84cc16, #a3e635);
   --shadow-glow: 0 0 24px rgba(16,185,129,.35);
+  --sidebar-glow: linear-gradient(180deg, rgba(16,185,129,.08), rgba(5,150,105,.03));
 }
 
 /* 5. Cyber (Pink/Cyan/Purple) */
 .theme-cyber {
-  --accent-1: #ec4899; /* Pink */
-  --accent-2: #06b6d4; /* Cyan */
-  --accent-3: #8b5cf6; /* Purple */
+  --accent-1: #ec4899;
+  --accent-2: #06b6d4;
+  --accent-3: #8b5cf6;
   --grad-main: linear-gradient(135deg, #ec4899, #8b5cf6);
   --grad-accent: linear-gradient(135deg, #06b6d4, #22d3ee);
   --shadow-glow: 0 0 24px rgba(236,72,153,.35);
+  --sidebar-glow: linear-gradient(180deg, rgba(236,72,153,.08), rgba(139,92,246,.03));
 }
 
 /* Map legacy variables to theme ones */
@@ -1130,4 +1138,295 @@ img { max-width: 100%; display: block; }
 /* ── fw-900 already exists, extra safe ─────────────────────── */
 .text-right { text-align: right; }
 
+/* ════════════════════════════════════════════════════════════
+   SIDEBAR + DESKTOP LAYOUT
+   ════════════════════════════════════════════════════════════ */
+
+/* ── App Layout Container ──────────────────────────────────── */
+.app-layout {
+  display: flex;
+  min-height: 100dvh;
+}
+
+.main-column {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Background Ambient Container ──────────────────────────── */
+.bg-ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* ── Floating Particles ────────────────────────────────────── */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--accent-1);
+  opacity: .06;
+  animation: particleFloat 20s ease-in-out infinite;
+}
+.particle-1 { width: 6px; height: 6px; top: 15%; left: 25%; animation-delay: 0s; animation-duration: 18s; }
+.particle-2 { width: 4px; height: 4px; top: 45%; left: 65%; animation-delay: -4s; animation-duration: 22s; }
+.particle-3 { width: 8px; height: 8px; top: 70%; left: 35%; animation-delay: -8s; animation-duration: 25s; opacity: .04; }
+.particle-4 { width: 3px; height: 3px; top: 25%; left: 80%; animation-delay: -12s; animation-duration: 20s; }
+.particle-5 { width: 5px; height: 5px; top: 85%; left: 50%; animation-delay: -6s; animation-duration: 24s; opacity: .05; }
+
+@keyframes particleFloat {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(40px, -60px) rotate(90deg); }
+  50% { transform: translate(-30px, -120px) rotate(180deg); }
+  75% { transform: translate(50px, -80px) rotate(270deg); }
+}
+
+/* ── Sidebar ───────────────────────────────────────────────── */
+.sidebar {
+  display: none; /* Hidden on mobile by default */
+  width: var(--sidebar-width);
+  flex-shrink: 0;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 150;
+  background: var(--bg-sidebar);
+  background-image: var(--sidebar-glow);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-right: 1px solid var(--panel-border);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.5rem 1rem 1rem;
+}
+
+/* ── Sidebar Brand ─────────────────────────────────────────── */
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  padding: .5rem .75rem;
+  margin-bottom: 1.5rem;
+  text-decoration: none;
+  transition: transform var(--transition);
+}
+.sidebar-brand:hover { transform: scale(1.02); }
+.sidebar-brand-flag { font-size: 1.8rem; }
+.sidebar-brand-text { display: flex; flex-direction: column; }
+.sidebar-brand-name { font-size: 1.15rem; font-weight: 800; letter-spacing: -.02em; color: var(--text-primary); }
+.sidebar-brand-sub  { font-size: .68rem; color: var(--text-muted); font-weight: 500; margin-top: .1rem; }
+
+/* ── Sidebar Navigation ────────────────────────────────────── */
+.sidebar-nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .75rem 1rem;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: .9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.sidebar-link i {
+  width: 20px;
+  text-align: center;
+  font-size: 1rem;
+  transition: transform var(--transition-spring);
+}
+.sidebar-link:hover {
+  background: rgba(255,255,255,.06);
+  color: var(--text-primary);
+  transform: translateX(4px);
+}
+.sidebar-link:hover i { transform: scale(1.15); }
+
+.sidebar-link.active {
+  background: rgba(255,255,255,.08);
+  color: var(--accent-1);
+  font-weight: 700;
+}
+.sidebar-link.active::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 60%;
+  background: var(--grad-main);
+  border-radius: 0 4px 4px 0;
+  animation: sidebarPillIn .3s ease;
+}
+@keyframes sidebarPillIn {
+  from { height: 0; opacity: 0; }
+  to   { height: 60%; opacity: 1; }
+}
+
+.sidebar-link-ai { position: relative; }
+.sidebar-badge {
+  margin-left: auto;
+  font-size: .7rem;
+  padding: .15rem .4rem;
+  border-radius: var(--radius-full);
+  background: var(--grad-main);
+  animation: badgePulse 2s ease-in-out infinite;
+}
+@keyframes badgePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .7; transform: scale(.92); }
+}
+
+/* ── Sidebar User Footer ───────────────────────────────────── */
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  padding: .75rem;
+  margin-top: auto;
+  border-top: 1px solid var(--panel-border);
+  border-radius: var(--radius-md);
+  transition: background var(--transition);
+}
+.sidebar-user:hover { background: rgba(255,255,255,.04); }
+.sidebar-user-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--grad-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.sidebar-user-name  { font-weight: 700; font-size: .88rem; color: var(--text-primary); }
+.sidebar-user-level { font-size: .72rem; color: var(--text-muted); }
+
+/* ════════════════════════════════════════════════════════════
+   MOTION GRAPHICS — Card Entrance Animations
+   ════════════════════════════════════════════════════════════ */
+
+@keyframes cardFadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.glass-card, .ai-feature-card, .stat-big-box, .path-lesson, .challenge-card, .settings-item {
+  animation: cardFadeInUp .45s ease both;
+}
+/* Stagger delays for sequential cards */
+.glass-card:nth-child(1), .ai-feature-card:nth-child(1), .stat-big-box:nth-child(1), .path-lesson:nth-child(1) { animation-delay: .04s; }
+.glass-card:nth-child(2), .ai-feature-card:nth-child(2), .stat-big-box:nth-child(2), .path-lesson:nth-child(2) { animation-delay: .1s; }
+.glass-card:nth-child(3), .ai-feature-card:nth-child(3), .stat-big-box:nth-child(3), .path-lesson:nth-child(3) { animation-delay: .16s; }
+.glass-card:nth-child(4), .ai-feature-card:nth-child(4), .stat-big-box:nth-child(4), .path-lesson:nth-child(4) { animation-delay: .22s; }
+.glass-card:nth-child(5), .path-lesson:nth-child(5) { animation-delay: .28s; }
+.glass-card:nth-child(6), .path-lesson:nth-child(6) { animation-delay: .34s; }
+
+/* ── Enhanced Card Hover Effects ───────────────────────────── */
+.glass-card {
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+.glass-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md), 0 0 30px rgba(255,255,255,.03);
+  border-color: rgba(255,255,255,.14);
+}
+
+/* ── Button Press Effect ───────────────────────────────────── */
+.btn:active:not(:disabled) {
+  transform: scale(.96) !important;
+  transition: transform .08s ease;
+}
+
+/* ── Nav Item Bounce ───────────────────────────────────────── */
+.nav-item:active i, .sidebar-link:active i {
+  animation: iconBounce .3s ease;
+}
+@keyframes iconBounce {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(.85); }
+  70%  { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+/* ── Enhanced Page Transition ──────────────────────────────── */
+.app-main {
+  animation: pageFadeIn .3s ease;
+}
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Streak pulse micro-animation ──────────────────────────── */
+.stat-chip.streak {
+  animation: streakPulse 3s ease-in-out infinite;
+}
+@keyframes streakPulse {
+  0%, 100% { box-shadow: none; }
+  50% { box-shadow: 0 0 12px rgba(251,146,60,.25); }
+}
+
+/* ════════════════════════════════════════════════════════════
+   RESPONSIVE — Desktop vs Mobile
+   ════════════════════════════════════════════════════════════ */
+
+/* Desktop: Show sidebar, hide bottom nav, hide mobile header logo */
+@media (min-width: 768px) {
+  .sidebar {
+    display: flex;
+  }
+  .main-column {
+    margin-left: var(--sidebar-width);
+  }
+  .bottom-nav {
+    display: none !important;
+  }
+  /* Hide logo in header on desktop (it's in sidebar) */
+  .app-header .logo {
+    display: none;
+  }
+  .app-main {
+    max-width: 780px;
+    padding-bottom: 2rem;
+  }
+  /* Wider cards on desktop */
+  .ai-features-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .practice-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  body {
+    padding-bottom: 0;
+  }
+}
+
+/* Mobile: Ensure sidebar is hidden, bottom nav visible */
+@media (max-width: 767px) {
+  .sidebar {
+    display: none !important;
+  }
+  .bottom-nav {
+    display: flex;
+  }
+}
 
