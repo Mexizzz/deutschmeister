@@ -209,13 +209,13 @@ function xpForLevel(level) {
 const UI = (() => {
   function applyTheme(themeName) {
     if (!themeName) return;
-    const body = document.body;
+    const root = document.documentElement;
     // Remove existing themes
-    body.classList.forEach(cls => {
-      if (cls.startsWith('theme-')) body.classList.remove(cls);
+    root.classList.forEach(cls => {
+      if (cls.startsWith('theme-')) root.classList.remove(cls);
     });
     // Add new theme
-    body.classList.add(`theme-${themeName}`);
+    root.classList.add(`theme-${themeName}`);
   }
 
   return { applyTheme };
