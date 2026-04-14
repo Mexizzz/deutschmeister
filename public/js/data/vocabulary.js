@@ -146,7 +146,8 @@ const VOCABULARY = [
   { id:'v121', de:'Donnerstag', en:'Thursday', gender:null, plural:null, example_de:'Am Donnerstag habe ich frei.', example_en:'On Thursday I am free.', category:'time', level:'A1' },
   { id:'v122', de:'Freitag', en:'Friday', gender:null, plural:null, example_de:'Freitag ist der letzte Schultag.', example_en:'Friday is the last school day.', category:'time', level:'A1' },
   { id:'v123', de:'Samstag', en:'Saturday', gender:null, plural:null, example_de:'Am Samstag schlafe ich lange.', example_en:'On Saturday I sleep in.', category:'time', level:'A1' },
-  { id:'v124', de:'Sonntag', en:'Sunday', gender:null, plural:null, example_de:'Sonntag ist ein Ruhetag.', example_en:'Sunday is a d  { id:'v132', de:'der Monat', en:'the month', gender:'m', plural:'die Monate', example_de:'Ich lerne seit einem Monat Deutsch.', example_en:'I have been learning German for a month.', category:'time', level:'A1' },
+  { id:'v124', de:'Sonntag', en:'Sunday', gender:null, plural:null, example_de:'Sonntag ist ein Ruhetag.', example_en:'Sunday is a day of rest.', category:'time', level:'A1' },
+  { id:'v132', de:'der Monat', en:'the month', gender:'m', plural:'die Monate', example_de:'Ich lerne seit einem Monat Deutsch.', example_en:'I have been learning German for a month.', category:'time', level:'A1' },
 
   // ── Common Verbs ──────────────────────────────────────────────────────
   { id:'v133', de:'sein', en:'to be', gender:null, plural:null, example_de:'Ich bin Student.', example_en:'I am a student.', category:'verbs', level:'A1' },
