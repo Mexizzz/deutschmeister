@@ -88,7 +88,6 @@ function renderDashboard() {
     </div>`;
 
   // ── AI Daily Homework ─────────────────────────────────────────────────────
-  const today = new Date().toDateString();
   const homeworkDone = p.homeworkDate === today && p.homeworkCompleted;
 
   const homeworkHtml = `
