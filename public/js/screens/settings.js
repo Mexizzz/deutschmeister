@@ -3,9 +3,24 @@
 
 function renderSettings() {
   const p = Storage.getProfile();
+  const metaRaw = localStorage.getItem('dm_user_meta');
+  const userMeta = metaRaw ? JSON.parse(metaRaw) : null;
 
   const html = `
-    <div class="section-label mb-3">⚙️ Settings</div>
+    <div class="flex-between mb-2">
+      <div class="section-label mb-0">⚙️ Settings</div>
+    </div>
+
+    <!-- Account Details -->
+    <div class="glass-card mb-3 text-center">
+      <div style="font-size:3rem;margin-bottom:.5rem">👤</div>
+      <div class="fw-900" style="font-size:1.4rem">${userMeta ? userMeta.username : p.name}</div>
+      <div class="text-secondary text-sm">${userMeta ? userMeta.email : 'Local Guest'}</div>
+      
+      <button class="btn btn-secondary btn-block mt-3" onclick="logout()" style="color:var(--danger)">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out
+      </button>
+    </div>
 
     <!-- Learning Settings -->
     <div class="settings-group">

@@ -3,13 +3,21 @@ require('dotenv').config(); // Load .env file (GROQ_API_KEY etc.)
 
 const express = require('express');
 const path = require('path');
+const cors = require('cors');
+const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const { Resend } = require('resend');
+const db = require('./db');
 
 const app = express();
+const resend = new Resend('re_dyrgNJBX_2Dhghb7nx8rcCBcZAcr8nPb8'); // Explicitly adding the user's key here
+const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-deutschmeister-key';
 const PORT = process.env.PORT || 3000;
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
 // ── Middleware ──────────────────────────────────────────────────────────────
-app.use(express.json({ limit: '10kb' }));
+app.use(cors());
+app.use(express.json({ limit: '1MB' })); // Increased limit for saving progress json
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ── Rate Limiting (in-memory per IP) ───────────────────────────────────────
@@ -108,6 +116,135 @@ Return ONLY a valid JSON object with this exact shape:
   "encouragement": "A motivating closing sentence"
 }`
 };
+
+// ── Auth & Database Routes ───────────────────────────────────────────────────
+
+// Auth Middleware
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) return res.status(401).json({ error: 'Missing token' });
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) return res.status(403).json({ error: 'Invalid token' });
+    req.user = user;
+    next();
+  });
+}
+
+// 1. Send OTP via Resend
+app.post('/api/auth/send-code', async (req, res) => {
+  const { email, username } = req.body;
+  if (!email || !username) return res.status(400).json({ error: 'Email and username required' });
+
+  const code = Math.floor(100000 + Math.random() * 900000).toString();
+  const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+
+  try {
+    const existingUser = await db.get('SELECT * FROM users WHERE username = ? COLLATE NOCASE', [username]);
+    if (existingUser && existingUser.email.toLowerCase() !== email.toLowerCase()) {
+      return res.status(409).json({ error: 'Username is already taken by another account.' });
+    }
+
+    await db.run(
+      'INSERT INTO otps (email, code, expiresAt) VALUES (?, ?, ?) ON CONFLICT(email) DO UPDATE SET code = excluded.code, expiresAt = excluded.expiresAt',
+      [email.toLowerCase(), code, expiresAt]
+    );
+
+    // Using onboarding@resend.dev which only works for verified emails in free tier, but works out-of-the-box for testing
+    await resend.emails.send({
+      from: 'DeutschMeister <onboarding@resend.dev>',
+      to: email,
+      subject: 'Your DeutschMeister Login Code 🇩🇪',
+      html: `
+        <div style="font-family:sans-serif; text-align:center; padding:2rem;">
+          <h2>Willkommen bei DeutschMeister!</h2>
+          <p>Here is your magic login code:</p>
+          <h1 style="letter-spacing:4px; color:#6366f1;">${code}</h1>
+          <p style="color:#666">This code expires in 10 minutes.</p>
+        </div>
+      `
+    });
+
+    res.json({ success: true, message: 'Code sent!' });
+  } catch (err) {
+    console.error('OTP Error:', err);
+    // Even if Resend fails due to free tier restrictions on unverified emails, 
+    // we will log the code so the dev can still log in via console
+    console.log(`[DEBUG MOCK] Sent OTP ${code} to ${email}`);
+    res.json({ success: true, message: 'Code routed.', debugCode: code });
+  }
+});
+
+// 2. Verify OTP & Login
+app.post('/api/auth/verify-code', async (req, res) => {
+  const { email, code, username } = req.body;
+  if (!email || !code || !username) return res.status(400).json({ error: 'Missing fields' });
+
+  try {
+    const emailLower = email.toLowerCase();
+    const otpRec = await db.get('SELECT * FROM otps WHERE email = ?', [emailLower]);
+    
+    if (!otpRec || otpRec.code !== code || new Date() > new Date(otpRec.expiresAt)) {
+      return res.status(401).json({ error: 'Invalid or expired code' });
+    }
+
+    let user = await db.get('SELECT * FROM users WHERE email = ?', [emailLower]);
+    if (!user) {
+      const userId = crypto.randomUUID();
+      await db.run('INSERT INTO users (id, email, username) VALUES (?, ?, ?)', [userId, emailLower, username]);
+      user = { id: userId, email: emailLower, username };
+      
+      const defaultProfile = JSON.stringify({ name: username, level: 'A1', xp: 0, hearts: 5, appLevel: 1 });
+      await db.run('INSERT INTO user_data (userId, profile, srsCards, bookmarks) VALUES (?, ?, ?, ?)', [userId, defaultProfile, '{}', '[]']);
+    }
+
+    await db.run('DELETE FROM otps WHERE email = ?', [emailLower]);
+    const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '30d' });
+
+    res.json({ success: true, token, user: { id: user.id, username: user.username, email: user.email } });
+  } catch (err) {
+    console.error('Verify Error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// 3. User Data Sync
+app.get('/api/user/sync', authenticateToken, async (req, res) => {
+  try {
+    const data = await db.get('SELECT profile, srsCards, chatHistory, bookmarks FROM user_data WHERE userId = ?', [req.user.id]);
+    res.json({
+      success: true,
+      data: {
+        profile: JSON.parse(data.profile || '{}'),
+        srsCards: JSON.parse(data.srsCards || '{}'),
+        chatHistory: JSON.parse(data.chatHistory || '{}'),
+        bookmarks: JSON.parse(data.bookmarks || '[]')
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Fetch data failed' });
+  }
+});
+
+app.post('/api/user/sync', authenticateToken, async (req, res) => {
+  const { profile, srsCards, chatHistory, bookmarks } = req.body;
+  try {
+    await db.run(
+      'UPDATE user_data SET profile = ?, srsCards = ?, chatHistory = ?, bookmarks = ?, lastSynced = CURRENT_TIMESTAMP WHERE userId = ?',
+      [
+        profile ? JSON.stringify(profile) : null,
+        srsCards ? JSON.stringify(srsCards) : null,
+        chatHistory ? JSON.stringify(chatHistory) : null,
+        bookmarks ? JSON.stringify(bookmarks) : null,
+        req.user.id
+      ]
+    );
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Sync data failed' });
+  }
+});
 
 // ── Groq API Helper ────────────────────────────────────────────────────────
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';

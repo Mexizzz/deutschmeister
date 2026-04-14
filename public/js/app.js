@@ -6,6 +6,7 @@ const App = (() => {
   // ── Route table ─────────────────────────────────────────────────────────────
   const ROUTES = {
     '/':                    () => renderDashboard(),
+    '/auth':                () => renderAuthScreen(),
     '/onboarding':          () => renderOnboarding(),
     '/learn':               () => renderLearnMenu(),
     '/lesson/:id':          (p) => startLesson(p.id),
@@ -68,10 +69,17 @@ const App = (() => {
   function handleRoute() {
     const hash  = window.location.hash || '#/';
     const path  = hash.replace(/^#/, '') || '/';
-    const p     = Storage.getProfile();
+    
+    // Auth guard
+    if (!Storage.isAuthenticated() && path !== '/auth') {
+      navigate('/auth');
+      return;
+    }
 
-    // Redirect to onboarding if first launch
-    if (!p.onboardingDone && path !== '/onboarding') {
+    const p = Storage.getProfile();
+
+    // Redirect to onboarding if first launch (after login)
+    if (Storage.isAuthenticated() && !p.onboardingDone && path !== '/onboarding' && path !== '/auth') {
       navigate('/onboarding');
       return;
     }
