@@ -347,6 +347,7 @@ const App = (() => {
   }
 
   // ── Init ─────────────────────────────────────────────────────────────────
+  function init() {
     const p = Storage.getProfile();
     if (!p.name) Storage.setProfile(Storage.DEFAULTS.profile);
     UI.applyTheme(p.theme);
