@@ -32,15 +32,9 @@ const Gamification = (() => {
     return p;
   }
 
-  // ── Lose Heart ───────────────────────────────────────────────────────────
+  // ── Lose Heart (Disabled) ─────────────────────────────────────────────────
   function loseHeart() {
-    const p = Storage.getProfile();
-    if (p.hearts <= 0) return p;
-    p.hearts = Math.max(0, p.hearts - 1);
-    p.lastHeartRegen = Date.now();
-    Storage.setProfile(p);
-    updateHeaderStats();
-    return p;
+    return Storage.getProfile(); // Hearts are disabled for better learning
   }
 
   // ── Regen Hearts (call on app start) ────────────────────────────────────
@@ -172,13 +166,9 @@ const Gamification = (() => {
     const el = document.getElementById('header-stats');
     if (!el) return;
     const p = Storage.getProfile();
-    const hearts = Array.from({ length: p.maxHearts }, (_, i) =>
-      `<span class="heart ${i < p.hearts ? '' : 'empty'}">❤️</span>`
-    ).join('');
-
+    
     el.innerHTML = `
       <div class="stat-chip streak"><span class="streak-fire">🔥</span>${p.streak}</div>
-      <div class="stat-chip hearts">${hearts}</div>
       <div class="stat-chip xp">⭐ Lvl ${p.appLevel}</div>
     `;
   }

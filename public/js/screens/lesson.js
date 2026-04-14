@@ -83,10 +83,6 @@ function renderCurrentStep() {
     }
   }
 
-  const heartsHtml = Array.from({ length: 5 }, (_, i) =>
-    `<span class="heart ${i < hearts ? '' : 'empty'}">❤️</span>`
-  ).join('');
-
   const dotsHtml = steps.map((_, i) => {
     const cls = i < currentStep ? 'done' : i === currentStep ? 'current' : '';
     return `<div class="lesson-step-dot ${cls}"></div>`;
@@ -104,7 +100,6 @@ function renderCurrentStep() {
     <div style="margin-bottom:-.5rem">
       <div class="flex-between mb-2">
         <button class="btn btn-secondary btn-sm" onclick="App.navigate('/')">✕ Exit</button>
-        <div class="hearts-row">${heartsHtml}</div>
       </div>
       <div class="lesson-progress">${dotsHtml}</div>
     </div>
@@ -205,11 +200,22 @@ window.quickSpeakWord = function(targetWord) {
       btn.innerHTML = '<i class="fa-solid fa-microphone"></i> Say it';
       btn.classList.remove('mic-recording');
 
+      // Provide a mapping for STT engines that convert spoken numbers to digits
+      const digitMap = {
+        '0':'null', '1':'eins', '2':'zwei', '3':'drei', '4':'vier', '5':'fünf',
+        '6':'sechs', '7':'sieben', '8':'acht', '9':'neun', '10':'zehn', '11':'elf',
+        '12':'zwölf', '13':'dreizehn', '14':'vierzehn', '15':'fünfzehn', '16':'sechzehn',
+        '17':'siebzehn', '18':'achtzehn', '19':'neunzehn', '20':'zwanzig', '21':'einundzwanzig',
+        '22':'zweiundzwanzig', '23':'dreiundzwanzig', '30':'dreißig', '40':'vierzig',
+        '50':'fünfzig', '60':'sechzig', '70':'siebzig', '80':'achtzig', '90':'neunzig', '100':'hundert'
+      };
+
       // Simple: check if the recognized text matches the target word (ignoring article)
       const norm   = s => s.toLowerCase().replace(/^(der|die|das) /,'').replace(/[.,!?]/g,'').trim();
       const base   = norm(targetWord);
-      const said   = norm(transcript);
-      const sim    = Math.round((1 - Math.abs(base.length - said.length) / Math.max(base.length, said.length)) * 100);
+      let said     = norm(transcript);
+      if (digitMap[said]) said = digitMap[said]; // Translate '1' to 'eins' if STT outputs digit
+      
       const pass   = said === base || said.includes(base) || base.includes(said);
 
       result.innerHTML = `
@@ -430,19 +436,8 @@ function handleCorrect() {
 function handleWrong() {
   if (window.AudioFX) AudioFX.error();
   lessonState.wrong++;
-  const p = Gamification.loseHeart();
-  lessonState.hearts = p.hearts;
 
-  if (p.hearts <= 0) {
-    setTimeout(showNoHeartsScreen, 600);
-    return;
-  }
-
-  const heartsRow = document.querySelector('.hearts-row');
-  if (heartsRow) {
-    heartsRow.style.animation = 'heartLost .4s ease-out';
-    setTimeout(() => heartsRow.style.animation = '', 500);
-  }
+  // Hearts system removed to improve learning experience
 
   const w = lessonState.steps[lessonState.currentStep].word;
   Gamification.logMistake(w.category);
