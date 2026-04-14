@@ -45,7 +45,7 @@ function renderDashboard() {
           </div>
         </div>
       </div>
-      <img src="C:/Users/Mexiz/.gemini/antigravity/brain/4e2170c2-b065-46a9-ab96-94a2a5ca262d/premium_mascot_skeleton_1776135174461.png" class="banner-mascot" alt="Mascot">
+      <div class="banner-mascot" style="font-size: 5.5rem;">🚀</div>
     </div>
 
     <div class="dashboard-grid">
