@@ -22,6 +22,30 @@ function renderSettings() {
       </button>
     </div>
 
+    <!-- Theme Selection -->
+    <div class="settings-group">
+      <div class="section-label mb-2">🎨 Theme & Appearance</div>
+      <div class="glass-card">
+        <div class="text-xs text-muted mb-3">Choose your visual identity</div>
+        <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:0.5rem">
+          ${[
+            { id: 'midnight', name: 'Midnight', colors: ['#8b5cf6','#f59e0b'] },
+            { id: 'sunset',   name: 'Sunset',   colors: ['#f97316','#ef4444'] },
+            { id: 'ocean',    name: 'Ocean',    colors: ['#0ea5e9','#10b981'] },
+            { id: 'forest',   name: 'Forest',   colors: ['#10b981','#84cc16'] },
+            { id: 'cyber',    name: 'Cyber',    colors: ['#ec4899','#06b6d4'] }
+          ].map(t => `
+            <div class="theme-option ${p.theme===t.id?'active':''}" onclick="setTheme('${t.id}')" title="${t.name}">
+              <div class="theme-preview" style="background:linear-gradient(135deg, ${t.colors[0]}, ${t.colors[1]})">
+                ${p.theme===t.id ? '<i class="fa-solid fa-check" style="color:white;font-size:0.75rem"></i>' : ''}
+              </div>
+              <div style="font-size:0.6rem;text-align:center;margin-top:0.25rem;color:var(--text-muted)">${t.name}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+
     <!-- Learning Settings -->
     <div class="settings-group">
       <div class="section-label mb-2">📚 Learning</div>
@@ -150,6 +174,25 @@ window.updateSetting = function(key, value) {
   Storage.updateProfile({ [key]: value });
   Toast.success('Setting saved ✓', 1500);
 };
+
+window.setTheme = function(themeId) {
+  Storage.updateProfile({ theme: themeId });
+  UI.applyTheme(themeId);
+  renderSettings(); // Re-render to show active checkmark
+  Toast.success(`Theme updated to ${themeId.charAt(0).toUpperCase() + themeId.slice(1)}!`, 1500);
+};
+
+if (!document.getElementById('theme-styles')) {
+  const s = document.createElement('style');
+  s.id = 'theme-styles';
+  s.innerHTML = `
+    .theme-option { cursor:pointer; padding:0.25rem; border-radius:var(--radius-md); border:2px solid transparent; transition:all 0.2s; }
+    .theme-option.active { border-color:var(--accent-1); background:rgba(255,255,255,0.05); }
+    .theme-preview { width:100%; aspect-ratio:1; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-sm); }
+    .theme-option:hover .theme-preview { transform:scale(1.1); }
+  `;
+  document.head.appendChild(s);
+}
 
 window.confirmReset = function() {
   Modal.confirm(

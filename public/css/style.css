@@ -9,30 +9,16 @@
   --bg-input:    rgba(0, 0, 0, 0.3);
   --panel-border: rgba(255, 255, 255, 0.09);
 
-  --accent-gold:    #f59e0b;
-  --accent-purple:  #8b5cf6;
-  --accent-blue:    #3b82f6;
-  --accent-cyan:    #06b6d4;
-  --accent-red:     #ef4444;
-
-  --grad-gold:   linear-gradient(135deg, #f59e0b, #f97316);
-  --grad-purple: linear-gradient(135deg, #8b5cf6, #6366f1);
-  --grad-blue:   linear-gradient(135deg, #3b82f6, #06b6d4);
-  --grad-green:  linear-gradient(135deg, #10b981, #34d399);
-  --grad-red:    linear-gradient(135deg, #ef4444, #f97316);
+  --text-primary:   #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted:     #64748b;
 
   --success: #10b981;
   --warning: #f59e0b;
   --danger:  #ef4444;
 
-  --text-primary:   #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted:     #64748b;
-
   --shadow-sm: 0 2px 8px rgba(0,0,0,.35);
   --shadow-md: 0 8px 24px rgba(0,0,0,.5);
-  --shadow-glow-gold:   0 0 24px rgba(245,158,11,.35);
-  --shadow-glow-purple: 0 0 24px rgba(139,92,246,.35);
 
   --radius-sm: .375rem;
   --radius-md: .75rem;
@@ -43,6 +29,68 @@
   --nav-height:    64px;
   --header-height: 60px;
   --transition:    .22s cubic-bezier(.4,0,.2,1);
+}
+
+/* ── Theme Definitions ──────────────────────────────────────── */
+
+/* 1. Midnight (Standard Indigo/Gold) */
+.theme-midnight, :root:not([class*="theme-"]) {
+  --accent-1: #8b5cf6; /* Purple */
+  --accent-2: #f59e0b; /* Gold */
+  --accent-3: #3b82f6; /* Blue */
+  --grad-main: linear-gradient(135deg, #8b5cf6, #6366f1);
+  --grad-accent: linear-gradient(135deg, #f59e0b, #f97316);
+  --shadow-glow: 0 0 24px rgba(139,92,246,.35);
+}
+
+/* 2. Sunset (Orange/Amber/Red) */
+.theme-sunset {
+  --accent-1: #f97316; /* Orange */
+  --accent-2: #fbbf24; /* Amber */
+  --accent-3: #ef4444; /* Red */
+  --grad-main: linear-gradient(135deg, #f97316, #ef4444);
+  --grad-accent: linear-gradient(135deg, #fbbf24, #f59e0b);
+  --shadow-glow: 0 0 24px rgba(249,115,22,.35);
+}
+
+/* 3. Ocean (Blue/Cyan/Emerald) */
+.theme-ocean {
+  --accent-1: #0ea5e9; /* Blue */
+  --accent-2: #06b6d4; /* Cyan */
+  --accent-3: #10b981; /* Emerald */
+  --grad-main: linear-gradient(135deg, #0ea5e9, #06b6d4);
+  --grad-accent: linear-gradient(135deg, #10b981, #34d399);
+  --shadow-glow: 0 0 24px rgba(14,165,233,.35);
+}
+
+/* 4. Forest (Emerald/Green/Lime) */
+.theme-forest {
+  --accent-1: #10b981; /* Emerald */
+  --accent-2: #84cc16; /* Lime */
+  --accent-3: #0ea5e9; /* Blue */
+  --grad-main: linear-gradient(135deg, #10b981, #059669);
+  --grad-accent: linear-gradient(135deg, #84cc16, #a3e635);
+  --shadow-glow: 0 0 24px rgba(16,185,129,.35);
+}
+
+/* 5. Cyber (Pink/Cyan/Purple) */
+.theme-cyber {
+  --accent-1: #ec4899; /* Pink */
+  --accent-2: #06b6d4; /* Cyan */
+  --accent-3: #8b5cf6; /* Purple */
+  --grad-main: linear-gradient(135deg, #ec4899, #8b5cf6);
+  --grad-accent: linear-gradient(135deg, #06b6d4, #22d3ee);
+  --shadow-glow: 0 0 24px rgba(236,72,153,.35);
+}
+
+/* Map legacy variables to theme ones */
+:root {
+  --accent-gold:   var(--accent-2);
+  --accent-purple: var(--accent-1);
+  --accent-blue:   var(--accent-3);
+  --grad-gold:     var(--grad-accent);
+  --grad-purple:   var(--grad-main);
+  --shadow-glow-purple: var(--shadow-glow);
 }
 
 /* ── Reset ─────────────────────────────────────────────────── */

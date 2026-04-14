@@ -131,6 +131,7 @@ const Storage = (() => {
       onboardingDone: false,
       certifications: {},        // { 'A1': { score:92, date:... }, ... }
       levelTestScores: {},       // { 'A1': [85, 72, 91] } history
+      theme: 'midnight',         // 'midnight' | 'sunset' | 'ocean' | 'forest' | 'cyber'
     }
   };
 

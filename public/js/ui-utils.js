@@ -204,3 +204,19 @@ function levelName(appLevel) {
 function xpForLevel(level) {
   return level * level * 60; // 60, 240, 540, ...
 }
+
+// ── Theme Engine ─────────────────────────────────────────────────────────────
+const UI = (() => {
+  function applyTheme(themeName) {
+    if (!themeName) return;
+    const body = document.body;
+    // Remove existing themes
+    body.classList.forEach(cls => {
+      if (cls.startsWith('theme-')) body.classList.remove(cls);
+    });
+    // Add new theme
+    body.classList.add(`theme-${themeName}`);
+  }
+
+  return { applyTheme };
+})();

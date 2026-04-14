@@ -78,6 +78,7 @@ const App = (() => {
     }
 
     const p = Storage.getProfile();
+    UI.applyTheme(p.theme);
 
     // Redirect to onboarding if first launch (after login)
     if (Storage.isAuthenticated() && !p.onboardingDone && path !== '/onboarding' && path !== '/auth') {
@@ -346,9 +347,9 @@ const App = (() => {
   }
 
   // ── Init ─────────────────────────────────────────────────────────────────
-  function init() {
     const p = Storage.getProfile();
     if (!p.name) Storage.setProfile(Storage.DEFAULTS.profile);
+    UI.applyTheme(p.theme);
     Gamification.regenHearts();
     Gamification.updateHeaderStats();
     setupOfflineMonitoring();
