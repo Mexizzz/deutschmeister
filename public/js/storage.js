@@ -134,7 +134,13 @@ const Storage = (() => {
     }
   };
 
-  function getProfile() { return get('profile', DEFAULTS.profile); }
+  function getProfile() {
+    const raw = get('profile', null);
+    if (!raw) return { ...DEFAULTS.profile };
+    
+    // Merge defaults so we never crash on missing arrays/properties
+    return { ...DEFAULTS.profile, ...raw };
+  }
   function setProfile(p) { return set('profile', p); }
 
   function updateProfile(updates) {
