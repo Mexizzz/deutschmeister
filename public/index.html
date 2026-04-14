@@ -1,68 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- DOMINANT SEO: Core Meta Tags -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FluentGermanAI | The Ultimate AI German Tutor</title>
-  <meta name="description" content="Master German up to 10x faster with FluentGermanAI. Engage in real-time voice roleplays, personalized AI homework, and spaced-repetition vocabulary tracking. Start speaking fluently today.">
-  <meta name="keywords" content="learn german, german ai tutor, AI language learning, fluent in german, german spaced repetition, AI roleplay, language hacking">
-  <meta name="author" content="FluentGermanAI">
-  <link rel="canonical" href="https://fluentgermanai.space/">
+  <meta name="description" content="Master German up to 10x faster with FluentGermanAI. Engage in real-time voice roleplays, personalized AI homework, and spaced-repetition vocabulary tracking.">
   <meta name="theme-color" content="#0a0e1a">
 
-  <!-- DOMINANT SEO: OpenGraph / Facebook -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://fluentgermanai.space/">
-  <meta property="og:title" content="FluentGermanAI | Master German with Artificial Intelligence">
-  <meta property="og:description" content="Engage in real-time language roleplay, generate custom daily homework from your vocabulary, and reach fluency faster.">
-  <meta property="og:image" content="https://fluentgermanai.space/og-image.jpg">
-
-  <!-- DOMINANT SEO: Twitter Cards -->
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://fluentgermanai.space/">
-  <meta property="twitter:title" content="FluentGermanAI | The Ultimate AI German Tutor">
-  <meta property="twitter:description" content="The easiest way to master German. Real-time AI voice chats, personalized roleplay, and structured learning.">
-  <meta property="twitter:image" content="https://fluentgermanai.space/og-image.jpg">
-
-  <!-- DOMINANT SEO: Schema.org Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "FluentGermanAI",
-    "operatingSystem": "Web",
-    "applicationCategory": "EducationalApplication",
-    "description": "An AI-powered German language learning platform utilizing spaced repetition, real-time voice synthesis, and dynamic AI story generation.",
-    "offers": {
-      "@type": "Offer",
-      "price": "0.00",
-      "priceCurrency": "USD"
-    }
-  }
-  </script>
-
-  <!-- External Assets -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet" />
   
   <style>
-    /* BALANCED MULTI-COLOR THEME & AESTHETIC STYLING */
     :root {
       --bg: #0a0e17;
       --surface: #131a2a;
       --text: #f8fafc;
       --text-muted: #94a3b8;
       
-      /* Multi-color balanced palette */
-      --color-primary: #6366f1;   /* Indigo */
-      --color-secondary: #ec4899; /* Pink */
-      --color-accent: #f59e0b;    /* Gold/Amber */
-      --color-success: #10b981;   /* Emerald */
+      --color-primary: #6366f1;
+      --color-secondary: #ec4899;
+      --color-accent: #f59e0b;
       
       --gradient-main: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-      --gradient-glow: linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(236, 72, 153, 0.4));
     }
     
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -75,226 +35,371 @@
       overflow-x: hidden;
     }
 
+    /* ── MOTION GRAPHIC 1: Particle Background ── */
+    #bg-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: -2; pointer-events: none;
+    }
+
     /* Ambient Background Glows */
     .glow-blob {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      z-index: -1;
-      opacity: 0.5;
+      position: absolute; border-radius: 50%; filter: blur(90px);
+      z-index: -1; opacity: 0.4;
+      animation: floatBlob 20s infinite alternate ease-in-out;
     }
-    .blob-1 { top: -10%; left: -10%; width: 400px; height: 400px; background: rgba(99, 102, 241, 0.3); }
-    .blob-2 { top: 40%; right: -10%; width: 500px; height: 500px; background: rgba(236, 72, 153, 0.2); }
-    .blob-3 { bottom: -10%; left: 20%; width: 600px; height: 600px; background: rgba(245, 158, 11, 0.15); }
+    @keyframes floatBlob {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(50px, -50px) scale(1.1); }
+    }
+    .blob-1 { top: -10%; left: -10%; width: 400px; height: 400px; background: rgba(99, 102, 241, 0.4); }
+    .blob-2 { top: 40%; right: -10%; width: 500px; height: 500px; background: rgba(236, 72, 153, 0.3); animation-delay:-5s;}
+    .blob-3 { bottom: -10%; left: 20%; width: 600px; height: 600px; background: rgba(245, 158, 11, 0.2); animation-delay:-10s;}
 
     /* Navigation */
     nav {
       position: fixed; top: 0; width: 100%; padding: 1.5rem 5%;
       display: flex; justify-content: space-between; align-items: center;
-      background: rgba(10, 14, 23, 0.8);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      z-index: 100;
+      background: rgba(10, 14, 23, 0.6); backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.05); z-index: 100;
+      transition: all 0.4s ease;
     }
-    .logo {
-      font-size: 1.5rem; font-weight: 900;
-      background: var(--gradient-main);
-      -webkit-background-clip: text; color: transparent;
-      text-decoration: none; display: flex; align-items: center; gap: 0.5rem;
-    }
-    .nav-links a { color: var(--text); text-decoration: none; font-weight: 500; font-size: 0.95rem; margin-left: 2rem; transition: 0.2s; }
+    .logo { font-size: 1.5rem; font-weight: 900; background: var(--gradient-main); -webkit-background-clip: text; color: transparent; text-decoration: none; }
+    .nav-links a { color: var(--text); text-decoration: none; font-weight: 600; font-size: 0.95rem; margin-left: 2rem; transition: 0.2s; }
     .nav-links a:hover { color: var(--color-accent); }
-    
+
+    /* ── MOTION GRAPHIC 4: Micro-interactions (Buttons) ── */
     .btn {
-      display: inline-block; padding: 0.8rem 2rem; border-radius: 100px;
-      font-weight: 700; text-decoration: none; font-size: 1rem;
-      transition: all 0.3s ease; cursor: pointer; border: none;
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 0.8rem 2.2rem; border-radius: 100px; font-weight: 800; text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+      position: relative; overflow: hidden; border: none;
     }
-    .btn-primary {
-      background: var(--gradient-main); color: white;
-      box-shadow: 0 4px 20px var(--gradient-glow);
+    .btn::before { /* Sweeping Shine effect */
+      content: ''; position: absolute; top:0; left:-100%; width:50%; height:100%;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+      transform: skewX(-25deg); animation: sweepShine 5s infinite;
     }
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px var(--gradient-glow);
+    @keyframes sweepShine {
+      0%, 80% { left: -100%; }
+      100% { left: 200%; }
     }
-    .btn-outline {
-      background: transparent; color: white;
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-    .btn-outline:hover { background: rgba(255,255,255,0.05); }
+    .btn-primary { background: var(--gradient-main); color: white; box-shadow: 0 4px 25px rgba(99, 102, 241, 0.4); }
+    .btn-primary:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 10px 40px rgba(236, 72, 153, 0.6); }
 
     /* Hero Section */
     header.hero {
       min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
       align-items: center; text-align: center; padding: 8rem 20px 4rem 20px;
-      position: relative;
+      perspective: 1000px;
     }
-    .badge {
-      display: inline-block; padding: 0.4rem 1rem; border-radius: 2rem;
-      background: rgba(99, 102, 241, 0.1); color: var(--color-primary);
-      font-size: 0.85rem; font-weight: 700; margin-bottom: 1.5rem;
-      border: 1px solid rgba(99, 102, 241, 0.3);
-    }
-    h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 900; line-height: 1.1; margin-bottom: 1.5rem; letter-spacing: -0.04em; max-width: 900px;}
-    h1 span { background: var(--gradient-main); -webkit-background-clip: text; color: transparent; }
-    .hero-sub { color: var(--text-muted); font-size: 1.25rem; max-width: 600px; margin: 0 auto 2.5rem auto; }
-    .hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    h1 { font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 900; line-height: 1.1; margin-bottom: 1.5rem; letter-spacing: -0.04em;}
+    h1 span { background: var(--gradient-main); -webkit-background-clip: text; color: transparent; animation: hueRotate 10s infinite alternate linear; }
+    @keyframes hueRotate { to { filter: hue-rotate(45deg); } }
+    
+    .hero-sub { color: var(--text-muted); font-size: 1.25rem; max-width: 650px; margin: 0 auto 2.5rem auto; line-height: 1.8;}
 
-    /* Dashboard Preview Image */
+    /* ── MOTION GRAPHIC 3: Floating 3D Graphic ── */
     .dashboard-preview {
-      margin-top: 4rem; width: 100%; max-width: 1000px; aspect-ratio: 16/9;
-      background: var(--surface); border-radius: 20px;
+      margin-top: 5rem; width: 100%; max-width: 900px;
+      background: var(--surface); border-radius: 24px;
       border: 1px solid rgba(255,255,255,0.1);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-      position: relative; overflow: hidden;
-      display: flex; justify-content: center; align-items: center;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.8);
+      position: relative; overflow: hidden; padding: 4rem;
+      transform-style: preserve-3d;
+      transition: transform 0.1s ease-out; /* JavaScript handles the tilt jump */
+      will-change: transform;
     }
     .dashboard-preview::before {
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
       background: var(--gradient-main);
     }
+    .db-content { transform: translateZ(50px); pointer-events: none; } /* Pop out effect */
 
     /* Features Grid */
-    section { padding: 6rem 5%; }
-    .section-title { text-align: center; font-size: 2.5rem; font-weight: 800; margin-bottom: 3rem; }
+    section { padding: 8rem 5%; position: relative; z-index: 2;}
+    .section-title { text-align: center; font-size: 2.5rem; font-weight: 900; margin-bottom: 4rem; }
     
     .features-grid {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;
       max-width: 1200px; margin: 0 auto;
     }
+
+    /* ── MOTION GRAPHIC 3: 3D Tilt Cards ── */
     .feature-card {
-      background: var(--surface); padding: 2.5rem; border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.05); transition: 0.3s ease;
+      background: rgba(19, 26, 42, 0.7); backdrop-filter: blur(10px);
+      padding: 3rem 2.5rem; border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.05); 
+      transform-style: preserve-3d; transition: transform 0.2s ease, border-color 0.3s ease;
     }
-    .feature-card:hover { transform: translateY(-5px); border-color: rgba(99, 102, 241, 0.3); }
+    .feature-card:hover { border-color: rgba(99, 102, 241, 0.5); }
+    .feature-inner { transform: translateZ(40px); pointer-events:none; } /* Pop out text inside card */
     
-    .f-icon { width: 60px; height: 60px; border-radius: 16px; display: flex; justify-content: center; align-items: center; font-size: 1.8rem; margin-bottom: 1.5rem; }
-    .fc-1 { background: rgba(99, 102, 241, 0.1); color: var(--color-primary); }
-    .fc-2 { background: rgba(236, 72, 153, 0.1); color: var(--color-secondary); }
-    .fc-3 { background: rgba(245, 158, 11, 0.1); color: var(--color-accent); }
+    .f-icon { width: 70px; height: 70px; border-radius: 20px; display: flex; justify-content: center; align-items: center; font-size: 2rem; margin-bottom: 1.5rem; }
+    .fc-1 { background: rgba(99, 102, 241, 0.15); color: var(--color-primary); box-shadow: 0 0 20px rgba(99, 102, 241, 0.2); }
+    .fc-2 { background: rgba(236, 72, 153, 0.15); color: var(--color-secondary); box-shadow: 0 0 20px rgba(236, 72, 153, 0.2); }
+    .fc-3 { background: rgba(245, 158, 11, 0.15); color: var(--color-accent); box-shadow: 0 0 20px rgba(245, 158, 11, 0.2); }
     
-    .feature-card h3 { font-size: 1.4rem; margin-bottom: 1rem; }
-    .feature-card p { color: var(--text-muted); font-size: 0.95rem; }
+    .feature-card h3 { font-size: 1.5rem; margin-bottom: 1rem; font-weight: 800;}
+    .feature-card p { color: var(--text-muted); font-size: 1rem; line-height: 1.7;}
+
+    /* ── MOTION GRAPHIC 2: Scroll Animations ── */
+    .scroll-reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1); }
+    .scroll-reveal.in-view { opacity: 1; transform: translateY(0); }
+    
+    /* Stats Section */
+    .stats-container { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 3rem; max-width: 1000px; margin: 0 auto; }
+    .stat-box h4 { font-size: 3.5rem; font-weight: 900; margin-bottom: 0.5rem; background: var(--gradient-main); -webkit-background-clip: text; color: transparent;}
+    .stat-box p { color: var(--text-muted); font-weight: 600; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px;}
 
     /* CTA Section */
-    .cta-section {
-      background: var(--gradient-main); padding: 6rem 5%; text-align: center;
-      position: relative; overflow: hidden;
-    }
+    .cta-section { background: var(--gradient-main); padding: 8rem 5%; text-align: center; position: relative; overflow: hidden; border-radius: 40px; max-width: 1400px; margin: 0 auto 4rem auto;}
     .cta-section * { position: relative; z-index: 2; }
-    .cta-section h2 { font-size: 3rem; font-weight: 900; margin-bottom: 1rem; color: white;}
-    .cta-section p { font-size: 1.2rem; color: rgba(255,255,255,0.9); margin-bottom: 2.5rem; }
-    .btn-white { background: white; color: var(--color-primary); }
-    .btn-white:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-
-    /* Footer */
-    footer {
-      background: var(--bg); padding: 3rem 5%; border-top: 1px solid rgba(255,255,255,0.05);
-      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2rem;
-    }
-    .footer-text { color: var(--text-muted); font-size: 0.9rem; }
+    .cta-section h2 { font-size: 3.5rem; font-weight: 900; margin-bottom: 1rem; color: white; line-height: 1.2;}
+    .cta-section p { font-size: 1.25rem; color: rgba(255,255,255,0.9); margin-bottom: 3rem; }
+    .btn-white { background: white; color: var(--color-primary); box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
     
+    /* Flowing waves inside CTA */
+    .wave { position: absolute; bottom: -50px; left: -10vw; width: 120vw; height: 300px; background: rgba(255,255,255,0.1); border-radius: 50%; opacity: 0.5; animation: waveRipple 10s infinite alternate linear; }
+    .wave-2 { background: rgba(0,0,0,0.1); bottom: -100px; left: -5vw; animation-direction: reverse; animation-duration: 15s; }
+    @keyframes waveRipple {
+      0% { transform: translateY(0) scale(1) rotate(0); }
+      100% { transform: translateY(-30px) scale(1.05) rotate(2deg); }
+    }
+
+    footer { background: var(--bg); padding: 4rem 5%; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; }
+
     @media (max-width: 768px) {
       .nav-links { display: none; }
-      h1 { font-size: 2.5rem; }
+      h1 { font-size: 2.8rem; }
+      .feature-card { padding: 2rem; }
+      .cta-section { border-radius: 0; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Background Ambience -->
+  <!-- Motion Graphic: Canvas Particles -->
+  <canvas id="bg-canvas"></canvas>
+
   <div class="glow-blob blob-1"></div>
   <div class="glow-blob blob-2"></div>
   <div class="glow-blob blob-3"></div>
 
   <!-- Navbar -->
-  <nav>
+  <nav id="navbar">
     <a href="/" class="logo">🇩🇪 FluentGermanAI</a>
     <div class="nav-links">
       <a href="#features">Features</a>
-      <a href="#how-it-works">How it works</a>
-      <a href="/app.html#/auth" class="btn btn-primary" style="padding: 0.6rem 1.5rem; margin-left: 1rem;">Log In</a>
+      <a href="/app.html#/auth" class="btn btn-primary" style="padding: 0.5rem 1.5rem; font-size:0.9rem;">Sign In</a>
     </div>
   </nav>
 
   <!-- Hero -->
-  <header class="hero">
-    <div class="badge">✨ Launching v1.0 — Smart Learning Engine</div>
+  <header class="hero scroll-reveal">
+    <div style="display:inline-block; padding:0.5rem 1.2rem; border-radius:100px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:white; font-size:0.85rem; font-weight:700; margin-bottom:1.5rem;">
+      🎉 V1.0 Platform Officially Live
+    </div>
     <h1>Master German <span>Faster</span><br>With Artificial Intelligence.</h1>
     <p class="hero-sub">Ditch the boring textbooks. Engage in real-time voice conversations, automatically generate stories from your known vocabulary, and hack fluency with deep spaced-repetition.</p>
     
-    <div class="hero-buttons">
-      <a href="/app.html#/auth" class="btn btn-primary">Start Learning Free</a>
-      <a href="#features" class="btn btn-outline">Explore Features</a>
+    <div style="display:flex; gap:1rem; flex-wrap:wrap; justify-content:center;">
+      <a href="/app.html#/auth" class="btn btn-primary">Start Learning Free <i class="fa-solid fa-rocket ms-2" style="margin-left:8px;"></i></a>
     </div>
 
-    <!-- UI Mockup / Graphic -->
-    <div class="dashboard-preview">
-      <div style="text-align:center; color: var(--text-muted);">
-        <div style="font-size:3rem; margin-bottom:1rem;">🤖</div>
-        <h3>The app architecture is loaded natively.</h3>
-        <p>Click "Start Learning Free" to access the App Dashboard.</p>
+    <!-- 3D Interactive Dashboard Graphic -->
+    <div class="dashboard-preview scroll-reveal" id="hero-graphic">
+      <div class="db-content" style="text-align:center; color: var(--text-muted);">
+        <div style="font-size:4rem; margin-bottom:1.5rem; animation: floatBlob 3s infinite alternate ease-in-out;">✨</div>
+        <h3 style="color:white; font-size:1.8rem; margin-bottom:0.5rem;">Interactive Learning Console</h3>
+        <p>This panel interacts with your mouse position.<br>Log in to access your actual dashboard.</p>
       </div>
     </div>
   </header>
 
   <!-- Features Block -->
   <section id="features">
-    <h2 class="section-title">A complete fluency ecosystem.</h2>
+    <h2 class="section-title scroll-reveal">A complete fluency ecosystem.</h2>
     <div class="features-grid">
       
-      <div class="feature-card">
-        <div class="f-icon fc-1">🗣️</div>
-        <h3>Live Voice Roleplay</h3>
-        <p>Speak natively through your microphone. Our deep-learning AI responds in real-time with perfect German accents, auto-correcting your grammar dynamically.</p>
+      <div class="feature-card tilt-card scroll-reveal">
+        <div class="feature-inner">
+          <div class="f-icon fc-1">🎙️</div>
+          <h3>Live Voice Roleplay</h3>
+          <p>Speak natively through your microphone. Our deep-learning AI responds in real-time with perfect German accents, auto-correcting your grammar dynamically.</p>
+        </div>
       </div>
 
-      <div class="feature-card">
-        <div class="f-icon fc-2">📚</div>
-        <h3>Curated Comprehensible Input</h3>
-        <p>Our algorithm curates "Daily Homework" stories using <b>only</b> the vocabulary words you've explicitly mastered, completely removing friction.</p>
+      <div class="feature-card tilt-card scroll-reveal" style="transition-delay: 0.1s;">
+        <div class="feature-inner">
+          <div class="f-icon fc-2">📚</div>
+          <h3>Curated Comprehensible Input</h3>
+          <p>Our algorithm curates "Daily Homework" stories using <b>only</b> the vocabulary words you've explicitly mastered, completely removing reading friction.</p>
+        </div>
       </div>
 
-      <div class="feature-card">
-        <div class="f-icon fc-3">🧠</div>
-        <h3>Spaced Repetition Engine</h3>
-        <p>A neuro-optimized flashcard system calculates exactly when your brain is about to forget a word, testing you at the perfect interval to build permanent memory.</p>
+      <div class="feature-card tilt-card scroll-reveal" style="transition-delay: 0.2s;">
+        <div class="feature-inner">
+          <div class="f-icon fc-3">🧠</div>
+          <h3>Spaced Repetition Engine</h3>
+          <p>A neuro-optimized flashcard system calculates exactly when your brain is about to forget a word, testing you at the perfect interval to build permanent memory.</p>
+        </div>
       </div>
 
     </div>
   </section>
 
-  <!-- Simple Stats/Proof -->
-  <section style="background: var(--surface); text-align: center; border-top:1px solid rgba(255,255,255,0.05); border-bottom:1px solid rgba(255,255,255,0.05);">
-    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 2rem; max-width: 1000px; margin: 0 auto;">
-      <div>
-        <div style="font-size: 2.5rem; font-weight: 900; color: var(--color-primary);">10x</div>
-        <div style="color: var(--text-muted);">Faster Fluency</div>
+  <!-- Stats Section -->
+  <section style="background: rgba(19, 26, 42, 0.4); border-top:1px solid rgba(255,255,255,0.05); border-bottom:1px solid rgba(255,255,255,0.05);">
+    <div class="stats-container">
+      <div class="stat-box scroll-reveal">
+        <h4>10x</h4>
+        <p>Faster Fluency</p>
       </div>
-      <div>
-        <div style="font-size: 2.5rem; font-weight: 900; color: var(--color-secondary);">Infinite</div>
-        <div style="color: var(--text-muted);">Conversations</div>
+      <div class="stat-box scroll-reveal" style="transition-delay: 0.1s;">
+        <h4>Infinite</h4>
+        <p>Conversations</p>
       </div>
-      <div>
-        <div style="font-size: 2.5rem; font-weight: 900; color: var(--color-accent);">100%</div>
-        <div style="color: var(--text-muted);">Local Memory Sync</div>
+      <div class="stat-box scroll-reveal" style="transition-delay: 0.2s;">
+        <h4>100%</h4>
+        <p>Cross-Device Sync</p>
       </div>
     </div>
   </section>
 
-  <!-- Bottom CTA -->
-  <section class="cta-section">
-    <h2>Stop studying. Start speaking.</h2>
-    <p>Join the next generation of language learners mastering German through conversational AI.</p>
-    <a href="/app.html#/auth" class="btn btn-white btn-lg" style="font-size: 1.1rem; padding: 1rem 3rem;">Create a Free Account</a>
+  <!-- CTA Section -->
+  <section style="padding-top: 6rem;">
+    <div class="cta-section scroll-reveal">
+      <div class="wave"></div>
+      <div class="wave wave-2"></div>
+      <h2>Stop studying. Start speaking.</h2>
+      <p>Join the next generation of language learners mastering German through conversational AI.</p>
+      <a href="/app.html#/auth" class="btn btn-white" style="font-size: 1.1rem; padding: 1.2rem 3.5rem;">Create a Free Account</a>
+    </div>
   </section>
 
-  <!-- Footer -->
   <footer>
-    <div class="logo" style="font-size: 1.2rem;">🇩🇪 FluentGermanAI</div>
-    <div class="footer-text">© 2026 FluentGermanAI. All rights reserved.</div>
+    <div class="logo" style="justify-content:center; font-size:1.5rem; margin-bottom:1rem;">🇩🇪 FluentGermanAI</div>
+    <div style="color:var(--text-muted); font-size:0.9rem;">© 2026 FluentGermanAI. All rights reserved. Built with advanced AI.</div>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+  
+  <script>
+    // --- MOTION GRAPHICS SCRIPT ---
+
+    // 1. Scroll Transparency for Navbar
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('navbar');
+      if (window.scrollY > 50) {
+        nav.style.boxShadow = '0 10px 30px rgba(0,0,0,0.5)';
+      } else {
+        nav.style.boxShadow = 'none';
+      }
+    });
+
+    // 2. Intersection Observer (Scroll Fade/Slide Effects)
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+    document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+
+    // 3. 3D Tilt Effect on Cards & Hero Graphic
+    const tiltContainers = document.querySelectorAll('.tilt-card, #hero-graphic');
+    tiltContainers.forEach(container => {
+      container.addEventListener('mousemove', (e) => {
+        const rect = container.getBoundingClientRect();
+        const x = e.clientX - rect.left; 
+        const y = e.clientY - rect.top;
+        
+        // Calculate rotation based on cursor position (-0.5 to 0.5)
+        const xPct = (x / rect.width - 0.5) * 2;
+        const yPct = (y / rect.height - 0.5) * 2;
+        
+        // Adjust the multiplier to change the intensity of the tilt
+        const rotateX = yPct * -10; 
+        const rotateY = xPct * 10;
+        
+        container.style.transform = \`perspective(1000px) rotateX(\${rotateX}deg) rotateY(\${rotateY}deg) scale3d(1.02, 1.02, 1.02)\`;
+      });
+
+      container.addEventListener('mouseleave', () => {
+        container.style.transform = \`perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)\`;
+      });
+    });
+
+    // 4. HTML5 Canvas Ambient Particle Network
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    
+    let width, height;
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    const particles = [];
+    const count = window.innerWidth < 768 ? 30 : 60; // Fewer on mobile
+
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        radius: Math.random() * 2 + 0.5
+      });
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+      
+      // Update and draw particles
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+        
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.fill();
+      });
+
+      // Draw connecting network lines
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          
+          if (dist < 120) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            // Opacity scales with distance
+            ctx.strokeStyle = \`rgba(255, 255, 255, \${0.1 - dist/1200})\`;
+            ctx.stroke();
+          }
+        }
+      }
+      
+      requestAnimationFrame(draw);
+    }
+    draw();
+
+  </script>
 </body>
 </html>
