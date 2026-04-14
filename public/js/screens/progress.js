@@ -55,6 +55,13 @@ function renderProgress() {
     .sort((a,b) => b[1]-a[1]).slice(0,3);
 
   const html = `
+    <div class="flex-between mb-2">
+      <div class="section-label mb-0">👤 My Profile</div>
+      <button class="btn btn-icon btn-secondary" onclick="App.navigate('/settings')" title="Settings">
+        <i class="fa-solid fa-gear"></i>
+      </button>
+    </div>
+
     <!-- Level Card -->
     <div class="glass-card mb-3">
       <div class="flex-between mb-2">
