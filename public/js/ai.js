@@ -100,5 +100,11 @@ const AI = (() => {
     return res.json();
   }
 
+  // ── Health Check ─────────────────────────────────────────────────────────
+  async function healthCheck() {
+    const res = await fetch('/api/health');
+    return res.json();
+  }
+
   return { chat, correctGrammar, generateStory, generateExercises, askTutor, evaluatePronunciation, defineWord, healthCheck };
 })();
