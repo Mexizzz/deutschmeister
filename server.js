@@ -150,12 +150,12 @@ app.post('/api/auth/send-code', async (req, res) => {
 
     // Using onboarding@resend.dev which only works for verified emails in free tier, but works out-of-the-box for testing
     await resend.emails.send({
-      from: 'GermanMaster <onboarding@resend.dev>',
+      from: 'FluentGermanAI <onboarding@resend.dev>',
       to: email,
-      subject: 'Your GermanMaster Login Code 🇩🇪',
+      subject: 'Your FluentGermanAI Login Code 🇩🇪',
       html: `
         <div style="font-family:sans-serif; text-align:center; padding:2rem;">
-          <h2>Welcome to GermanMaster!</h2>
+          <h2>Welcome to FluentGermanAI!</h2>
           <p>Here is your magic login code:</p>
           <h1 style="letter-spacing:4px; color:#6366f1;">${code}</h1>
           <p style="color:#666">This code expires in 10 minutes.</p>

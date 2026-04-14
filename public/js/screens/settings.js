@@ -107,7 +107,7 @@ function renderSettings() {
       <div class="section-label mb-2">ℹ️ About</div>
       <div class="glass-card mb-2">
         <div class="flex-between">
-          <span class="text-muted">App</span><span class="fw-700">🇩🇪 GermanMaster</span>
+          <span class="text-muted">App</span><span class="fw-700">🇩🇪 FluentGermanAI</span>
         </div>
         <div class="flex-between mt-1">
           <span class="text-muted">Version</span><span>1.0.0</span>

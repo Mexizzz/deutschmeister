@@ -8,7 +8,7 @@ function renderAuthScreen() {
     <div style="min-height:90vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1rem">
       <!-- Logo -->
       <div style="font-size:4rem;margin-bottom:.5rem;animation:bounceIn .6s cubic-bezier(0.175, 0.885, 0.32, 1.275)">🇩🇪</div>
-      <div class="fw-900 gradient-text-gold" style="font-size:2.4rem;letter-spacing:-.04em">GermanMaster</div>
+      <div class="fw-900 gradient-text-gold" style="font-size:2.4rem;letter-spacing:-.04em">FluentGermanAI</div>
       <div class="text-secondary mt-1 mb-4" style="max-width:300px;margin:0 auto">Log in to save your vocabulary and streak across all devices.</div>
 
       <!-- Form Container -->

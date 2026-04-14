@@ -7,7 +7,7 @@ function renderOnboarding() {
 
       <!-- Logo -->
       <div style="font-size:3.5rem;margin-bottom:.5rem">🇩🇪</div>
-      <div class="fw-900 gradient-text-gold" style="font-size:2rem;letter-spacing:-.04em">GermanMaster</div>
+      <div class="fw-900 gradient-text-gold" style="font-size:2rem;letter-spacing:-.04em">FluentGermanAI</div>
       <div class="text-secondary text-sm mt-1 mb-3">Your personal AI-powered German tutor</div>
 
       <!-- Goal Picker -->
