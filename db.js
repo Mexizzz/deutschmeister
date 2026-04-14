@@ -15,7 +15,12 @@ if (!fs.existsSync(dbFile)) {
 }
 
 function readDB() {
-  return JSON.parse(fs.readFileSync(dbFile, 'utf8'));
+  const data = JSON.parse(fs.readFileSync(dbFile, 'utf8'));
+  // Ensure all tables exist for backward compatibility
+  if (!data.users) data.users = [];
+  if (!data.pendingUsers) data.pendingUsers = [];
+  if (!data.userData) data.userData = [];
+  return data;
 }
 
 function writeDB(data) {
