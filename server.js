@@ -10,7 +10,7 @@ const { Resend } = require('resend');
 const db = require('./db');
 
 const app = express();
-const resend = new Resend('re_dyrgNJBX_2Dhghb7nx8rcCBcZAcr8nPb8'); // Explicitly adding the user's key here
+const resend = new Resend(process.env.RESEND_API_KEY || 're_dyrgNJBX_2Dhghb7nx8rcCBcZAcr8nPb8'); 
 const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-deutschmeister-key';
 const PORT = process.env.PORT || 3000;
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
