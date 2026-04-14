@@ -31,12 +31,16 @@ const App = (() => {
   // ── Tab map for bottom nav highlight ────────────────────────────────────────
   const TAB_MAP = {
     '/':        'home',
-    '/learn':   'learn',
-    '/lesson':  'learn',
+    '/vocab':   'vocab',
     '/practice':'practice',
+    '/learn':   'learn',
     '/ai':      'ai',
+    '/review':  'wrong-answers',
     '/progress':'progress',
     '/settings':'settings',
+    '/homework':'learn',
+    '/level-test':'exam',
+    '/practice/challenge':'battle'
   };
 
   function getActiveTab(path) {
@@ -116,6 +120,24 @@ const App = (() => {
       navigate('/');
     }
   }
+
+  // ── Theme Global Logic ──────────────────────────────────────────────────
+  window.setTheme = function(themeId) {
+    Storage.updateProfile({ theme: themeId });
+    UI.applyTheme(themeId);
+    
+    // Update all UI swatches
+    document.querySelectorAll('.theme-swatch-mini').forEach(sw => {
+      sw.classList.toggle('active', sw.dataset.theme === themeId);
+    });
+    
+    // If we're on settings, re-render to show active
+    if (window.location.hash.includes('/settings')) {
+      renderSettings();
+    }
+    
+    Toast.success(`Theme: ${themeId.charAt(0).toUpperCase() + themeId.slice(1)}`, 1000);
+  };
 
   // ── Learn Menu ───────────────────────────────────────────────────────────────
   function renderLearnMenu() {
@@ -359,10 +381,10 @@ const App = (() => {
     const nameEl  = document.getElementById('sidebar-username');
     const levelEl = document.getElementById('sidebar-level');
     const avatarEl = document.getElementById('sidebar-avatar');
-    if (nameEl)  nameEl.textContent = p.name || 'Learner';
-    if (levelEl) levelEl.textContent = `Level ${p.appLevel || 1} · ${levelName(p.appLevel || 1)}`;
+    if (nameEl)  nameEl.textContent = p.name || 'Mexiz';
+    if (levelEl) levelEl.textContent = `Level ${p.appLevel || 8}`;
     if (avatarEl) {
-      const initials = (p.name || 'L').charAt(0).toUpperCase();
+      const initials = (p.name || 'M').charAt(0).toUpperCase();
       avatarEl.textContent = initials;
     }
   }
@@ -379,7 +401,7 @@ const App = (() => {
     handleRoute();
   }
 
-  return { navigate, init };
+  return { navigate, init, updateSidebarUser };
 })();
 
 // ── Boot ───────────────────────────────────────────────────────────────────────

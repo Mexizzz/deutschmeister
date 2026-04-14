@@ -175,13 +175,10 @@ function renderSettings() {
 window.updateSetting = function(key, value) {
   Storage.updateProfile({ [key]: value });
   Toast.success('Setting saved ✓', 1500);
-};
-
-window.setTheme = function(themeId) {
-  Storage.updateProfile({ theme: themeId });
-  UI.applyTheme(themeId);
-  renderSettings(); // Re-render to show active checkmark
-  Toast.success(`Theme updated to ${themeId.charAt(0).toUpperCase() + themeId.slice(1)}!`, 1500);
+  
+  if (key === 'name') {
+    App.updateSidebarUser();
+  }
 };
 
 window.confirmReset = function() {

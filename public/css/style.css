@@ -1313,29 +1313,157 @@ img { max-width: 100%; display: block; }
   display: none;
 }
 
-/* User Footer */
+/* Sidebar Footer — Theme + User */
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--panel-border);
+}
+
+.sidebar-theme-picker {
+  display: flex;
+  justify-content: space-between;
+  padding: .75rem .65rem;
+  margin-bottom: .5rem;
+  background: rgba(255,255,255,.02);
+  border-radius: var(--radius-md);
+}
+
+.theme-swatch-mini {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all var(--transition);
+  border: 2px solid transparent;
+}
+
+.theme-swatch-mini:hover { transform: scale(1.2); }
+.theme-swatch-mini.active { border-color: #fff; box-shadow: 0 0 8px rgba(255,255,255,.3); }
+
 .sidebar-user {
   display: flex;
   align-items: center;
-  gap: .6rem;
-  padding: .65rem;
-  margin-top: auto;
-  border-top: 1px solid var(--panel-border);
+  gap: .75rem;
+  padding: .75rem .65rem;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: background var(--transition);
 }
+.sidebar-user:hover { background: rgba(255,255,255,.04); }
+
 .sidebar-user-avatar {
-  width: 30px; height: 30px;
+  width: 32px; height: 32px;
   border-radius: 50%;
-  background: var(--accent-1);
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-3));
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: .75rem;
+  font-size: .8rem;
   font-weight: 700;
   color: #fff;
   flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0,0,0,.2);
 }
-.sidebar-user-name  { font-weight: 600; font-size: .82rem; color: var(--text-primary); }
-.sidebar-user-level { font-size: .68rem; color: var(--text-muted); }
+.sidebar-user-info { flex: 1; }
+.sidebar-user-name  { font-weight: 600; font-size: .85rem; color: var(--text-primary); line-height: 1.2; }
+.sidebar-user-level { font-size: .68rem; color: var(--text-muted); font-weight: 500; }
+.sidebar-user-logout { color: var(--text-muted); font-size: .9rem; opacity: .6; transition: all .2s; }
+.sidebar-user-logout:hover { color: var(--danger); opacity: 1; }
+
+/* Dashboard Level Progress (Sidebar Bottom) */
+.sidebar-progress-box {
+  padding: .25rem .65rem .75rem;
+}
+.sidebar-progress-label { display: flex; justify-content: space-between; font-size: .65rem; font-weight: 700; color: var(--text-muted); margin-bottom: .4rem; }
+.sidebar-progress-bar { height: 4px; background: rgba(255,255,255,.06); border-radius: 2px; overflow: hidden; }
+.sidebar-progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent-1), var(--accent-3)); transition: width .6s ease; }
+
+/* ── Dashboard Hub Styles ─────────────────────────────────── */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 1200px) {
+  .dashboard-grid { grid-template-columns: 2fr 1fr; }
+}
+
+.dashboard-banner {
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-3));
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 20px 40px -15px rgba(0,0,0,.3);
+}
+
+.dashboard-banner::before {
+  content: '';
+  position: absolute;
+  top: -20%; left: -10%;
+  width: 300px; height: 300px;
+  background: rgba(255,255,255,.05);
+  border-radius: 50%;
+}
+
+.banner-content h1 { font-size: 2rem; font-weight: 900; margin-bottom: .5rem; }
+.banner-content p { opacity: .8; font-size: .95rem; }
+
+.banner-stats { display: flex; gap: 2rem; margin-top: 1.5rem; }
+.banner-stat-item { text-align: left; }
+.banner-stat-value { font-size: 1.75rem; font-weight: 900; display: block; }
+.banner-stat-label { font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; opacity: .7; }
+
+.banner-mascot {
+  width: 140px;
+  height: 140px;
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,.2));
+}
+
+/* Activity Dots (Streak) */
+.activity-dots { display: flex; gap: 6px; justify-content: space-between; margin-top: 1rem; }
+.activity-dot {
+  flex: 1;
+  aspect-ratio: 1;
+  border-radius: 4px;
+  background: rgba(255,255,255,.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .65rem;
+  color: var(--text-muted);
+  transition: all .2s;
+}
+.activity-dot.active {
+  background: var(--accent-1);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(124, 92, 252, 0.3);
+}
+.activity-dot.today { border: 2px solid var(--accent-1); }
+
+/* Compact Sections */
+.dashboard-section { margin-bottom: 2rem; }
+.dashboard-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+.dashboard-section-title { font-size: .9rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--text-muted); }
+
+.glass-card-smooth {
+  background: var(--bg-card);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  transition: all var(--transition);
+}
+.glass-card-smooth:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,.1);
+  box-shadow: var(--shadow-md);
+}
 
 /* ════════════════════════════════════════════════════════════
    WELCOME HERO BANNER

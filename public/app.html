@@ -32,55 +32,96 @@
         <!-- Nav: Main -->
         <nav class="sidebar-nav">
           <a class="sidebar-link active" href="#/" data-tab="home" id="side-home">
-            <i class="fa-solid fa-grid-2"></i>
+            <i class="fa-solid fa-house"></i>
             <span>Dashboard</span>
           </a>
 
           <div class="sidebar-section-label">LEARN</div>
-          <a class="sidebar-link" href="#/learn" data-tab="learn" id="side-learn">
-            <i class="fa-solid fa-book-open"></i>
-            <span>Lessons</span>
+          <a class="sidebar-link" href="#/vocab" data-tab="vocab">
+            <i class="fa-solid fa-book"></i>
+            <span>Library</span>
+          </a>
+          <a class="sidebar-link" href="#/practice" data-tab="practice">
+            <i class="fa-solid fa-play"></i>
+            <span>Study</span>
           </a>
           <a class="sidebar-link" href="#/ai/tutor" data-tab="ai" id="side-ai">
             <i class="fa-solid fa-robot"></i>
             <span>AI Tutor</span>
           </a>
-          <a class="sidebar-link" href="#/vocab" data-tab="vocab">
-            <i class="fa-solid fa-language"></i>
-            <span>Vocabulary</span>
+          <a class="sidebar-link" href="#/learn" data-tab="learn" id="side-learn">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>Lessons</span>
+          </a>
+          <a class="sidebar-link" href="#/ai/stories" data-tab="stories">
+            <i class="fa-solid fa-file-invoice"></i>
+            <span>Summaries</span>
+          </a>
+          <a class="sidebar-link" href="#/vocab" data-tab="folders">
+            <i class="fa-solid fa-folder"></i>
+            <span>Folders</span>
           </a>
 
-          <div class="sidebar-section-label">PRACTICE</div>
-          <a class="sidebar-link" href="#/practice" data-tab="practice" id="side-practice">
-            <i class="fa-solid fa-bullseye"></i>
-            <span>Practice</span>
+          <div class="sidebar-section-label">TEST</div>
+          <a class="sidebar-link" href="#/level-test/A1" data-tab="exam">
+            <i class="fa-solid fa-file-circle-check"></i>
+            <span>Exam Mode</span>
           </a>
-          <a class="sidebar-link" href="#/practice/flashcards" data-tab="flashcards">
-            <i class="fa-solid fa-clone"></i>
-            <span>Flashcards</span>
+          <a class="sidebar-link" href="#/practice" data-tab="exam-lab">
+            <i class="fa-solid fa-vial"></i>
+            <span>Exam Lab</span>
           </a>
-          <a class="sidebar-link" href="#/ai/chat" data-tab="chat">
-            <i class="fa-solid fa-comments"></i>
-            <span>AI Chat</span>
+          <a class="sidebar-link" href="#/review" data-tab="wrong-answers">
+            <i class="fa-solid fa-circle-xmark"></i>
+            <span>Wrong Answers</span>
+          </a>
+          <a class="sidebar-link" href="#/practice/challenge" data-tab="battle">
+            <i class="fa-solid fa-bolt-lightning"></i>
+            <span>Brain Battle</span>
           </a>
 
           <div class="sidebar-section-label">TRACK</div>
           <a class="sidebar-link" href="#/progress" data-tab="progress" id="side-progress">
-            <i class="fa-solid fa-chart-line"></i>
-            <span>Progress</span>
+            <i class="fa-solid fa-chart-simple"></i>
+            <span>Analytics</span>
           </a>
-          <a class="sidebar-link" href="#/settings" data-tab="settings" id="side-settings">
-            <i class="fa-solid fa-gear"></i>
-            <span>Settings</span>
+          <a class="sidebar-link" href="#/settings" data-tab="study-plan">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span>Study Plan</span>
+          </a>
+          <a class="sidebar-link" href="#/settings" data-tab="goals">
+            <i class="fa-solid fa-bullseye"></i>
+            <span>Goals</span>
+          </a>
+          <a class="sidebar-link" href="#/progress" data-tab="insights">
+            <i class="fa-solid fa-receipt"></i>
+            <span>Weekly Insights</span>
           </a>
         </nav>
 
-        <!-- Sidebar Footer — User Card -->
-        <div class="sidebar-user" id="sidebar-user">
-          <div class="sidebar-user-avatar" id="sidebar-avatar">M</div>
-          <div class="sidebar-user-info">
-            <div class="sidebar-user-name" id="sidebar-username">Learner</div>
-            <div class="sidebar-user-level" id="sidebar-level">Level 1</div>
+        <!-- Sidebar Footer — Theme + User -->
+        <div class="sidebar-footer">
+          <!-- Theme Picker Swatches -->
+          <div class="sidebar-theme-picker" id="side-theme-picker">
+            <div class="theme-swatch-mini active" data-theme="midnight" style="background:#8b5cf6" title="Midnight"></div>
+            <div class="theme-swatch-mini" data-theme="light"    style="background:#cbd5e1" title="Light"></div>
+            <div class="theme-swatch-mini" data-theme="neon"     style="background:#ff007f" title="Neon"></div>
+            <div class="theme-swatch-mini" data-theme="ocean"    style="background:#0ea5e9" title="Ocean"></div>
+            <div class="theme-swatch-mini" data-theme="forest"   style="background:#10b981" title="Forest"></div>
+            <div class="theme-swatch-mini" data-theme="sunset"   style="background:#f97316" title="Sunset"></div>
+          </div>
+
+          <!-- User Card -->
+          <div class="sidebar-user" id="sidebar-user" onclick="App.navigate('/settings')">
+            <div class="sidebar-user-avatar" id="sidebar-avatar">M</div>
+            <div class="sidebar-user-info">
+              <div class="sidebar-user-name" id="sidebar-username">Learner</div>
+              <div class="flex-between">
+                <div class="sidebar-user-level" id="sidebar-level">Level 1</div>
+                <div class="text-xs text-gold fw-900 ml-1">👑</div>
+              </div>
+            </div>
+            <div class="sidebar-user-logout" onclick="event.stopPropagation(); logout()"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
           </div>
         </div>
       </div>
