@@ -30,17 +30,18 @@ const App = (() => {
 
   // ── Tab map for bottom nav highlight ────────────────────────────────────────
   const TAB_MAP = {
-    '/':        'home',
-    '/vocab':   'vocab',
-    '/practice':'practice',
-    '/learn':   'learn',
-    '/ai':      'ai',
-    '/review':  'wrong-answers',
-    '/progress':'progress',
-    '/settings':'settings',
-    '/homework':'learn',
+    '/':          'home',
+    '/learn':     'learn',
+    '/homework':  'learn',
+    '/review':    'review',
+    '/vocab':     'vocab',
+    '/ai/chat':   'ai-chat',
+    '/ai/write':  'ai-write',
+    '/ai/stories':'ai-stories',
+    '/ai/tutor':  'ai-tutor',
+    '/ai':        'ai',
     '/level-test':'exam',
-    '/practice/challenge':'battle'
+    '/settings':  'settings'
   };
 
   function getActiveTab(path) {
