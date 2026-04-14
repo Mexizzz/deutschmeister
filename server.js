@@ -243,7 +243,21 @@ app.post('/api/auth/login', async (req, res) => {
     res.json({ success: true, token, user: { id: user.id, username: user.username, email: user.email } });
   } catch (err) {
     console.error('Login Error:', err);
-    res.status(500).json({ error: 'Server error during login' });
+    res.status(500).json({ 
+      error: 'Server error during login', 
+      details: err.message,
+      code: err.code 
+    });
+  }
+});
+
+// 2.5 DB Diagnostic Route
+app.get('/api/db-check', async (req, res) => {
+  try {
+    const result = await db.pool.query('SELECT NOW() as now, current_database() as db');
+    res.json({ success: true, ...result.rows[0], env_exists: !!process.env.DATABASE_URL });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message, code: err.code, env_exists: !!process.env.DATABASE_URL });
   }
 });
 
