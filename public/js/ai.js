@@ -25,6 +25,7 @@ const AI = (() => {
       messages,
       scenario: scenario || 'casual conversation',
       level: level || p.level || 'A1',
+      dialect: p.dialect || 'standard'
     });
 
     const reader  = res.body.getReader();

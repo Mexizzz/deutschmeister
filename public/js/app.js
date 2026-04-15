@@ -19,6 +19,7 @@ const App = (() => {
     '/practice/challenge':  () => renderDailyChallenge(),
     '/ai':                  () => renderAIHub(),
     '/ai/chat':             () => renderAIChat(),
+    '/ai/scenarios':        () => renderScenarios(),
     '/ai/write':            () => renderAIWriting(),
     '/ai/stories':          () => renderAIStories(),
     '/ai/tutor':            () => renderAITutor(),
@@ -27,6 +28,7 @@ const App = (() => {
     '/progress':            () => renderProgress(),
     '/settings':            () => renderSettings(),
     '/admin':               () => renderAdminPanel(),
+    '/achievements':        () => renderAchievements(),
   };
 
   // ── Tab map for bottom nav highlight ────────────────────────────────────────
@@ -42,6 +44,7 @@ const App = (() => {
     '/ai/tutor':  'ai-tutor',
     '/ai':        'ai',
     '/level-test':'exam',
+    '/achievements':'achievements',
     '/settings':  'settings'
   };
 
@@ -269,7 +272,7 @@ const App = (() => {
   // ── AI Hub ────────────────────────────────────────────────────────────────
   function renderAIHub() {
     const aiFeatures = [
-      { route:'/ai/chat',    icon:'💬', title:'Conversation Partner', sub:'Practice real German dialogue',  color:'var(--grad-purple)' },
+      { route:'/ai/scenarios', icon:'💬', title:'Conversation Partner', sub:'Practice real German dialogue',  color:'var(--grad-purple)' },
       { route:'/ai/write',   icon:'✏️', title:'Grammar Corrector',    sub:'Fix your German text with AI',   color:'var(--grad-blue)' },
       { route:'/ai/stories', icon:'📖', title:'Story Generator',      sub:'Read AI German stories',         color:'var(--grad-gold)' },
       { route:'/ai/tutor',   icon:'🧑‍🏫', title:'AI Tutor',          sub:'Ask any grammar question',      color:'var(--grad-green)' },
@@ -399,6 +402,13 @@ const App = (() => {
     Gamification.regenHearts();
     Gamification.updateHeaderStats();
     setupOfflineMonitoring();
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => console.error('SW repo:', err));
+      });
+    }
+
     window.addEventListener('hashchange', handleRoute);
     handleRoute();
   }

@@ -86,6 +86,19 @@ function renderSettings() {
           <option value="english" ${p.aiResponseLang==='english'?'selected':''}>Full English</option>
         </select>
       </div>
+
+      <div class="settings-item">
+        <div class="settings-item-info">
+          <h4>Regional Dialect</h4>
+          <p>AI will use local vocabulary & accent</p>
+        </div>
+        <select class="modern-select" style="width:auto" id="dialect-select"
+                onchange="updateSetting('dialect', this.value)">
+          <option value="standard" ${(!p.dialect || p.dialect==='standard')?'selected':''}>Standard (Hochdeutsch)</option>
+          <option value="austrian" ${p.dialect==='austrian'?'selected':''}>Austrian (Österreichisch)</option>
+          <option value="swiss"    ${p.dialect==='swiss'   ?'selected':''}>Swiss (Mundart)</option>
+        </select>
+      </div>
     </div>
 
     <!-- Audio Settings -->

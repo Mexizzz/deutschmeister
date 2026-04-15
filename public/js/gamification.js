@@ -147,7 +147,10 @@ const Gamification = (() => {
     ACHIEVEMENTS.forEach(a => {
       if (!p.unlockedAchievements.includes(a.id) && a.check(p)) {
         p.unlockedAchievements.push(a.id);
-        setTimeout(() => Toast.info(`🏅 Achievement unlocked: ${a.icon} ${a.name}!`, 4000), 800);
+        setTimeout(() => {
+          if (window.AudioFX) AudioFX.success();
+          Toast.info(`🏅 Achievement unlocked: ${a.icon} ${a.name}!`, 4000);
+        }, 800);
       }
     });
     Storage.setProfile(p);

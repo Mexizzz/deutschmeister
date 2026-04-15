@@ -42,7 +42,17 @@ function renderDashboard() {
             <div style="width:1px; background:rgba(255,255,255,0.2)"></div>
             <div class="banner-stat-item">
               <span class="banner-stat-value">${p.xp.toLocaleString()}</span>
-              <span class="banner-stat-label">total XP</span>
+              <span class="banner-stat-label">level XP</span>
+            </div>
+          </div>
+          <!-- Enhanced XP Progress Bar -->
+          <div class="mt-3" style="width: 100%; max-width: 300px; margin: 0 auto;">
+            <div class="flex-between text-xs fw-800 mb-1" style="opacity:0.8">
+              <span>Level ${p.appLevel}</span>
+              <span>${p.xp} / ${Gamification.xpForLevel(p.appLevel+1)} XP</span>
+            </div>
+            <div class="xp-bar-wrap" style="height: 8px; background: rgba(255,255,255,0.1)">
+              <div class="xp-bar-fill" style="width: ${xpPct}%; background: var(--grad-gold); border-radius: 4px;"></div>
             </div>
           </div>
         </div>
@@ -107,12 +117,28 @@ function renderDashboard() {
           <button class="btn btn-secondary btn-block btn-sm mt-4" onclick="App.navigate('/homework')">Start Lesson</button>
         </div>
 
-        <!-- Planning Card -->
-        <div class="glass-card-smooth mb-4 animate-fade-in stagger-6 text-center py-4">
-          <div style="font-size:2.5rem; margin-bottom:1rem; opacity:0.3">📅</div>
-          <div class="fw-800 mb-1">No plan for today</div>
-          <div class="text-sm text-muted mb-4">Set up your study plan for the day</div>
-          <button class="btn btn-primary btn-block" onclick="App.navigate('/settings')">Create Study Plan</button>
+        <!-- Community Activity Feed -->
+        <div class="glass-card-smooth mb-4 animate-fade-in stagger-6">
+          <div class="flex-between mb-3">
+            <div class="dashboard-section-title">🌍 Live Community</div>
+            <span class="flex-center" style="position:relative"><span style="width:8px;height:8px;background:var(--success);border-radius:50%;display:inline-block;margin-right:6px;animation:pulse 2s infinite"></span> Online</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div class="flex-center gap-2">
+              <div style="width:32px;height:32px;border-radius:50%;background:var(--grad-purple);display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700">M</div>
+              <div class="text-sm"><strong style="color:var(--text)">Max_Berlin</strong> reached a <span class="text-gold fw-700">14-day streak 🔥</span>!</div>
+            </div>
+            <div style="height:1px;background:rgba(255,255,255,0.05)"></div>
+            <div class="flex-center gap-2">
+              <div style="width:32px;height:32px;border-radius:50%;background:var(--grad-blue);display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700">A</div>
+              <div class="text-sm"><strong style="color:var(--text)">Anna_T</strong> unlocked <span class="text-purple fw-700">Level 5 ⭐</span>!</div>
+            </div>
+            <div style="height:1px;background:rgba(255,255,255,0.05)"></div>
+            <div class="flex-center gap-2">
+              <div style="width:32px;height:32px;border-radius:50%;background:var(--grad-gold);display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700">J</div>
+              <div class="text-sm"><strong style="color:var(--text)">Jan</strong> achieved <span class="fw-700">Perfectionist 💯</span> badge!</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

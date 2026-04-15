@@ -257,16 +257,18 @@ window.clearChat = function() {
 
 window.startMicInput = function() {
   const btn = document.getElementById('mic-btn');
-  if (btn) btn.textContent = '🔴';
+  if (btn) btn.innerHTML = '<div style="display:flex;gap:2px;height:12px;align-items:center"><div style="width:3px;height:100%;background:var(--danger);animation:pulse 0.5s infinite alternate"></div><div style="width:3px;height:60%;background:var(--danger);animation:pulse 0.5s infinite alternate 0.2s"></div><div style="width:3px;height:80%;background:var(--danger);animation:pulse 0.5s infinite alternate 0.4s"></div></div>';
+  
   Speech.startListening(
     (transcript) => {
-      if (btn) btn.textContent = '🎤';
+      if (btn) btn.innerHTML = '🎤';
       const input = document.getElementById('chat-input');
       if (input) { input.value = transcript; sendUserMessage(); }
     },
     (err) => {
-      if (btn) btn.textContent = '🎤';
+      if (btn) btn.innerHTML = '🎤';
       Toast.error(err);
     }
   );
 };
+

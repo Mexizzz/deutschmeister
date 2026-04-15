@@ -39,11 +39,12 @@ function checkRateLimit(ip) {
 
 // ── System Prompts ─────────────────────────────────────────────────────────
 const PROMPTS = {
-  chat: (level, scenario) =>
+  chat: (level, scenario, dialect) =>
     `You are a friendly German language conversation partner. The learner is at CEFR level ${level}.
 Scenario: ${scenario}.
+Dialect: ${dialect === 'austrian' ? 'Austrian German (Österreichisches Deutsch, e.g. "Grüß Gott", "Topfen")' : dialect === 'swiss' ? 'Swiss German (Schweizerdeutsch/Mundart, e.g. "Grüezi", "Merci")' : 'Standard German (Hochdeutsch)'}.
 Rules:
-- Respond ONLY in German, but add English translations in parentheses for any word above ${level} difficulty.
+- Respond ONLY in the requested dialect, but add English translations in parentheses for any word above ${level} difficulty.
 - Keep replies to 2-3 short sentences.
 - If the user makes a grammar mistake, gently correct it at the end of your reply with a tip emoji 💡.
 - Stay in character for the scenario.
@@ -173,7 +174,7 @@ app.get('/api/admin/users', authenticateAdmin, async (req, res) => {
   }
 });
 
-// 1. Password Registration (Initiation)
+// 1. Password Registration (Direct)
 app.post('/api/auth/register', async (req, res) => {
   const { email, username, password } = req.body;
   if (!email || !username || !password) return res.status(400).json({ error: 'All fields are required' });
@@ -186,70 +187,29 @@ app.post('/api/auth/register', async (req, res) => {
     if (await db.getUserByEmail(emailLower)) return res.status(409).json({ error: 'Email already registered' });
     if (await db.getUserByUsername(username)) return res.status(409).json({ error: 'Username is already taken' });
 
-    // Generate Verification Code
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
     const salt = db.generateSalt();
     const hash = db.hashPassword(password, salt);
     const userId = crypto.randomUUID();
     
-    // Save to PENDING instead of permanent
-    await db.savePendingUser(userId, emailLower, username, hash, salt, code);
-
-    // Send Code via Resend
-    try {
-      await resend.emails.send({
-        from: 'FluentGermanAI <onboarding@resend.dev>',
-        to: emailLower,
-        subject: `${code} is your FluentGermanAI verification code 🇩🇪`,
-        html: `
-          <div style="font-family:sans-serif; text-align:center; padding:2rem; border:1px solid #eee; border-radius:12px;">
-            <h2 style="color:#6366f1;">Welcome to FluentGermanAI!</h2>
-            <p>To finalize your account, please enter this code in the app:</p>
-            <h1 style="letter-spacing:6px; font-size:3rem; color:#111;">${code}</h1>
-            <p style="color:#666; font-size:0.9rem;">This code expires in 15 minutes.</p>
-          </div>
-        `
-      });
-      res.json({ success: true, verificationRequired: true, message: 'Code sent!' });
-    } catch (err) {
-      console.error('Email Dispatch Error:', err);
-      // Fallback debug code for dev
-      res.json({ success: true, verificationRequired: true, debugCode: code });
-    }
-  } catch (err) {
-    console.error('Registration Init Error:', err);
-    res.status(500).json({ error: 'Server error during registration' });
-  }
-});
-
-// 1.5 Verify Registration Code
-app.post('/api/auth/verify-registration', async (req, res) => {
-  const { email, code } = req.body;
-  if (!email || !code) return res.status(400).json({ error: 'Email and code required' });
-
-  try {
-    const emailLower = email.toLowerCase();
-    const pending = await db.getPendingUser(emailLower);
-
-    if (!pending || pending.code !== code) {
-      return res.status(401).json({ error: 'Invalid or expired verification code' });
-    }
-
-    // Officialize Account
-    await db.createUser(pending.id, emailLower, pending.username, pending.password_hash, pending.salt);
+    // Create User directly in main table
+    await db.createUser(userId, emailLower, username, hash, salt);
 
     // Initialize Default User Profile Data
-    const defaultProfile = { name: pending.username, level: 'A1', xp: 0, hearts: 5, appLevel: 1 };
-    await db.createUserData(pending.id, defaultProfile, {}, []);
+    const defaultProfile = { name: username, level: 'A1', xp: 0, hearts: 5, appLevel: 1 };
+    await db.createUserData(userId, defaultProfile, {}, []);
 
-    // Cleanup
-    await db.deletePendingUser(emailLower);
+    // Generate JWT Token
+    const token = jwt.sign({ id: userId, username: username }, JWT_SECRET, { expiresIn: '30d' });
 
-    const token = jwt.sign({ id: pending.id, username: pending.username }, JWT_SECRET, { expiresIn: '30d' });
-    res.json({ success: true, token, user: { id: pending.id, username: pending.username, email: emailLower } });
+    res.json({ 
+      success: true, 
+      token, 
+      user: { id: userId, username: username, email: emailLower },
+      message: 'Registration successful!' 
+    });
   } catch (err) {
-    console.error('Verification Error:', err);
-    res.status(500).json({ error: 'Server error during verification' });
+    console.error('Registration Error:', err);
+    res.status(500).json({ error: 'Server error during registration' });
   }
 });
 
@@ -434,14 +394,14 @@ app.post('/api/chat', async (req, res) => {
     return res.status(429).json({ error: 'Too many requests. Please wait a moment.' });
   }
 
-  const { messages = [], level = 'A1', scenario = 'casual conversation' } = req.body;
+  const { messages = [], level = 'A1', scenario = 'casual conversation', dialect = 'standard' } = req.body;
   if (!Array.isArray(messages) || messages.length === 0) {
     return res.status(400).json({ error: 'messages array required' });
   }
 
   try {
     const groqResp = await callGroq({
-      systemPrompt: PROMPTS.chat(level, scenario),
+      systemPrompt: PROMPTS.chat(level, scenario, dialect),
       messages: messages.slice(-12), // Keep last 12 messages for context
       stream: true,
     });
