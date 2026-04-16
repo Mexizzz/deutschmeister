@@ -7,6 +7,14 @@ function getWordOfTheDay() {
   return VOCABULARY[dayIndex % VOCABULARY.length];
 }
 
+// Quick-action definitions for the dashboard shortcut row
+const QUICK_ACTIONS = [
+  { icon:'🎙️', label:'Speak',     color:'rgba(99,102,241,.2)',  route:'/ai/chat' },
+  { icon:'🧠',  label:'Review',   color:'rgba(245,158,11,.2)',  route:'/review' },
+  { icon:'📖',  label:'Stories',  color:'rgba(236,72,153,.2)',  route:'/ai/stories' },
+  { icon:'✍️',  label:'Grammar',  color:'rgba(16,185,129,.2)',  route:'/ai/write' },
+];
+
 function renderDashboard() {
   const p = Gamification.regenHearts();
   Gamification.updateStreak();
@@ -101,20 +109,32 @@ function renderDashboard() {
           </div>
         </div>
 
+        <!-- Quick Actions -->
+        <div class="glass-card-smooth animate-fade-in stagger-5">
+          <div class="dashboard-section-title mb-2">Quick Actions</div>
+          <div class="quick-actions-grid">
+            ${QUICK_ACTIONS.map(a => `
+              <button class="quick-action-btn" onclick="App.navigate('${a.route}')">
+                <div class="qa-icon" style="background:${a.color}">${a.icon}</div>
+                <span>${a.label}</span>
+              </button>`).join('')}
+          </div>
+        </div>
+
         <!-- AI Homework -->
-        <div class="glass-card-smooth animate-fade-in stagger-5" style="border-left: 4px solid var(--accent-purple)">
-          <div class="flex-between mb-3">
+        <div class="glass-card-smooth animate-fade-in stagger-6" style="border-left: 3px solid var(--accent-purple)">
+          <div class="flex-between mb-2">
             <div class="dashboard-section-title">AI Homework</div>
             <span class="text-xs text-purple fw-800">+100 XP</span>
           </div>
-          <div class="flex gap-3">
+          <div class="flex gap-3 mb-3">
             <div style="font-size:1.5rem">🧠</div>
             <div>
               <div class="fw-700 text-sm">Personalized Session</div>
-              <div class="text-xs text-muted">A1 Story + Grammar Practice</div>
+              <div class="text-xs text-muted">${p.level} Story + Grammar Practice</div>
             </div>
           </div>
-          <button class="btn btn-secondary btn-block btn-sm mt-4" onclick="App.navigate('/homework')">Start Lesson</button>
+          <button class="btn btn-secondary btn-block btn-sm" onclick="App.navigate('/homework')">Start Lesson</button>
         </div>
 
         <!-- Community Activity Feed -->
@@ -179,12 +199,6 @@ function renderDashboard() {
   });
 
   setTimeout(() => Speech.attachSpeakerButtons(), 150);
-}
-
-// Word of the Day determiner
-function getWordOfTheDay() {
-  const dayIndex = Math.floor(Date.now() / (1000 * 60 * 60 * 24));
-  return VOCABULARY[dayIndex % VOCABULARY.length];
 }
 
 // Dashboard bookmark toggle (without re-render)

@@ -172,19 +172,43 @@ function createWaveform() {
 }
 
 // ── Screen Transition ────────────────────────────────────────────────────────
+let _renderVersion = 0;
 function renderScreen(html) {
   const root = document.getElementById('app-root');
-  // Trigger fade out
+  const bar  = document.getElementById('page-progress');
+  const version = ++_renderVersion;
+
+  // Kick progress bar
+  if (bar) {
+    bar.style.transition = 'none';
+    bar.style.width = '0%';
+    bar.style.opacity = '1';
+    requestAnimationFrame(() => {
+      bar.style.transition = 'width .35s ease, opacity .25s ease';
+      bar.style.width = '45%';
+    });
+  }
+
   root.classList.add('fade-out');
-  
+
   setTimeout(() => {
-    window.scrollTo(0, 0); // Auto-scroll to top on new screen
+    if (version !== _renderVersion) return; // Stale — another navigate() fired
+    window.scrollTo({ top: 0, behavior: 'instant' });
     root.innerHTML = html;
-    // Release fade out to trigger CSS transition fade in
+
     requestAnimationFrame(() => {
       root.classList.remove('fade-out');
+
+      // Complete & hide progress bar
+      if (bar) {
+        bar.style.width = '100%';
+        setTimeout(() => {
+          bar.style.opacity = '0';
+          setTimeout(() => { bar.style.width = '0%'; }, 260);
+        }, 220);
+      }
     });
-  }, 180);
+  }, 170);
 }
 
 // ── Format helpers ───────────────────────────────────────────────────────────

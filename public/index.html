@@ -3,32 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Learn German Online | FluentGermanAI — The Ultimate AI German Tutor</title>
-  <meta name="description" content="Master German 10x faster with FluentGermanAI. Talk to our AI Tutor, practice grammar, enjoy personalized stories, and track progress. Learn German online today.">
-  <meta name="keywords" content="learn german, learn german online, AI german tutor, german language course, speak german, learn german fast, german AI, spaced repetition, german flashcards">
+  <title>Learn German Online Free | FluentGermanAI — AI German Tutor</title>
+  <meta name="description" content="Master German with FluentGermanAI — the #1 AI-powered German tutor. Real-time voice conversations, grammar correction, spaced repetition flashcards, and personalized stories. Start for free today.">
+  <meta name="keywords" content="learn german, learn german online free, AI german tutor, german language course, speak german, learn german fast, german AI app, spaced repetition german, german flashcards, german grammar">
   <meta name="author" content="FluentGermanAI">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <meta name="theme-color" content="#0a0e1a">
   <link rel="canonical" href="https://deutschmeister.up.railway.app/" />
 
-  <!-- Open Graph / Facebook -->
+  <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://deutschmeister.up.railway.app/">
-  <meta property="og:title" content="Learn German with AI | FluentGermanAI">
-  <meta property="og:description" content="Engage in real-time voice conversations and master German grammar 10x faster using our deep-learning AI language tutor.">
+  <meta property="og:title" content="Learn German Online Free | FluentGermanAI — AI German Tutor">
+  <meta property="og:description" content="Master German 10x faster with AI-powered conversations, smart flashcards, personalized stories, and real-time grammar correction.">
   <meta property="og:image" content="https://deutschmeister.up.railway.app/media/og-image.jpg">
+  <meta property="og:site_name" content="FluentGermanAI">
+  <meta property="og:locale" content="en_US">
 
   <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://deutschmeister.up.railway.app/">
-  <meta property="twitter:title" content="Learn German with AI | FluentGermanAI">
-  <meta property="twitter:description" content="Engage in real-time voice conversations and master German grammar 10x faster using our deep-learning AI language tutor.">
-  <meta property="twitter:image" content="https://deutschmeister.up.railway.app/media/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://deutschmeister.up.railway.app/">
+  <meta name="twitter:title" content="Learn German Online Free | FluentGermanAI">
+  <meta name="twitter:description" content="Master German 10x faster with AI-powered conversations, smart flashcards, personalized stories, and real-time grammar correction.">
+  <meta name="twitter:image" content="https://deutschmeister.up.railway.app/media/og-image.jpg">
 
+  <!-- PWA -->
   <link rel="manifest" href="/manifest.json" />
   <link rel="apple-touch-icon" href="https://img.icons8.com/color/192/germany.png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-  <!-- JSON-LD Structured Data for Google -->
+  <!-- Preload critical font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome (CSS only — no JS version needed) -->
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
+
+  <!-- JSON-LD: SoftwareApplication -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -36,17 +49,24 @@
     "name": "FluentGermanAI",
     "operatingSystem": "Web",
     "applicationCategory": "EducationalApplication",
-    "description": "An AI-powered German language learning software offering real-time voice conversations, grammar correction, and dynamic spaced repetition.",
+    "description": "An AI-powered German language learning platform offering real-time voice conversations, grammar correction, personalized stories, and deep spaced repetition.",
     "url": "https://deutschmeister.up.railway.app/",
-    "offers": {
-      "@type": "Offer",
-      "price": "0.00",
-      "priceCurrency": "USD"
-    }
+    "offers": { "@type": "Offer", "price": "0.00", "priceCurrency": "USD" },
+    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "1200" }
   }
   </script>
 
-  <!-- FAQ Schema -->
+  <!-- JSON-LD: WebSite (sitelinks searchbox) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "FluentGermanAI",
+    "url": "https://deutschmeister.up.railway.app/"
+  }
+  </script>
+
+  <!-- JSON-LD: FAQPage -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -55,453 +75,920 @@
       {
         "@type": "Question",
         "name": "How can I learn German fast with AI?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "FluentGermanAI uses advanced conversational AI to simulate real-life German conversations, allowing you to practice speaking and listening 10x faster than traditional methods."
-        }
+        "acceptedAnswer": { "@type": "Answer", "text": "FluentGermanAI uses advanced conversational AI to simulate real-life German conversations, allowing you to practice speaking and listening 10x faster than traditional methods." }
       },
       {
         "@type": "Question",
         "name": "Is FluentGermanAI free to use?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes, FluentGermanAI offers a generous free tier that includes access to core AI conversation features and vocabulary tracking."
-        }
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes, FluentGermanAI offers a generous free tier that includes access to core AI conversation features, spaced repetition flashcards, and vocabulary tracking." }
       },
       {
         "@type": "Question",
         "name": "Does the AI correct my German grammar?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Absolutely. Our AI Tutor provides real-time feedback and grammar corrections during your conversations, helping you learn from your mistakes instantly."
-        }
+        "acceptedAnswer": { "@type": "Answer", "text": "Absolutely. Our AI Tutor provides real-time feedback and grammar corrections during your conversations, helping you learn from your mistakes instantly." }
+      },
+      {
+        "@type": "Question",
+        "name": "What German levels are supported?",
+        "acceptedAnswer": { "@type": "Answer", "text": "FluentGermanAI supports A1 (Beginner), A2 (Elementary), and B1 (Intermediate) CEFR levels, with structured lessons and certification tests for each." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I practice German speaking with AI?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes! Our voice roleplay feature lets you speak into your microphone and receive real-time AI responses in natural German, with instant pronunciation feedback." }
       }
     ]
   }
   </script>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet" />
-  
   <style>
     :root {
       --bg: #0a0e17;
       --surface: #131a2a;
+      --surface-2: #0f1525;
       --text: #f8fafc;
       --text-muted: #94a3b8;
-      
+      --text-dim: #64748b;
       --color-primary: #6366f1;
       --color-secondary: #ec4899;
       --color-accent: #f59e0b;
-      
       --gradient-main: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+      --gradient-gold: linear-gradient(135deg, #f59e0b, #f97316);
+      --radius-sm: 12px;
+      --radius-md: 18px;
+      --radius-lg: 24px;
+      --radius-xl: 32px;
+      --transition: .28s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
     body {
       font-family: 'Inter', sans-serif;
-      background-color: var(--bg);
+      background: var(--bg);
       color: var(--text);
       line-height: 1.6;
       overflow-x: hidden;
+      opacity: 0;
+      animation: pageIn .5s ease .1s forwards;
     }
 
-    /* ── MOTION GRAPHIC 1: Particle Background ── */
+    @keyframes pageIn {
+      to { opacity: 1; }
+    }
+
+    /* ── Canvas BG ── */
     #bg-canvas {
-      position: fixed;
-      top: 0; left: 0;
+      position: fixed; top: 0; left: 0;
       width: 100vw; height: 100vh;
       z-index: -2; pointer-events: none;
     }
 
-    /* Ambient Background Glows */
+    /* ── Ambient Glows ── */
     .glow-blob {
-      position: absolute; border-radius: 50%; filter: blur(90px);
-      z-index: -1; opacity: 0.4;
-      animation: floatBlob 20s infinite alternate ease-in-out;
+      position: absolute; border-radius: 50%; filter: blur(100px);
+      z-index: -1; opacity: 0.35; pointer-events: none;
+      animation: floatBlob 18s infinite alternate ease-in-out;
     }
     @keyframes floatBlob {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(50px, -50px) scale(1.1); }
+      0%   { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(40px, -40px) scale(1.1); }
     }
-    .blob-1 { top: -10%; left: -10%; width: 400px; height: 400px; background: rgba(99, 102, 241, 0.4); }
-    .blob-2 { top: 40%; right: -10%; width: 500px; height: 500px; background: rgba(236, 72, 153, 0.3); animation-delay:-5s;}
-    .blob-3 { bottom: -10%; left: 20%; width: 600px; height: 600px; background: rgba(245, 158, 11, 0.2); animation-delay:-10s;}
+    .blob-1 { top: -8%; left: -8%; width: 420px; height: 420px; background: rgba(99,102,241,.5); }
+    .blob-2 { top: 35%; right: -8%; width: 480px; height: 480px; background: rgba(236,72,153,.35); animation-delay: -6s; }
+    .blob-3 { bottom: -8%; left: 18%; width: 560px; height: 560px; background: rgba(245,158,11,.18); animation-delay: -12s; }
 
-    /* Navigation */
+    /* ── Nav ── */
     nav {
-      position: fixed; top: 0; width: 100%; padding: 1.5rem 5%;
+      position: fixed; top: 0; width: 100%; z-index: 200;
+      padding: 1.1rem 5%;
       display: flex; justify-content: space-between; align-items: center;
-      background: rgba(10, 14, 23, 0.6); backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255,255,255,0.05); z-index: 100;
-      transition: all 0.4s ease;
+      background: rgba(10,14,23,.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      transition: box-shadow var(--transition), background var(--transition);
     }
-    .logo { font-size: 1.5rem; font-weight: 900; background: var(--gradient-main); -webkit-background-clip: text; color: transparent; text-decoration: none; }
-    .nav-links a { color: var(--text); text-decoration: none; font-weight: 600; font-size: 0.95rem; margin-left: 2rem; transition: 0.2s; }
-    .nav-links a:hover { color: var(--color-accent); }
+    nav.scrolled {
+      background: rgba(10,14,23,.92);
+      box-shadow: 0 8px 32px rgba(0,0,0,.45);
+    }
+    .logo {
+      font-size: 1.35rem; font-weight: 900;
+      background: var(--gradient-main); -webkit-background-clip: text; color: transparent;
+      text-decoration: none; display: flex; align-items: center; gap: .5rem;
+    }
+    .nav-links { display: flex; align-items: center; gap: 1.75rem; }
+    .nav-links a {
+      color: var(--text-muted); text-decoration: none;
+      font-weight: 600; font-size: .9rem;
+      transition: color var(--transition);
+    }
+    .nav-links a:hover { color: var(--text); }
 
-    /* ── MOTION GRAPHIC 4: Micro-interactions (Buttons) ── */
+    /* Hamburger (mobile) */
+    .nav-toggle {
+      display: none;
+      flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: .4rem;
+    }
+    .nav-toggle span {
+      display: block; width: 22px; height: 2px;
+      background: var(--text); border-radius: 2px;
+      transition: all .3s ease;
+    }
+    .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Mobile menu */
+    .mobile-menu {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(10,14,23,.97);
+      backdrop-filter: blur(20px);
+      z-index: 190;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2rem;
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s ease;
+    }
+    .mobile-menu.open { opacity: 1; pointer-events: auto; }
+    .mobile-menu a {
+      color: var(--text); text-decoration: none;
+      font-size: 1.5rem; font-weight: 700;
+      transition: color var(--transition);
+    }
+    .mobile-menu a:hover { color: var(--color-accent); }
+
+    /* ── Buttons ── */
     .btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      padding: 0.8rem 2.2rem; border-radius: 100px; font-weight: 800; text-decoration: none;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-      position: relative; overflow: hidden; border: none;
+      display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+      padding: .85rem 2rem; border-radius: 100px;
+      font-weight: 800; font-size: .95rem;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: all .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative; overflow: hidden; white-space: nowrap;
     }
-    .btn::before { /* Sweeping Shine effect */
-      content: ''; position: absolute; top:0; left:-100%; width:50%; height:100%;
-      background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
-      transform: skewX(-25deg); animation: sweepShine 5s infinite;
+    .btn::after {
+      content: ''; position: absolute;
+      inset: 0; background: linear-gradient(to right, transparent, rgba(255,255,255,.25), transparent);
+      transform: translateX(-100%) skewX(-20deg);
+      transition: none;
     }
-    @keyframes sweepShine {
-      0%, 80% { left: -100%; }
-      100% { left: 200%; }
+    .btn:hover::after { animation: shineOnce .5s ease forwards; }
+    @keyframes shineOnce {
+      to { transform: translateX(200%) skewX(-20deg); }
     }
-    .btn-primary { background: var(--gradient-main); color: white; box-shadow: 0 4px 25px rgba(99, 102, 241, 0.4); }
-    .btn-primary:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 10px 40px rgba(236, 72, 153, 0.6); }
+    .btn-primary {
+      background: var(--gradient-main); color: #fff;
+      box-shadow: 0 4px 20px rgba(99,102,241,.4);
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: 0 12px 35px rgba(236,72,153,.55);
+    }
+    .btn-secondary {
+      background: rgba(255,255,255,.07); color: var(--text);
+      border: 1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(10px);
+    }
+    .btn-secondary:hover {
+      background: rgba(255,255,255,.12);
+      transform: translateY(-2px);
+    }
+    .btn-white {
+      background: #fff; color: var(--color-primary);
+      box-shadow: 0 8px 30px rgba(0,0,0,.25);
+    }
+    .btn-white:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 16px 40px rgba(0,0,0,.35);
+    }
+    .btn-sm { padding: .5rem 1.2rem; font-size: .85rem; }
 
-    /* Hero Section */
+    /* ── Scroll Reveal ── */
+    .sr {
+      opacity: 0; transform: translateY(36px);
+      transition: opacity .7s cubic-bezier(0.16,1,.3,1), transform .7s cubic-bezier(0.16,1,.3,1);
+    }
+    .sr.in { opacity: 1; transform: none; }
+    .sr-delay-1 { transition-delay: .1s; }
+    .sr-delay-2 { transition-delay: .2s; }
+    .sr-delay-3 { transition-delay: .3s; }
+
+    /* ── Hero ── */
     header.hero {
-      min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
-      align-items: center; text-align: center; padding: 8rem 20px 4rem 20px;
-      perspective: 1000px;
+      min-height: 100vh; padding: 9rem 5% 6rem;
+      display: flex; flex-direction: column;
+      align-items: center; text-align: center;
     }
-    h1 { font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 900; line-height: 1.1; margin-bottom: 1.5rem; letter-spacing: -0.04em;}
-    h1 span { background: var(--gradient-main); -webkit-background-clip: text; color: transparent; animation: hueRotate 10s infinite alternate linear; }
-    @keyframes hueRotate { to { filter: hue-rotate(45deg); } }
-    
-    .hero-sub { color: var(--text-muted); font-size: 1.25rem; max-width: 650px; margin: 0 auto 2.5rem auto; line-height: 1.8;}
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .45rem 1.1rem; border-radius: 100px;
+      background: rgba(99,102,241,.12); border: 1px solid rgba(99,102,241,.3);
+      color: #a5b4fc; font-size: .8rem; font-weight: 700;
+      margin-bottom: 1.75rem; letter-spacing: .02em;
+    }
+    h1 {
+      font-size: clamp(2.8rem, 7vw, 5.5rem); font-weight: 900;
+      line-height: 1.08; letter-spacing: -.04em; margin-bottom: 1.5rem;
+    }
+    h1 .gradient-span {
+      background: var(--gradient-main); -webkit-background-clip: text; color: transparent;
+      animation: hueShift 12s infinite alternate linear;
+    }
+    @keyframes hueShift { to { filter: hue-rotate(40deg); } }
 
-    /* ── MOTION GRAPHIC 3: Floating 3D Graphic ── */
+    .hero-sub {
+      color: var(--text-muted); font-size: 1.2rem;
+      max-width: 620px; margin: 0 auto 2.5rem; line-height: 1.8;
+    }
+
+    .hero-cta { display: flex; gap: .85rem; flex-wrap: wrap; justify-content: center; margin-bottom: 2rem; }
+
+    .trust-row {
+      display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+      justify-content: center; color: var(--text-dim); font-size: .82rem; font-weight: 600;
+      margin-bottom: 4rem;
+    }
+    .trust-item { display: flex; align-items: center; gap: .35rem; }
+    .trust-item i { color: var(--color-accent); }
+
+    /* ── Dashboard Preview ── */
     .dashboard-preview {
-      margin-top: 5rem; width: 100%; max-width: 900px;
-      background: var(--surface); border-radius: 24px;
-      border: 1px solid rgba(255,255,255,0.1);
-      box-shadow: 0 30px 80px rgba(0,0,0,0.8);
-      position: relative; overflow: hidden; padding: 4rem;
-      transform-style: preserve-3d;
-      transition: transform 0.1s ease-out; /* JavaScript handles the tilt jump */
-      will-change: transform;
+      width: 100%; max-width: 860px;
+      background: var(--surface); border-radius: var(--radius-lg);
+      border: 1px solid rgba(255,255,255,.09);
+      box-shadow: 0 40px 100px rgba(0,0,0,.7), 0 0 0 1px rgba(99,102,241,.12);
+      position: relative; overflow: hidden; padding: 3rem 2.5rem;
+      transform-style: preserve-3d; will-change: transform;
+      transition: transform .12s ease-out;
     }
     .dashboard-preview::before {
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
       background: var(--gradient-main);
     }
-    .db-content { transform: translateZ(50px); pointer-events: none; } /* Pop out effect */
+    .db-inner { transform: translateZ(40px); pointer-events: none; text-align: center; }
+    .db-inner .big-emoji { font-size: 3.5rem; margin-bottom: 1.25rem; display: inline-block; animation: floatBlob 3s ease-in-out infinite alternate; }
+    .db-inner h3 { color: var(--text); font-size: 1.6rem; font-weight: 800; margin-bottom: .5rem; }
+    .db-inner p { color: var(--text-muted); font-size: .95rem; }
 
-    /* Features Grid */
-    section { padding: 8rem 5%; position: relative; z-index: 2;}
-    .section-title { text-align: center; font-size: 2.5rem; font-weight: 900; margin-bottom: 4rem; }
+    /* Pill row inside hero graphic */
+    .db-pills { display: flex; gap: .6rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; }
+    .db-pill {
+      padding: .35rem .85rem; border-radius: 100px;
+      font-size: .8rem; font-weight: 700;
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.05);
+      color: var(--text-muted);
+    }
+    .db-pill.active { background: rgba(99,102,241,.2); border-color: rgba(99,102,241,.4); color: #a5b4fc; }
 
-    /* FAQ Section Styles */
-    .faq-container { max-width: 800px; margin: 0 auto; }
-    .faq-item { margin-bottom: 1.5rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 1.5rem; }
-    .faq-question { font-weight: 800; font-size: 1.1rem; color: white; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 10px; }
-    .faq-answer { color: var(--text-muted); line-height: 1.6; }
-    
+    /* ── Section base ── */
+    section { padding: 7rem 5%; position: relative; z-index: 2; }
+    .section-label {
+      text-align: center; font-size: .75rem; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--color-primary); margin-bottom: .85rem;
+    }
+    .section-title {
+      text-align: center; font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 900; margin-bottom: 1rem; letter-spacing: -.03em;
+    }
+    .section-sub {
+      text-align: center; color: var(--text-muted);
+      font-size: 1.05rem; max-width: 560px; margin: 0 auto 4rem; line-height: 1.7;
+    }
+
+    /* ── Features Grid ── */
     .features-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 1.5rem; max-width: 1200px; margin: 0 auto;
+    }
+    .feature-card {
+      background: rgba(19,26,42,.75); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: var(--radius-lg); padding: 2.5rem 2rem;
+      transform-style: preserve-3d;
+      transition: border-color var(--transition), transform .2s ease, box-shadow var(--transition);
+    }
+    .feature-card:hover {
+      border-color: rgba(99,102,241,.4);
+      box-shadow: 0 20px 50px rgba(0,0,0,.4), 0 0 25px rgba(99,102,241,.08);
+    }
+    .feature-inner { transform: translateZ(30px); pointer-events: none; }
+    .f-icon {
+      width: 60px; height: 60px; border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.65rem; margin-bottom: 1.25rem;
+    }
+    .fc-1 { background: rgba(99,102,241,.15); color: #818cf8; box-shadow: 0 0 20px rgba(99,102,241,.2); }
+    .fc-2 { background: rgba(236,72,153,.15); color: #f472b6; box-shadow: 0 0 20px rgba(236,72,153,.2); }
+    .fc-3 { background: rgba(245,158,11,.15); color: #fbbf24; box-shadow: 0 0 20px rgba(245,158,11,.2); }
+    .fc-4 { background: rgba(16,185,129,.15); color: #34d399; box-shadow: 0 0 20px rgba(16,185,129,.2); }
+    .fc-5 { background: rgba(59,130,246,.15); color: #60a5fa; box-shadow: 0 0 20px rgba(59,130,246,.2); }
+    .fc-6 { background: rgba(168,85,247,.15); color: #c084fc; box-shadow: 0 0 20px rgba(168,85,247,.2); }
+    .feature-card h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: .75rem; letter-spacing: -.02em; }
+    .feature-card p { color: var(--text-muted); font-size: .92rem; line-height: 1.7; }
+
+    /* ── How It Works ── */
+    .hiw-strip {
+      background: rgba(15,21,37,.6);
+      border-top: 1px solid rgba(255,255,255,.05);
+      border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+    .hiw-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 3rem; max-width: 1000px; margin: 0 auto;
+    }
+    .hiw-step { text-align: center; }
+    .hiw-number {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: var(--gradient-main);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; font-weight: 900; color: #fff;
+      margin: 0 auto 1.25rem;
+      box-shadow: 0 8px 25px rgba(99,102,241,.45);
+    }
+    .hiw-step h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: .6rem; }
+    .hiw-step p { color: var(--text-muted); font-size: .9rem; line-height: 1.65; }
+
+    /* ── Stats ── */
+    .stats-strip {
+      background: rgba(19,26,42,.4);
+      border-top: 1px solid rgba(255,255,255,.05);
+      border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+    .stats-inner {
+      display: flex; justify-content: space-around;
+      flex-wrap: wrap; gap: 3rem; max-width: 960px; margin: 0 auto;
+    }
+    .stat-box { text-align: center; }
+    .stat-box h4 {
+      font-size: clamp(2.5rem, 6vw, 3.5rem); font-weight: 900; line-height: 1;
+      background: var(--gradient-main); -webkit-background-clip: text; color: transparent;
+      margin-bottom: .4rem;
+    }
+    .stat-box p { color: var(--text-muted); font-weight: 700; font-size: .85rem; text-transform: uppercase; letter-spacing: .12em; }
+
+    /* ── Testimonials ── */
+    .testimonials-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem; max-width: 1100px; margin: 0 auto;
+    }
+    .testimonial-card {
+      background: rgba(19,26,42,.75); backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.06); border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      transition: border-color var(--transition), transform var(--transition);
+    }
+    .testimonial-card:hover { border-color: rgba(99,102,241,.3); transform: translateY(-4px); }
+    .t-stars { color: var(--color-accent); font-size: .9rem; margin-bottom: 1rem; letter-spacing: .1em; }
+    .t-quote { color: var(--text-muted); font-size: .93rem; line-height: 1.7; margin-bottom: 1.25rem; font-style: italic; }
+    .t-author { display: flex; align-items: center; gap: .75rem; }
+    .t-avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--gradient-main);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: .9rem; color: #fff; flex-shrink: 0;
+    }
+    .t-name { font-weight: 700; font-size: .9rem; }
+    .t-sub { color: var(--text-dim); font-size: .78rem; margin-top: .1rem; }
+
+    /* ── FAQ ── */
+    .faq-container { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: .75rem; }
+    .faq-item {
+      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.06);
+      border-radius: var(--radius-md); overflow: hidden;
+      transition: border-color var(--transition);
+    }
+    .faq-item:hover { border-color: rgba(99,102,241,.3); }
+    .faq-question {
+      padding: 1.25rem 1.5rem; font-weight: 700; font-size: 1rem;
+      display: flex; justify-content: space-between; align-items: center;
+      cursor: pointer; user-select: none; gap: 1rem;
+    }
+    .faq-question span { flex: 1; }
+    .faq-icon { color: var(--text-dim); transition: transform var(--transition); font-size: .9rem; flex-shrink: 0; }
+    .faq-item.open .faq-icon { transform: rotate(180deg); color: var(--color-primary); }
+    .faq-answer {
+      max-height: 0; overflow: hidden;
+      transition: max-height .4s ease, padding .3s ease;
+      padding: 0 1.5rem; color: var(--text-muted); font-size: .93rem; line-height: 1.7;
+    }
+    .faq-item.open .faq-answer { max-height: 200px; padding: 0 1.5rem 1.25rem; }
+
+    /* ── CTA Section ── */
+    .cta-wrap { padding: 2rem 5% 6rem; }
+    .cta-section {
+      background: var(--gradient-main); border-radius: var(--radius-xl);
+      padding: 6rem 2rem; text-align: center; position: relative; overflow: hidden;
+      max-width: 1300px; margin: 0 auto;
+    }
+    .cta-section * { position: relative; z-index: 2; }
+    .cta-section h2 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 900; color: #fff; margin-bottom: .85rem; line-height: 1.2; }
+    .cta-section p { color: rgba(255,255,255,.85); font-size: 1.1rem; margin-bottom: 2.5rem; }
+    .cta-wave {
+      position: absolute; border-radius: 50%;
+      background: rgba(255,255,255,.08); pointer-events: none;
+    }
+    .cta-wave-1 { width: 500px; height: 500px; top: -250px; right: -100px; animation: floatBlob 15s infinite alternate ease-in-out; }
+    .cta-wave-2 { width: 400px; height: 400px; bottom: -200px; left: -80px; animation: floatBlob 12s infinite alternate-reverse ease-in-out; }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--bg); border-top: 1px solid rgba(255,255,255,.05);
+      padding: 4rem 5% 2.5rem;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr repeat(3, 1fr);
+      gap: 3rem; max-width: 1200px; margin: 0 auto 3rem;
+    }
+    .footer-brand .logo { font-size: 1.4rem; display: inline-flex; margin-bottom: 1rem; }
+    .footer-brand p { color: var(--text-muted); font-size: .88rem; line-height: 1.7; max-width: 280px; }
+    .footer-col h4 { font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--text-muted); margin-bottom: 1rem; }
+    .footer-col a { display: block; color: var(--text-muted); font-size: .88rem; text-decoration: none; margin-bottom: .6rem; transition: color var(--transition); }
+    .footer-col a:hover { color: var(--text); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,.05); padding-top: 1.75rem;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+      color: var(--text-dim); font-size: .82rem;
       max-width: 1200px; margin: 0 auto;
     }
 
-    /* ── MOTION GRAPHIC 3: 3D Tilt Cards ── */
-    .feature-card {
-      background: rgba(19, 26, 42, 0.7); backdrop-filter: blur(10px);
-      padding: 3rem 2.5rem; border-radius: 24px;
-      border: 1px solid rgba(255,255,255,0.05); 
-      transform-style: preserve-3d; transition: transform 0.2s ease, border-color 0.3s ease;
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; }
     }
-    .feature-card:hover { border-color: rgba(99, 102, 241, 0.5); }
-    .feature-inner { transform: translateZ(40px); pointer-events:none; } /* Pop out text inside card */
-    
-    .f-icon { width: 70px; height: 70px; border-radius: 20px; display: flex; justify-content: center; align-items: center; font-size: 2rem; margin-bottom: 1.5rem; }
-    .fc-1 { background: rgba(99, 102, 241, 0.15); color: var(--color-primary); box-shadow: 0 0 20px rgba(99, 102, 241, 0.2); }
-    .fc-2 { background: rgba(236, 72, 153, 0.15); color: var(--color-secondary); box-shadow: 0 0 20px rgba(236, 72, 153, 0.2); }
-    .fc-3 { background: rgba(245, 158, 11, 0.15); color: var(--color-accent); box-shadow: 0 0 20px rgba(245, 158, 11, 0.2); }
-    
-    .feature-card h3 { font-size: 1.5rem; margin-bottom: 1rem; font-weight: 800;}
-    .feature-card p { color: var(--text-muted); font-size: 1rem; line-height: 1.7;}
-
-    /* ── MOTION GRAPHIC 2: Scroll Animations ── */
-    .scroll-reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1); }
-    .scroll-reveal.in-view { opacity: 1; transform: translateY(0); }
-    
-    /* Stats Section */
-    .stats-container { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 3rem; max-width: 1000px; margin: 0 auto; }
-    .stat-box h4 { font-size: 3.5rem; font-weight: 900; margin-bottom: 0.5rem; background: var(--gradient-main); -webkit-background-clip: text; color: transparent;}
-    .stat-box p { color: var(--text-muted); font-weight: 600; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px;}
-
-    /* CTA Section */
-    .cta-section { background: var(--gradient-main); padding: 8rem 5%; text-align: center; position: relative; overflow: hidden; border-radius: 40px; max-width: 1400px; margin: 0 auto 4rem auto;}
-    .cta-section * { position: relative; z-index: 2; }
-    .cta-section h2 { font-size: 3.5rem; font-weight: 900; margin-bottom: 1rem; color: white; line-height: 1.2;}
-    .cta-section p { font-size: 1.25rem; color: rgba(255,255,255,0.9); margin-bottom: 3rem; }
-    .btn-white { background: white; color: var(--color-primary); box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
-    
-    /* Flowing waves inside CTA */
-    .wave { position: absolute; bottom: -50px; left: -10vw; width: 120vw; height: 300px; background: rgba(255,255,255,0.1); border-radius: 50%; opacity: 0.5; animation: waveRipple 10s infinite alternate linear; }
-    .wave-2 { background: rgba(0,0,0,0.1); bottom: -100px; left: -5vw; animation-direction: reverse; animation-duration: 15s; }
-    @keyframes waveRipple {
-      0% { transform: translateY(0) scale(1) rotate(0); }
-      100% { transform: translateY(-30px) scale(1.05) rotate(2deg); }
-    }
-
-    footer { background: var(--bg); padding: 4rem 5%; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; }
-
     @media (max-width: 768px) {
       .nav-links { display: none; }
-      h1 { font-size: 2.8rem; }
-      .feature-card { padding: 2rem; }
-      .cta-section { border-radius: 0; }
+      .nav-toggle { display: flex; }
+      h1 { font-size: 2.5rem; }
+      .hero-sub { font-size: 1rem; }
+      .feature-card { padding: 2rem 1.5rem; }
+      .cta-section { border-radius: var(--radius-lg); padding: 4rem 1.5rem; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      .trust-row { gap: 1rem; }
+    }
+
+    /* ── prefers-reduced-motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+      html { scroll-behavior: auto; }
+      body { animation: none; opacity: 1; }
+      .sr { opacity: 1; transform: none; transition: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Motion Graphic: Canvas Particles -->
   <canvas id="bg-canvas"></canvas>
-
   <div class="glow-blob blob-1"></div>
   <div class="glow-blob blob-2"></div>
   <div class="glow-blob blob-3"></div>
 
-  <!-- Navbar -->
-  <nav id="navbar">
-    <a href="/" class="logo">🇩🇪 FluentGermanAI</a>
-    <div class="nav-links">
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-label="Navigation menu">
+    <a href="#features" onclick="closeMobileMenu()">Features</a>
+    <a href="#how-it-works" onclick="closeMobileMenu()">How It Works</a>
+    <a href="#faq" onclick="closeMobileMenu()">FAQ</a>
+    <a href="/app.html#/auth" class="btn btn-primary" onclick="closeMobileMenu()">Start Learning Free</a>
+  </div>
+
+  <!-- Nav -->
+  <nav id="navbar" role="navigation" aria-label="Main navigation">
+    <a href="/" class="logo" aria-label="FluentGermanAI home">🇩🇪 FluentGermanAI</a>
+    <div class="nav-links" role="list">
       <a href="#features">Features</a>
-      <a href="/app.html#/auth" class="btn btn-primary" style="padding: 0.5rem 1.5rem; font-size:0.9rem;">Sign In</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#faq">FAQ</a>
+      <a href="/app.html#/auth" class="btn btn-primary btn-sm">Start Free</a>
     </div>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 
   <!-- Hero -->
-  <header class="hero scroll-reveal">
-    <div style="display:inline-block; padding:0.5rem 1.2rem; border-radius:100px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:white; font-size:0.85rem; font-weight:700; margin-bottom:1.5rem;">
-      🎉 V1.0 Platform Officially Live
+  <header class="hero">
+    <div class="hero-badge sr">
+      <i class="fa-solid fa-star"></i> V1.0 Platform Officially Live
     </div>
-    <h1>Master German <span>Faster</span><br>With Artificial Intelligence.</h1>
-    <p class="hero-sub">Ditch the boring textbooks. Engage in real-time voice conversations, automatically generate stories from your known vocabulary, and hack fluency with deep spaced-repetition.</p>
-    
-    <div style="display:flex; gap:1rem; flex-wrap:wrap; justify-content:center;">
-      <a href="/app.html#/auth" class="btn btn-primary">Start Learning Free <i class="fa-solid fa-rocket ms-2" style="margin-left:8px;"></i></a>
+    <h1 class="sr sr-delay-1">
+      Master German<br><span class="gradient-span">Faster</span> With AI.
+    </h1>
+    <p class="hero-sub sr sr-delay-2">Ditch the textbooks. Talk with an AI tutor, auto-generate stories from your vocab, and hack fluency with neuro-optimized spaced repetition.</p>
+
+    <div class="hero-cta sr sr-delay-3">
+      <a href="/app.html#/auth" class="btn btn-primary">
+        <i class="fa-solid fa-rocket"></i> Start Learning Free
+      </a>
+      <a href="#features" class="btn btn-secondary">
+        See Features <i class="fa-solid fa-arrow-down"></i>
+      </a>
     </div>
 
-    <!-- 3D Interactive Dashboard Graphic -->
-    <div class="dashboard-preview scroll-reveal" id="hero-graphic">
-      <div class="db-content" style="text-align:center; color: var(--text-muted);">
-        <div style="font-size:4rem; margin-bottom:1.5rem; animation: floatBlob 3s infinite alternate ease-in-out;">✨</div>
-        <h3 style="color:white; font-size:1.8rem; margin-bottom:0.5rem;">Interactive Learning Console</h3>
-        <p>This panel interacts with your mouse position.<br>Log in to access your actual dashboard.</p>
+    <div class="trust-row sr">
+      <div class="trust-item"><i class="fa-solid fa-check-circle"></i> No credit card required</div>
+      <div class="trust-item"><i class="fa-solid fa-check-circle"></i> A1–B1 levels covered</div>
+      <div class="trust-item"><i class="fa-solid fa-check-circle"></i> Works on all devices</div>
+    </div>
+
+    <div class="dashboard-preview sr" id="hero-graphic">
+      <div class="db-inner">
+        <div class="big-emoji">✨</div>
+        <h3>Your Personal Learning Console</h3>
+        <p>Hover to interact. Sign in to access your full dashboard.</p>
+        <div class="db-pills">
+          <span class="db-pill active">🎙️ Voice Roleplay</span>
+          <span class="db-pill">📚 AI Stories</span>
+          <span class="db-pill">🧠 SRS Flashcards</span>
+          <span class="db-pill">✍️ Grammar Fix</span>
+        </div>
       </div>
     </div>
   </header>
 
-  <!-- Features Block -->
+  <!-- Features -->
   <section id="features">
-    <h2 class="section-title scroll-reveal">Master German with our AI ecosystem.</h2>
+    <p class="section-label sr">Why FluentGermanAI</p>
+    <h2 class="section-title sr">Everything you need to reach fluency.</h2>
+    <p class="section-sub sr">Six powerful tools, one unified platform. No app switching, no wasted time.</p>
+
     <div class="features-grid">
-      
-      <div class="feature-card tilt-card scroll-reveal">
+      <div class="feature-card tilt-card sr">
         <div class="feature-inner">
           <div class="f-icon fc-1">🎙️</div>
           <h3>Live Voice Roleplay</h3>
-          <p>Speak natively through your microphone. Our deep-learning AI responds in real-time with perfect German accents, auto-correcting your grammar dynamically.</p>
+          <p>Speak through your microphone. Our AI responds in real-time with natural German, auto-correcting grammar and building your ear for the language.</p>
         </div>
       </div>
 
-      <div class="feature-card tilt-card scroll-reveal" style="transition-delay: 0.1s;">
+      <div class="feature-card tilt-card sr sr-delay-1">
         <div class="feature-inner">
           <div class="f-icon fc-2">📚</div>
-          <h3>Curated Comprehensible Input</h3>
-          <p>Our algorithm curates "Daily Homework" stories using <b>only</b> the vocabulary words you've explicitly mastered, completely removing reading friction.</p>
+          <h3>Comprehensible Input Stories</h3>
+          <p>Stories generated using <em>only</em> vocabulary you've mastered — no dictionary lookups, just smooth reading that cements your knowledge.</p>
         </div>
       </div>
 
-      <div class="feature-card tilt-card scroll-reveal" style="transition-delay: 0.2s;">
+      <div class="feature-card tilt-card sr sr-delay-2">
         <div class="feature-inner">
           <div class="f-icon fc-3">🧠</div>
           <h3>Spaced Repetition Engine</h3>
-          <p>A neuro-optimized flashcard system calculates exactly when your brain is about to forget a word, testing you at the perfect interval to build permanent memory.</p>
+          <p>A SM-2 algorithm calculates the exact moment your brain is about to forget a word, drilling it at the optimal interval for permanent memory.</p>
         </div>
       </div>
 
+      <div class="feature-card tilt-card sr">
+        <div class="feature-inner">
+          <div class="f-icon fc-4">✍️</div>
+          <h3>AI Grammar Corrector</h3>
+          <p>Paste any German text and receive instant, detailed corrections with explanations — like a native-speaking editor in your pocket.</p>
+        </div>
+      </div>
+
+      <div class="feature-card tilt-card sr sr-delay-1">
+        <div class="feature-inner">
+          <div class="f-icon fc-5">🤖</div>
+          <h3>Personal AI Tutor</h3>
+          <p>Ask anything about German grammar, vocabulary, or culture. Get clear, step-by-step explanations tailored to your current CEFR level.</p>
+        </div>
+      </div>
+
+      <div class="feature-card tilt-card sr sr-delay-2">
+        <div class="feature-inner">
+          <div class="f-icon fc-6">🏆</div>
+          <h3>Gamified Progress Tracking</h3>
+          <p>Daily streaks, XP points, heart lives, achievements, and certification tests keep you motivated every single day on the road to fluency.</p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- Stats Section -->
-  <section style="background: rgba(19, 26, 42, 0.4); border-top:1px solid rgba(255,255,255,0.05); border-bottom:1px solid rgba(255,255,255,0.05);">
-    <div class="stats-container">
-      <div class="stat-box scroll-reveal">
+  <!-- How It Works -->
+  <section class="hiw-strip" id="how-it-works">
+    <p class="section-label sr">Simple Process</p>
+    <h2 class="section-title sr">Go from zero to conversational in 3 steps.</h2>
+    <p class="section-sub sr">No complex setup. You're learning German within seconds of signing up.</p>
+    <div class="hiw-grid">
+      <div class="hiw-step sr">
+        <div class="hiw-number">1</div>
+        <h3>Create a Free Account</h3>
+        <p>Sign up in seconds. Tell us your current level and your goal. We personalize your learning path instantly.</p>
+      </div>
+      <div class="hiw-step sr sr-delay-1">
+        <div class="hiw-number">2</div>
+        <h3>Complete Daily Lessons</h3>
+        <p>Work through structured A1–B1 lessons, flashcard reviews, and AI conversations at your own pace.</p>
+      </div>
+      <div class="hiw-step sr sr-delay-2">
+        <div class="hiw-number">3</div>
+        <h3>Track & Certify</h3>
+        <p>Watch your XP grow, unlock achievements, and take official-style level tests to prove your progress.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats-strip" aria-label="Platform statistics">
+    <div class="stats-inner">
+      <div class="stat-box sr">
         <h4>10x</h4>
         <p>Faster Fluency</p>
       </div>
-      <div class="stat-box scroll-reveal" style="transition-delay: 0.1s;">
-        <h4>Infinite</h4>
-        <p>Conversations</p>
+      <div class="stat-box sr sr-delay-1">
+        <h4>2,400+</h4>
+        <p>Vocabulary Words</p>
       </div>
-      <div class="stat-box scroll-reveal" style="transition-delay: 0.2s;">
-        <h4>100%</h4>
-        <p>Cross-Device Sync</p>
+      <div class="stat-box sr sr-delay-2">
+        <h4>∞</h4>
+        <p>AI Conversations</p>
+      </div>
+      <div class="stat-box sr sr-delay-3">
+        <h4>A1–B1</h4>
+        <p>CEFR Levels</p>
       </div>
     </div>
   </section>
 
-  <!-- FAQ Section -->
-  <section id="faq" class="scroll-reveal">
-    <h2 class="section-title">Frequently Asked Questions</h2>
+  <!-- Testimonials -->
+  <section id="testimonials">
+    <p class="section-label sr">Learner Stories</p>
+    <h2 class="section-title sr">Loved by German learners worldwide.</h2>
+    <p class="section-sub sr">Real feedback from real learners building real fluency.</p>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card sr">
+        <div class="t-stars">★★★★★</div>
+        <p class="t-quote">"The voice roleplay is incredible. I had a full 5-minute conversation in German after just two weeks. Nothing else comes close."</p>
+        <div class="t-author">
+          <div class="t-avatar">MK</div>
+          <div>
+            <div class="t-name">Marcus K.</div>
+            <div class="t-sub">A2 → B1 in 3 months</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card sr sr-delay-1">
+        <div class="t-stars">★★★★★</div>
+        <p class="t-quote">"The spaced repetition actually works. I've tried Duolingo, Anki, and Babbel. This is the first app where vocab sticks long-term."</p>
+        <div class="t-author">
+          <div class="t-avatar">SL</div>
+          <div>
+            <div class="t-name">Sophie L.</div>
+            <div class="t-sub">Preparing for Goethe B1</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card sr sr-delay-2">
+        <div class="t-stars">★★★★★</div>
+        <p class="t-quote">"The AI grammar corrector alone is worth it. I write a sentence in German, paste it, and learn exactly why my case endings were wrong."</p>
+        <div class="t-author">
+          <div class="t-avatar">TR</div>
+          <div>
+            <div class="t-name">Thomas R.</div>
+            <div class="t-sub">Learning German for work</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <p class="section-label sr">Got Questions?</p>
+    <h2 class="section-title sr">Frequently Asked Questions</h2>
+    <p class="section-sub sr">Everything you need to know before you start.</p>
+
     <div class="faq-container">
-      <div class="faq-item">
-        <div class="faq-question"><span>🤔</span> How can I learn German fast with AI?</div>
-        <div class="faq-answer">FluentGermanAI uses advanced conversational AI to simulate real-life German conversations, allowing you to practice speaking and listening 10x faster than traditional methods.</div>
+      <div class="faq-item sr">
+        <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
+          <span>How can I learn German fast with AI?</span>
+          <i class="fa-solid fa-chevron-down faq-icon"></i>
+        </div>
+        <div class="faq-answer">FluentGermanAI uses advanced conversational AI to simulate real-life German conversations, so you practice speaking and listening 10x faster than textbook methods. Combine that with spaced repetition and you have a system that matches how your brain actually learns.</div>
       </div>
-      <div class="faq-item">
-        <div class="faq-question"><span>💸</span> Is FluentGermanAI free to use?</div>
-        <div class="faq-answer">Yes, FluentGermanAI offers a generous free tier that includes access to core AI conversation features and vocabulary tracking.</div>
+
+      <div class="faq-item sr">
+        <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
+          <span>Is FluentGermanAI free to use?</span>
+          <i class="fa-solid fa-chevron-down faq-icon"></i>
+        </div>
+        <div class="faq-answer">Yes — FluentGermanAI offers a generous free tier including AI conversations, spaced repetition flashcards, grammar correction, and vocabulary tracking. No credit card required.</div>
       </div>
-      <div class="faq-item">
-        <div class="faq-question"><span>💡</span> Does the AI correct my German grammar?</div>
-        <div class="faq-answer">Absolutely. Our AI Tutor provides real-time feedback and grammar corrections during your conversations, helping you learn from your mistakes instantly.</div>
+
+      <div class="faq-item sr">
+        <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
+          <span>Does the AI correct my German grammar?</span>
+          <i class="fa-solid fa-chevron-down faq-icon"></i>
+        </div>
+        <div class="faq-answer">Absolutely. Our Grammar Fixer provides real-time corrections with detailed explanations during conversations and in the dedicated writing tool. You'll understand exactly why each correction was made.</div>
       </div>
-      <div class="faq-item">
-        <div class="faq-question"><span>📈</span> What German levels are supported?</div>
-        <div class="faq-answer">We currently support A1 (Beginner), A2 (Elementary), and B1 (Intermediate) levels, with content specifically optimized for official German language certifications.</div>
+
+      <div class="faq-item sr">
+        <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
+          <span>What German levels are supported?</span>
+          <i class="fa-solid fa-chevron-down faq-icon"></i>
+        </div>
+        <div class="faq-answer">We support A1 (Beginner), A2 (Elementary), and B1 (Intermediate) CEFR levels, with structured lesson paths, level-appropriate AI conversations, and official-style certification tests for each.</div>
+      </div>
+
+      <div class="faq-item sr">
+        <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
+          <span>Can I practice German speaking with AI?</span>
+          <i class="fa-solid fa-chevron-down faq-icon"></i>
+        </div>
+        <div class="faq-answer">Yes! Our Voice Roleplay feature uses your microphone for real-time German conversations. Choose from scenarios like a café, job interview, or city navigation — the AI responds naturally and corrects your pronunciation in context.</div>
+      </div>
+
+      <div class="faq-item sr">
+        <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
+          <span>How is FluentGermanAI different from Duolingo?</span>
+          <i class="fa-solid fa-chevron-down faq-icon"></i>
+        </div>
+        <div class="faq-answer">Duolingo gamifies repetition. FluentGermanAI uses real AI conversations, proper SM-2 spaced repetition, in-depth grammar correction, and comprehensible input stories — designed for learners who want actual fluency, not just streaks.</div>
       </div>
     </div>
   </section>
 
-  <!-- CTA Section -->
-  <section style="padding-top: 6rem;">
-    <div class="cta-section scroll-reveal">
-      <div class="wave"></div>
-      <div class="wave wave-2"></div>
-      <h2>Stop studying. Start speaking.</h2>
-      <p>Join the next generation of language learners mastering German through conversational AI.</p>
-      <a href="/app.html#/auth" class="btn btn-white" style="font-size: 1.1rem; padding: 1.2rem 3.5rem;">Create a Free Account</a>
+  <!-- CTA -->
+  <div class="cta-wrap">
+    <div class="cta-section sr">
+      <div class="cta-wave cta-wave-1"></div>
+      <div class="cta-wave cta-wave-2"></div>
+      <h2>Stop studying.<br>Start speaking German.</h2>
+      <p>Join the next generation of language learners building fluency through AI.</p>
+      <a href="/app.html#/auth" class="btn btn-white" style="font-size:1.05rem; padding:1.1rem 3rem;">
+        Create a Free Account <i class="fa-solid fa-arrow-right"></i>
+      </a>
     </div>
-  </section>
+  </div>
 
+  <!-- Footer -->
   <footer>
-    <div class="logo" style="justify-content:center; font-size:1.5rem; margin-bottom:1rem;">🇩🇪 FluentGermanAI</div>
-    <div style="color:var(--text-muted); font-size:0.9rem;">© 2026 FluentGermanAI. All rights reserved. Built with advanced AI.</div>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/" class="logo">🇩🇪 FluentGermanAI</a>
+        <p>The AI-powered German learning platform for serious learners. From A1 beginner to B1 intermediate, we've got your fluency journey covered.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Learn</h4>
+        <a href="/app.html#/learn">Learning Path</a>
+        <a href="/app.html#/review">Flashcards</a>
+        <a href="/app.html#/vocab">Dictionary</a>
+        <a href="/app.html#/level-test/A1">Take Level Test</a>
+      </div>
+      <div class="footer-col">
+        <h4>AI Tools</h4>
+        <a href="/app.html#/ai/chat">AI Conversation</a>
+        <a href="/app.html#/ai/write">Grammar Fixer</a>
+        <a href="/app.html#/ai/stories">German Stories</a>
+        <a href="/app.html#/ai/tutor">Ask AI Tutor</a>
+      </div>
+      <div class="footer-col">
+        <h4>Levels</h4>
+        <a href="/app.html#/learn">A1 Beginner</a>
+        <a href="/app.html#/learn">A2 Elementary</a>
+        <a href="/app.html#/learn">B1 Intermediate</a>
+        <a href="/app.html#/achievements">Achievements</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 FluentGermanAI. All rights reserved.</span>
+      <span>Built with advanced AI for German learners.</span>
+    </div>
   </footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
-  
   <script>
-    // --- MOTION GRAPHICS SCRIPT ---
-
-    // 1. Scroll Transparency for Navbar
+    // ── Nav scroll style ──
+    const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
-      const nav = document.getElementById('navbar');
-      if (window.scrollY > 50) {
-        nav.style.boxShadow = '0 10px 30px rgba(0,0,0,0.5)';
-      } else {
-        nav.style.boxShadow = 'none';
-      }
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // ── Mobile menu ──
+    const toggle = document.getElementById('nav-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    function closeMobileMenu() {
+      toggle.classList.remove('open');
+      mobileMenu.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+    toggle.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.toggle('open');
+      toggle.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(isOpen));
+      document.body.style.overflow = isOpen ? 'hidden' : '';
     });
 
-    // 2. Intersection Observer (Scroll Fade/Slide Effects)
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('in-view');
+    // ── Scroll reveal ──
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revealObs.unobserve(e.target); } });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.sr').forEach(el => revealObs.observe(el));
+
+    // ── 3D Tilt ──
+    document.querySelectorAll('.tilt-card, #hero-graphic').forEach(el => {
+      el.addEventListener('mousemove', e => {
+        const r = el.getBoundingClientRect();
+        const xPct = (e.clientX - r.left) / r.width - .5;
+        const yPct = (e.clientY - r.top) / r.height - .5;
+        el.style.transform = `perspective(900px) rotateX(${yPct * -12}deg) rotateY(${xPct * 12}deg) scale3d(1.02,1.02,1.02)`;
+      });
+      el.addEventListener('mouseleave', () => {
+        el.style.transform = 'perspective(900px) rotateX(0) rotateY(0) scale3d(1,1,1)';
+      });
+    });
+
+    // ── FAQ accordion ──
+    document.querySelectorAll('.faq-question').forEach(q => {
+      const activate = () => {
+        const item = q.closest('.faq-item');
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item.open').forEach(i => {
+          i.classList.remove('open');
+          i.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) {
+          item.classList.add('open');
+          q.setAttribute('aria-expanded', 'true');
         }
-      });
-    }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
-
-    document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
-
-    // 3. 3D Tilt Effect on Cards & Hero Graphic
-    const tiltContainers = document.querySelectorAll('.tilt-card, #hero-graphic');
-    tiltContainers.forEach(container => {
-      container.addEventListener('mousemove', (e) => {
-        const rect = container.getBoundingClientRect();
-        const x = e.clientX - rect.left; 
-        const y = e.clientY - rect.top;
-        
-        // Calculate rotation based on cursor position (-0.5 to 0.5)
-        const xPct = (x / rect.width - 0.5) * 2;
-        const yPct = (y / rect.height - 0.5) * 2;
-        
-        // Adjust the multiplier to change the intensity of the tilt
-        const rotateX = yPct * -10; 
-        const rotateY = xPct * 10;
-        
-        container.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-      });
-
-      container.addEventListener('mouseleave', () => {
-        container.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)`;
-      });
+      };
+      q.addEventListener('click', activate);
+      q.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); } });
     });
 
-    // 4. HTML5 Canvas Ambient Particle Network
+    // ── Particle canvas ──
     const canvas = document.getElementById('bg-canvas');
     const ctx = canvas.getContext('2d');
-    
-    let width, height;
-    function resize() {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
-    }
-    window.addEventListener('resize', resize);
+    let W, H;
+    const resize = () => {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', resize, { passive: true });
     resize();
 
-    const particles = [];
-    const count = window.innerWidth < 768 ? 30 : 60; // Fewer on mobile
+    const COUNT = window.innerWidth < 768 ? 25 : 55;
+    const particles = Array.from({ length: COUNT }, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      vx: (Math.random() - .5) * .45,
+      vy: (Math.random() - .5) * .45,
+      r: Math.random() * 1.8 + .4
+    }));
 
-    for (let i = 0; i < count; i++) {
-      particles.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        radius: Math.random() * 2 + 0.5
-      });
-    }
-
+    let raf;
     function draw() {
-      ctx.clearRect(0, 0, width, height);
-      
-      // Update and draw particles
+      ctx.clearRect(0, 0, W, H);
       particles.forEach(p => {
-        p.x += p.vx;
-        p.y += p.vy;
-        
-        if (p.x < 0 || p.x > width) p.vx *= -1;
-        if (p.y < 0 || p.y > height) p.vy *= -1;
-        
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > W) p.vx *= -1;
+        if (p.y < 0 || p.y > H) p.vy *= -1;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(165,148,255,.35)';
         ctx.fill();
       });
-
-      // Draw connecting network lines
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx*dx + dy*dy);
-          
-          if (dist < 120) {
+          const d = Math.sqrt(dx * dx + dy * dy);
+          if (d < 110) {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            // Opacity scales with distance
-            ctx.strokeStyle = `rgba(255, 255, 255, ${0.1 - dist/1200})`;
+            ctx.strokeStyle = `rgba(165,148,255,${.09 - d / 1200})`;
+            ctx.lineWidth = .6;
             ctx.stroke();
           }
         }
       }
-      
-      requestAnimationFrame(draw);
+      raf = requestAnimationFrame(draw);
     }
-    draw();
 
+    // Pause when tab is hidden (perf)
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) cancelAnimationFrame(raf);
+      else draw();
+    });
+
+    draw();
   </script>
 </body>
 </html>

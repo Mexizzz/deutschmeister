@@ -272,28 +272,30 @@ const App = (() => {
   // ── AI Hub ────────────────────────────────────────────────────────────────
   function renderAIHub() {
     const aiFeatures = [
-      { route:'/ai/scenarios', icon:'💬', title:'Conversation Partner', sub:'Practice real German dialogue',  color:'var(--grad-purple)' },
-      { route:'/ai/write',   icon:'✏️', title:'Grammar Corrector',    sub:'Fix your German text with AI',   color:'var(--grad-blue)' },
-      { route:'/ai/stories', icon:'📖', title:'Story Generator',      sub:'Read AI German stories',         color:'var(--grad-gold)' },
-      { route:'/ai/tutor',   icon:'🧑‍🏫', title:'AI Tutor',          sub:'Ask any grammar question',      color:'var(--grad-green)' },
-      { route:'/ai/speak',   icon:'🎤', title:'Pronunciation Coach',  sub:'Speak & get AI feedback',        color:'var(--grad-red)' },
+      { route:'/ai/scenarios', icon:'🎙️', title:'Conversation Partner', sub:'Practice real German dialogue with role-play scenarios', color:'rgba(99,102,241,.2)' },
+      { route:'/ai/write',     icon:'✍️', title:'Grammar Corrector',    sub:'Paste German text and get instant AI corrections',       color:'rgba(16,185,129,.2)' },
+      { route:'/ai/stories',   icon:'📖', title:'Story Generator',      sub:'Read AI stories built from your mastered vocabulary',    color:'rgba(245,158,11,.2)' },
+      { route:'/ai/tutor',     icon:'🤖', title:'AI Tutor',             sub:'Ask any question about German grammar or vocabulary',    color:'rgba(139,92,246,.2)' },
+      { route:'/ai/speak',     icon:'🎤', title:'Pronunciation Coach',  sub:'Speak German and receive real-time AI feedback',         color:'rgba(236,72,153,.2)' },
     ];
 
+    const p = Storage.getProfile();
     const html = `
-      <div class="section-label mb-1">🤖 AI Features</div>
-      <p class="text-secondary text-sm mb-3">Powered by Groq (llama-3.3-70b) — ultra-fast AI for real learning.</p>
-      <div style="display:flex;flex-direction:column;gap:.75rem">
+      <div class="flex-between mb-1">
+        <div class="section-label mb-0">🤖 AI Tools</div>
+        <span class="text-xs text-muted fw-700">${p.level} Level</span>
+      </div>
+      <p class="text-secondary text-sm mb-3">Powered by Groq · llama-3.3-70b · ultra-fast responses</p>
+
+      <div class="ai-hub-list">
         ${aiFeatures.map((f, i) => `
-          <div class="glass-card animate-fade-in stagger-${i+1}" style="cursor:pointer;display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem"
-               onclick="App.navigate('${f.route}')">
-            <div style="width:52px;height:52px;border-radius:var(--radius-md);background:${f.color};display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0">
-              ${f.icon}
+          <div class="ai-hub-item animate-fade-in stagger-${i + 1}" onclick="App.navigate('${f.route}')">
+            <div class="ai-hub-item-icon" style="background:${f.color}">${f.icon}</div>
+            <div class="ai-hub-item-info">
+              <div class="ai-hub-item-title">${f.title}</div>
+              <div class="ai-hub-item-sub">${f.sub}</div>
             </div>
-            <div style="flex:1">
-              <div class="fw-700 mb-1">${f.title}</div>
-              <div class="text-sm text-secondary">${f.sub}</div>
-            </div>
-            <i class="fa-solid fa-chevron-right text-muted"></i>
+            <i class="fa-solid fa-chevron-right text-muted" style="font-size:.8rem"></i>
           </div>`).join('')}
       </div>
     `;

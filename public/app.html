@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FluentGermanAI — Learn German with AI</title>
   <meta name="description" content="AI-powered German language learning app. Practice conversation, grammar, vocabulary and more with your personal AI tutor." />
+  <meta name="robots" content="noindex, nofollow" />
   <meta name="theme-color" content="#0a0e1a" />
   <link rel="manifest" href="/manifest.json" />
   <link rel="apple-touch-icon" href="https://img.icons8.com/color/192/germany.png">
@@ -15,10 +16,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
   <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body class="theme-midnight">
+
+  <!-- Page Progress Bar -->
+  <div id="page-progress"></div>
 
   <!-- Background Blobs (Motion Graphics) -->
   <div class="blob blob-1"></div>
