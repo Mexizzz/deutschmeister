@@ -2,7 +2,7 @@
   "name": "FluentGermanAI",
   "short_name": "FluentGerman",
   "description": "Learn German with AI conversational partners.",
-  "start_url": "/app.html",
+  "start_url": "/app",
   "display": "standalone",
   "background_color": "#0a0e1a",
   "theme_color": "#8b5cf6",

@@ -20,6 +20,16 @@ app.use(cors());
 app.use(express.json({ limit: '1MB' })); // Increased limit for saving progress json
 app.use(express.static(path.join(__dirname, 'public')));
 
+// ── Clean URL routing ───────────────────────────────────────────────────────
+// Serve app at /app (no .html extension)
+app.get('/app', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'app.html'));
+});
+// Redirect legacy /app.html → /app (preserves hash fragment on client side)
+app.get('/app.html', (req, res) => {
+  res.redirect(301, '/app');
+});
+
 // ── Rate Limiting (in-memory per IP) ───────────────────────────────────────
 const rateLimitMap = new Map();
 const RATE_WINDOW_MS = 60_000;
