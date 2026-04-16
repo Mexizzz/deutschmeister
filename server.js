@@ -21,14 +21,9 @@ app.use(express.json({ limit: '1MB' })); // Increased limit for saving progress 
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ── Clean URL routing ───────────────────────────────────────────────────────
-// Serve app at /app (no .html extension)
-app.get('/app', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'app.html'));
-});
-// Redirect legacy /app.html → /app (preserves hash fragment on client side)
-app.get('/app.html', (req, res) => {
-  res.redirect(301, '/app');
-});
+// Legacy /app and /app.html → redirect to /dashboard
+app.get('/app', (req, res) => res.redirect(301, '/dashboard'));
+app.get('/app.html', (req, res) => res.redirect(301, '/dashboard'));
 
 // ── Rate Limiting (in-memory per IP) ───────────────────────────────────────
 const rateLimitMap = new Map();
@@ -583,8 +578,16 @@ app.get('/api/health', (req, res) => {
 });
 
 // ── SPA Fallback ───────────────────────────────────────────────────────────
+// App routes → serve app.html (SPA handles the path via History API)
+// Everything else → serve index.html (landing page)
+const APP_ROUTES = [
+  '/dashboard', '/auth', '/onboarding', '/learn', '/lesson',
+  '/review', '/vocab', '/practice', '/homework',
+  '/ai', '/level-test', '/progress', '/settings', '/admin', '/achievements',
+];
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  const isApp = APP_ROUTES.some(r => req.path === r || req.path.startsWith(r + '/'));
+  res.sendFile(path.join(__dirname, 'public', isApp ? 'app.html' : 'index.html'));
 });
 
 // ── Start ──────────────────────────────────────────────────────────────────

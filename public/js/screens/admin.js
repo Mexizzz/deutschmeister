@@ -31,7 +31,7 @@ async function renderAdminPanel() {
           <i class="fa-solid fa-lock fa-3x mb-3" style="color: var(--color-secondary);"></i>
           <h3>Access Denied</h3>
           <p class="text-muted">You do not have administrative privileges.</p>
-          <button class="btn btn-primary mt-3" onclick="App.navigate('/')">Go Back</button>
+          <button class="btn btn-primary mt-3" onclick="App.navigate('/dashboard')">Go Back</button>
         `;
         return;
       }

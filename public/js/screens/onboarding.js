@@ -82,5 +82,5 @@ window.finishOnboarding = function() {
   });
 
   Toast.success(`Willkommen, ${name}! Your ${_selectedGoal} journey begins! 🎉`, 3000);
-  setTimeout(() => App.navigate('/'), 400);
+  setTimeout(() => App.navigate('/dashboard'), 400);
 };

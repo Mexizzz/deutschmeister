@@ -90,7 +90,7 @@ function renderSmartReview() {
     <button class="btn btn-purple btn-block btn-lg mb-2" onclick="startSmartReview()">
       🧠 Start Review (${words.length} cards)
     </button>
-    <button class="btn btn-secondary btn-block" onclick="App.navigate('/')">← Back</button>
+    <button class="btn btn-secondary btn-block" onclick="App.navigate('/dashboard')">← Back</button>
   `;
 
   renderScreen(html);
@@ -101,7 +101,7 @@ function renderSmartReview() {
 
 window.startSmartReview = function() {
   const words = window._smartReviewWords || getSmartReviewWords(8);
-  if (!words.length) { App.navigate('/'); return; }
+  if (!words.length) { App.navigate('/dashboard'); return; }
 
   reviewState = {
     words,
@@ -153,7 +153,7 @@ function renderReviewCard() {
 
   const html = `
     <div class="flex-between mb-2">
-      <button class="btn btn-secondary btn-sm" onclick="App.navigate('/')">✕ Exit</button>
+      <button class="btn btn-secondary btn-sm" onclick="App.navigate('/dashboard')">✕ Exit</button>
       <div class="text-sm fw-700 text-purple">${current + 1} / ${total}</div>
     </div>
     <div class="lesson-progress mb-3">${dotsHtml}</div>
@@ -256,7 +256,7 @@ function showReviewResults() {
       <button class="btn btn-primary btn-block btn-lg mb-2" onclick="renderSmartReview()">
         <i class="fa-solid fa-rotate-right"></i> Another Review
       </button>
-      <button class="btn btn-secondary btn-block" onclick="App.navigate('/')">Home</button>
+      <button class="btn btn-secondary btn-block" onclick="App.navigate('/dashboard')">Home</button>
     </div>`;
 
   renderScreen(html);

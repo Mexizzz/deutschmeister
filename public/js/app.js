@@ -1,11 +1,11 @@
-/* app.js — Hash-based SPA Router + App Init */
+/* app.js — History API SPA Router + App Init */
 'use strict';
 
 const App = (() => {
 
   // ── Route table ─────────────────────────────────────────────────────────────
   const ROUTES = {
-    '/':                    () => renderDashboard(),
+    '/dashboard':           () => renderDashboard(),
     '/auth':                () => renderAuthScreen(),
     '/onboarding':          () => renderOnboarding(),
     '/learn':               () => renderLearnMenu(),
@@ -33,7 +33,7 @@ const App = (() => {
 
   // ── Tab map for bottom nav highlight ────────────────────────────────────────
   const TAB_MAP = {
-    '/':          'home',
+    '/dashboard': 'home',
     '/learn':     'learn',
     '/homework':  'learn',
     '/review':    'review',
@@ -56,7 +56,8 @@ const App = (() => {
   }
 
   function navigate(path) {
-    window.location.hash = '#' + path;
+    history.pushState({}, '', path);
+    handleRoute();
   }
 
   function matchRoute(path) {
@@ -78,9 +79,8 @@ const App = (() => {
   }
 
   function handleRoute() {
-    const hash  = window.location.hash || '#/';
-    const path  = hash.replace(/^#/, '') || '/';
-    
+    const path = window.location.pathname || '/dashboard';
+
     // Auth guard
     if (!Storage.isAuthenticated() && path !== '/auth') {
       navigate('/auth');
@@ -118,11 +118,11 @@ const App = (() => {
           <div class="results-emoji">😕</div>
           <div class="results-title">Oops!</div>
           <div class="text-secondary mt-2">${err.message}</div>
-          <button class="btn btn-primary mt-3" onclick="App.navigate('/')">Home</button>
+          <button class="btn btn-primary mt-3" onclick="App.navigate('/dashboard')">Home</button>
         </div>`);
       }
     } else {
-      navigate('/');
+      navigate('/dashboard');
     }
   }
 
@@ -137,7 +137,7 @@ const App = (() => {
     });
     
     // If we're on settings, re-render to show active
-    if (window.location.hash.includes('/settings')) {
+    if (window.location.pathname === '/settings') {
       renderSettings();
     }
     
@@ -411,7 +411,19 @@ const App = (() => {
       });
     }
 
-    window.addEventListener('hashchange', handleRoute);
+    // Intercept all <a> clicks — use pushState instead of full reload
+    document.addEventListener('click', e => {
+      const a = e.target.closest('a[href]');
+      if (!a) return;
+      const href = a.getAttribute('href');
+      if (href && href.startsWith('/') && !href.startsWith('/api') && !href.startsWith('//')) {
+        e.preventDefault();
+        navigate(href);
+      }
+    });
+
+    // History API — back/forward button support
+    window.addEventListener('popstate', handleRoute);
     handleRoute();
   }
 

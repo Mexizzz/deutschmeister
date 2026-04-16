@@ -13,7 +13,7 @@ async function renderHomework() {
         <div class="results-emoji">🎓</div>
         <div class="results-title gradient-text-gold">Homework Complete!</div>
         <div class="text-secondary mt-2">You've finished your daily AI assignment. Be sure to check your vocabulary review.</div>
-        <button class="btn btn-primary btn-block btn-lg mt-4" onclick="App.navigate('/')">Back to Dashboard</button>
+        <button class="btn btn-primary btn-block btn-lg mt-4" onclick="App.navigate('/dashboard')">Back to Dashboard</button>
       </div>`);
     return;
   }
@@ -60,7 +60,7 @@ async function renderHomework() {
         <div class="results-emoji text-danger">⚠️</div>
         <div class="results-title text-danger">Generation Failed</div>
         <div class="text-secondary mt-2">Could not generate homework at this time.</div>
-        <button class="btn btn-secondary mt-4" onclick="App.navigate('/')">Back to Dashboard</button>
+        <button class="btn btn-secondary mt-4" onclick="App.navigate('/dashboard')">Back to Dashboard</button>
       </div>`);
   }
 }
@@ -70,7 +70,7 @@ function renderHomeworkStory() {
   
   const html = `
     <div class="flex-between mb-3">
-      <button class="btn btn-icon btn-secondary btn-sm" onclick="App.navigate('/')"><i class="fa-solid fa-arrow-left"></i></button>
+      <button class="btn btn-icon btn-secondary btn-sm" onclick="App.navigate('/dashboard')"><i class="fa-solid fa-arrow-left"></i></button>
       <div class="text-xs fw-700 text-muted" style="letter-spacing:.1em;text-transform:uppercase">Part 1: Story Time</div>
       <div style="width:32px"></div>
     </div>
@@ -208,7 +208,7 @@ window.startHomeworkRoleplay = function() {
 
 window.finishHomeworkEarly = function() {
   completeHomeworkMark();
-  App.navigate('/');
+  App.navigate('/dashboard');
 };
 
 function completeHomeworkMark() {

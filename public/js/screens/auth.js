@@ -107,7 +107,7 @@ window.handleAuthSubmit = async function(e, type) {
     await Storage.forceSyncDown();
     
     setTimeout(() => {
-      App.navigate('/');
+      App.navigate('/dashboard');
       window.location.reload(); 
     }, 800);
     

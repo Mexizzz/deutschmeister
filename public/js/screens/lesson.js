@@ -21,7 +21,7 @@ const LESSON_CONFIGS = {
 
 function startLesson(lessonId) {
   const config = LESSON_CONFIGS[lessonId];
-  if (!config) { App.navigate('/'); return; }
+  if (!config) { App.navigate('/dashboard'); return; }
 
   const words = getWordsByCategory(config.category);
   if (!words.length) { Toast.error('No words found for this lesson.'); return; }
@@ -99,7 +99,7 @@ function renderCurrentStep() {
   const html = `
     <div style="margin-bottom:-.5rem">
       <div class="flex-between mb-2">
-        <button class="btn btn-secondary btn-sm" onclick="App.navigate('/')">✕ Exit</button>
+        <button class="btn btn-secondary btn-sm" onclick="App.navigate('/dashboard')">✕ Exit</button>
       </div>
       <div class="lesson-progress">${dotsHtml}</div>
     </div>
@@ -494,7 +494,7 @@ function showLessonResults() {
         <div class="text-sm fw-700 text-gold">${words.length} words · Review in Flashcards 📇</div>
       </div>
 
-      <button class="btn btn-primary btn-block btn-lg" onclick="App.navigate('/')">
+      <button class="btn btn-primary btn-block btn-lg" onclick="App.navigate('/dashboard')">
         <i class="fa-solid fa-house"></i> Back to Home
       </button>
       <button class="btn btn-secondary btn-block mt-2" onclick="startLesson('${lessonId}')">
@@ -515,7 +515,7 @@ function showNoHeartsScreen() {
         <div style="font-size:2rem">❤️</div>
         <div class="text-sm text-muted mt-1">1 heart restores per hour</div>
       </div>
-      <button class="btn btn-primary btn-block btn-lg mt-3" onclick="App.navigate('/')">
+      <button class="btn btn-primary btn-block btn-lg mt-3" onclick="App.navigate('/dashboard')">
         <i class="fa-solid fa-house"></i> Back to Home
       </button>
     </div>`;

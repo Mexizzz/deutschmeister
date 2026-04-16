@@ -201,7 +201,7 @@ window.confirmReset = function() {
     () => {
       Storage.clear();
       Toast.success('Progress reset. Starting fresh!', 3000);
-      setTimeout(() => App.navigate('/'), 500);
+      setTimeout(() => App.navigate('/dashboard'), 500);
     }
   );
 };

@@ -364,7 +364,7 @@ function showTestResults() {
           <div class="text-sm text-secondary mt-1">• Ask the AI Tutor about grammar questions</div>
         </div>`}
 
-      <button class="btn btn-primary btn-block btn-lg" onclick="App.navigate('/')">
+      <button class="btn btn-primary btn-block btn-lg" onclick="App.navigate('/dashboard')">
         <i class="fa-solid fa-house"></i> Back to Home
       </button>
       ${passed ? `

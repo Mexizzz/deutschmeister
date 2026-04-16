@@ -142,7 +142,7 @@ function showQuizResults() {
         <div class="result-stat-box"><div class="result-stat-value" style="color:var(--accent-purple)">+${xp}</div><div class="result-stat-label">XP</div></div>
       </div>
       <button class="btn btn-primary btn-block btn-lg mt-3" onclick="renderQuiz()">Play Again</button>
-      <button class="btn btn-secondary btn-block mt-2" onclick="App.navigate('/')">Home</button>
+      <button class="btn btn-secondary btn-block mt-2" onclick="App.navigate('/dashboard')">Home</button>
     </div>`);
 }
 
@@ -156,7 +156,7 @@ function renderDailyChallenge() {
         <div class="results-emoji">🏆</div>
         <div class="results-title text-gold">Challenge Complete!</div>
         <div class="text-secondary mt-2">Come back tomorrow for a new challenge.</div>
-        <button class="btn btn-primary btn-block btn-lg mt-3" onclick="App.navigate('/')">Home</button>
+        <button class="btn btn-primary btn-block btn-lg mt-3" onclick="App.navigate('/dashboard')">Home</button>
       </div>`);
     return;
   }
@@ -181,7 +181,7 @@ function renderDailyChallenge() {
       <button class="btn btn-primary btn-block btn-lg mt-3" onclick="renderQuizQuestion()">
         🚀 Start Challenge
       </button>
-      <button class="btn btn-secondary btn-block mt-2" onclick="App.navigate('/')">Cancel</button>
+      <button class="btn btn-secondary btn-block mt-2" onclick="App.navigate('/dashboard')">Cancel</button>
     </div>`);
 }
 

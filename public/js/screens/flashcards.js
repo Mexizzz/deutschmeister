@@ -22,7 +22,7 @@ function renderFlashcards() {
             <span class="fw-700 text-success">${SRS.getMasteredCount()}</span>
           </div>
         </div>
-        <button class="btn btn-primary btn-block btn-lg mt-3" onclick="App.navigate('/')">
+        <button class="btn btn-primary btn-block btn-lg mt-3" onclick="App.navigate('/dashboard')">
           <i class="fa-solid fa-house"></i> Home
         </button>
         <button class="btn btn-secondary btn-block mt-2" onclick="SRS.resetAllDue(); renderFlashcards()">
@@ -173,7 +173,7 @@ function showFlashcardResults() {
         </div>
       </div>
 
-      <button class="btn btn-primary btn-block btn-lg mt-3" onclick="App.navigate('/')">
+      <button class="btn btn-primary btn-block btn-lg mt-3" onclick="App.navigate('/dashboard')">
         <i class="fa-solid fa-house"></i> Home
       </button>
     </div>`;
