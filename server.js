@@ -10,10 +10,50 @@ const { Resend } = require('resend');
 const db = require('./db');
 
 const app = express();
-const resend = new Resend(process.env.RESEND_API_KEY || 're_dyrgNJBX_2Dhghb7nx8rcCBcZAcr8nPb8'); 
+const resend = new Resend(process.env.RESEND_API_KEY || 're_dyrgNJBX_2Dhghb7nx8rcCBcZAcr8nPb8');
 const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-deutschmeister-key';
 const PORT = process.env.PORT || 3000;
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
+
+// Whop integration — set these env vars on Railway after creating products on whop.com
+const WHOP_API_KEY        = process.env.WHOP_API_KEY || '';
+const WHOP_WEBHOOK_SECRET = process.env.WHOP_WEBHOOK_SECRET || '';
+const WHOP_PLUS_PLAN_ID   = process.env.WHOP_PLUS_PLAN_ID  || '';   // $4/mo plan id from whop
+const WHOP_PRO_PLAN_ID    = process.env.WHOP_PRO_PLAN_ID   || '';   // $9/mo plan id from whop
+const WHOP_PLUS_CHECKOUT  = process.env.WHOP_PLUS_CHECKOUT || 'https://whop.com/fluentgermanai/plus';
+const WHOP_PRO_CHECKOUT   = process.env.WHOP_PRO_CHECKOUT  || 'https://whop.com/fluentgermanai/pro';
+
+// Trust Railway's reverse proxy so req.ip reflects the real client IP
+app.set('trust proxy', true);
+
+// ── IP + Geo helpers ────────────────────────────────────────────────────────
+function getClientIp(req) {
+  const fwd = req.headers['x-forwarded-for'];
+  if (fwd) return fwd.split(',')[0].trim();
+  return req.ip || req.connection?.remoteAddress || null;
+}
+
+async function lookupGeo(ip) {
+  if (!ip || ip === '::1' || ip.startsWith('127.') || ip.startsWith('192.168.') || ip.startsWith('10.')) {
+    return { country: 'Local', country_code: 'LO', city: 'Local' };
+  }
+  try {
+    const r = await fetch(`https://ipapi.co/${ip}/json/`, {
+      signal: AbortSignal.timeout(4000),
+      headers: { 'User-Agent': 'FluentGermanAI/1.0' }
+    });
+    if (!r.ok) return null;
+    const j = await r.json();
+    if (j.error) return null;
+    return {
+      country: j.country_name || 'Unknown',
+      country_code: j.country_code || null,
+      city: j.city || null
+    };
+  } catch {
+    return null;
+  }
+}
 
 // ── Middleware ──────────────────────────────────────────────────────────────
 app.use(cors());
@@ -169,6 +209,88 @@ function authenticateAdmin(req, res, next) {
   });
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// SUBSCRIPTION / WHOP INTEGRATION
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Get current user's subscription status
+app.get('/api/subscription/me', authenticateToken, async (req, res) => {
+  try {
+    const sub = await db.getSubscription(req.user.id);
+    res.json({
+      success: true,
+      tier:        sub?.subscription_tier || 'free',
+      status:      sub?.subscription_status || null,
+      expires_at:  sub?.subscription_expires_at || null
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Subscription fetch failed' });
+  }
+});
+
+// Return the checkout URLs (with the user's email pre-filled in metadata)
+app.get('/api/subscription/checkout-urls', authenticateToken, async (req, res) => {
+  try {
+    const user = await db.getUserByUsername(req.user.username);
+    const email = encodeURIComponent(user.email || '');
+    // Whop checkout supports query params for prefilling
+    res.json({
+      success: true,
+      plus: `${WHOP_PLUS_CHECKOUT}?email=${email}&metadata[user_id]=${req.user.id}`,
+      pro:  `${WHOP_PRO_CHECKOUT}?email=${email}&metadata[user_id]=${req.user.id}`
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Checkout URL fetch failed' });
+  }
+});
+
+// (Whop relay moved further down — just above the SPA catch-all.)
+
+// Manual recheck — user clicks "I just paid" button after returning from Whop checkout.
+// Hits Whop API with the user's email to fetch active memberships.
+app.post('/api/subscription/refresh', authenticateToken, async (req, res) => {
+  try {
+    if (!WHOP_API_KEY) {
+      return res.json({ success: true, tier: 'free', message: 'Whop not configured' });
+    }
+    const user = await db.getUserByUsername(req.user.username);
+
+    // Whop API v5: GET /api/v5/me/memberships works when authed as a Whop user.
+    // For server-to-server, list memberships for a user via the admin endpoint.
+    const r = await fetch(`https://api.whop.com/api/v5/memberships?email=${encodeURIComponent(user.email)}`, {
+      headers: { 'Authorization': `Bearer ${WHOP_API_KEY}` }
+    });
+    if (!r.ok) {
+      return res.json({ success: true, tier: 'free', message: 'No active subscription found' });
+    }
+    const data = await r.json();
+    const memberships = data.data || data.memberships || [];
+    const active = memberships.find(m => m.valid || m.status === 'active');
+
+    let tier = 'free';
+    let expiresAt = null;
+    let membershipId = null;
+    let whopUserId = null;
+
+    if (active) {
+      const planId = active.plan_id || active.plan?.id;
+      if (planId === WHOP_PLUS_PLAN_ID) tier = 'plus';
+      if (planId === WHOP_PRO_PLAN_ID)  tier = 'pro';
+      expiresAt = active.expires_at ? new Date(active.expires_at * 1000 || active.expires_at) : null;
+      membershipId = active.id;
+      whopUserId   = active.user_id;
+    }
+
+    await db.setSubscription(req.user.id, tier, active ? 'active' : 'free', expiresAt, membershipId, whopUserId);
+    res.json({ success: true, tier, status: active ? 'active' : 'free', expires_at: expiresAt });
+  } catch (err) {
+    console.error('Subscription refresh error:', err);
+    res.status(500).json({ error: 'Refresh failed', details: err.message });
+  }
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 // Admin Users Route
 app.get('/api/admin/users', authenticateAdmin, async (req, res) => {
   try {
@@ -176,6 +298,79 @@ app.get('/api/admin/users', authenticateAdmin, async (req, res) => {
     res.json({ success: true, count: users.length, users });
   } catch (err) {
     res.status(500).json({ error: 'Admin fetch failed', details: err.message });
+  }
+});
+
+// Admin Stats Route
+app.get('/api/admin/stats', authenticateAdmin, async (req, res) => {
+  try {
+    const stats = await db.getAdminStats();
+    res.json({ success: true, stats });
+  } catch (err) {
+    res.status(500).json({ error: 'Stats fetch failed', details: err.message });
+  }
+});
+
+// Admin Single User Detail
+app.get('/api/admin/user/:id', authenticateAdmin, async (req, res) => {
+  try {
+    const user = await db.getUserDetail(req.params.id);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    res.json({ success: true, user });
+  } catch (err) {
+    res.status(500).json({ error: 'User detail fetch failed', details: err.message });
+  }
+});
+
+// Admin Delete User
+app.delete('/api/admin/user/:id', authenticateAdmin, async (req, res) => {
+  try {
+    // Safety: don't allow admin to delete themselves
+    if (req.user.id === req.params.id) {
+      return res.status(400).json({ error: 'Cannot delete your own admin account' });
+    }
+    await db.deleteUserById(req.params.id);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Delete failed', details: err.message });
+  }
+});
+
+// Admin Broadcast Email
+app.post('/api/admin/broadcast', authenticateAdmin, async (req, res) => {
+  const { subject, html } = req.body;
+  if (!subject || !html) return res.status(400).json({ error: 'Subject and html required' });
+
+  try {
+    const recipients = await db.getAllUserEmails();
+    if (recipients.length === 0) {
+      return res.json({ success: true, sent: 0, failed: 0, total: 0 });
+    }
+
+    let sent = 0, failed = 0;
+    const FROM = 'FluentGermanAI <noreply@fluentgermanai.space>';
+
+    // Resend free tier is 100 emails/day; send sequentially with a brief gap.
+    for (const r of recipients) {
+      try {
+        const personalized = html.replace(/\{\{name\}\}/g, r.username || 'Learner');
+        await resend.emails.send({
+          from: FROM,
+          to: r.email,
+          subject,
+          html: personalized
+        });
+        sent++;
+      } catch (e) {
+        failed++;
+        console.error('Broadcast send failed for', r.email, e.message);
+      }
+      await new Promise(rs => setTimeout(rs, 120)); // ~8/sec rate limit
+    }
+
+    res.json({ success: true, sent, failed, total: recipients.length });
+  } catch (err) {
+    res.status(500).json({ error: 'Broadcast failed', details: err.message });
   }
 });
 
@@ -195,9 +390,10 @@ app.post('/api/auth/register', async (req, res) => {
     const salt = db.generateSalt();
     const hash = db.hashPassword(password, salt);
     const userId = crypto.randomUUID();
-    
+    const signupIp = getClientIp(req);
+
     // Create User directly in main table
-    await db.createUser(userId, emailLower, username, hash, salt);
+    await db.createUser(userId, emailLower, username, hash, salt, signupIp);
 
     // Initialize Default User Profile Data
     const defaultProfile = { name: username, level: 'A1', xp: 0, hearts: 5, appLevel: 1 };
@@ -206,11 +402,16 @@ app.post('/api/auth/register', async (req, res) => {
     // Generate JWT Token
     const token = jwt.sign({ id: userId, username: username }, JWT_SECRET, { expiresIn: '30d' });
 
-    res.json({ 
-      success: true, 
-      token, 
+    res.json({
+      success: true,
+      token,
       user: { id: userId, username: username, email: emailLower },
-      message: 'Registration successful!' 
+      message: 'Registration successful!'
+    });
+
+    // Fire-and-forget geo lookup so the response stays fast
+    lookupGeo(signupIp).then(geo => {
+      if (geo) db.updateUserGeo(userId, geo.country, geo.country_code, geo.city).catch(() => {});
     });
   } catch (err) {
     console.error('Registration Error:', err);
@@ -235,8 +436,8 @@ app.post('/api/auth/login', async (req, res) => {
 
     if (!user) return res.status(401).json({ error: 'Invalid credentials' });
 
-    // Legacy OTP users won't have a passwordHash/salt. Gracefully handle it.
-    if (!user.passwordHash || !user.salt) {
+    // Legacy OTP users won't have a password_hash/salt. Gracefully handle it.
+    if (!user.password_hash || !user.salt) {
        return res.status(401).json({ error: 'This account was created via Email Magic Link. Please re-register to set a password.' });
     }
 
@@ -246,6 +447,14 @@ app.post('/api/auth/login', async (req, res) => {
     }
 
     const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '30d' });
+    const loginIp = getClientIp(req);
+    db.recordLogin(user.id, loginIp).catch(() => {});
+    // Backfill geo if missing
+    if (!user.country) {
+      lookupGeo(loginIp).then(geo => {
+        if (geo) db.updateUserGeo(user.id, geo.country, geo.country_code, geo.city).catch(() => {});
+      });
+    }
     res.json({ success: true, token, user: { id: user.id, username: user.username, email: user.email } });
   } catch (err) {
     console.error('Login Error:', err);
@@ -577,6 +786,36 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// ── Whop relay ──────────────────────────────────────────────────────────────
+app.get('/api/whop/return', (req, res) => {
+  const orderId = String(req.query.orderId || '');
+  return res.redirect(
+    302,
+    'https://www.shoof.store/ar/order?orderId=' + encodeURIComponent(orderId) + '&paid=1'
+  );
+});
+app.post(
+  '/api/whop/webhook',
+  express.raw({ type: '*/*', limit: '1MB' }),
+  async (req, res) => {
+    try {
+      await fetch('https://www.shoof.store/api/webhook', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'webhook-id': req.headers['webhook-id'] || '',
+          'webhook-timestamp': req.headers['webhook-timestamp'] || '',
+          'webhook-signature': req.headers['webhook-signature'] || '',
+        },
+        body: req.body,
+      });
+    } catch (e) {
+      console.error('[whop-relay]', e && e.message ? e.message : e);
+    }
+    res.json({ ok: true });
+  }
+);
+
 // ── SPA Fallback ───────────────────────────────────────────────────────────
 // App routes → serve app.html (SPA handles the path via History API)
 // Everything else → serve index.html (landing page)
@@ -584,6 +823,7 @@ const APP_ROUTES = [
   '/dashboard', '/auth', '/onboarding', '/learn', '/lesson',
   '/review', '/vocab', '/practice', '/homework',
   '/ai', '/level-test', '/progress', '/settings', '/admin', '/achievements',
+  '/pricing',
 ];
 app.get('*', (req, res) => {
   const isApp = APP_ROUTES.some(r => req.path === r || req.path.startsWith(r + '/'));
