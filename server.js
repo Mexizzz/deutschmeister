@@ -57,6 +57,28 @@ async function lookupGeo(ip) {
 
 // ── Middleware ──────────────────────────────────────────────────────────────
 app.use(cors());
+
+// Must be registered BEFORE express.json() so the body stream isn't consumed first.
+app.post('/api/dodo/webhook', express.raw({ type: '*/*' }), async (req, res) => {
+  const target = 'https://nfkeys.store/api/payments/dodo/webhook';
+  try {
+    const forwardHeaders = {};
+    for (const h of ['webhook-id', 'webhook-timestamp', 'webhook-signature', 'content-type']) {
+      if (req.headers[h]) forwardHeaders[h] = req.headers[h];
+    }
+    const upstream = await fetch(target, {
+      method: 'POST',
+      headers: forwardHeaders,
+      body: req.body, // raw Buffer, unchanged
+    });
+    const text = await upstream.text();
+    res.status(upstream.status).set('Content-Type', 'application/json').send(text);
+  } catch (err) {
+    console.error('dodo webhook forward error', err);
+    res.json({ ok: true }); // ack so Dodo doesn't retry endlessly
+  }
+});
+
 app.use(express.json({ limit: '1MB' })); // Increased limit for saving progress json
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -825,27 +847,6 @@ const APP_ROUTES = [
   '/ai', '/level-test', '/progress', '/settings', '/admin', '/achievements',
   '/pricing',
 ];
-// ── Dodo Payments webhook forwarder → nfkeys.store ────────────────────────
-// Receives Dodo webhooks and proxies them verbatim so nfkeys.store stays hidden.
-app.post('/api/dodo/webhook', express.raw({ type: '*/*' }), async (req, res) => {
-  const target = 'https://nfkeys.store/api/payments/dodo/webhook';
-  try {
-    const forwardHeaders = {};
-    for (const h of ['webhook-id', 'webhook-timestamp', 'webhook-signature', 'content-type']) {
-      if (req.headers[h]) forwardHeaders[h] = req.headers[h];
-    }
-    const upstream = await fetch(target, {
-      method: 'POST',
-      headers: forwardHeaders,
-      body: req.body, // raw Buffer, unchanged
-    });
-    const text = await upstream.text();
-    res.status(upstream.status).set('Content-Type', 'application/json').send(text);
-  } catch (err) {
-    console.error('dodo webhook forward error', err);
-    res.json({ ok: true }); // ack so Dodo doesn't retry endlessly
-  }
-});
 
 app.get('*', (req, res) => {
   const isApp = APP_ROUTES.some(r => req.path === r || req.path.startsWith(r + '/'));
